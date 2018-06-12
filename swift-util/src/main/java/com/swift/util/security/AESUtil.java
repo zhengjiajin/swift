@@ -16,15 +16,8 @@ import org.apache.commons.collections.map.LRUMap;
  * mode:    ECB/CBC/PCBC/CTR/CTS/CFB/CFB8 to CFB128/OFB/OBF8 to OFB128<br/> 
  * padding: Nopadding/PKCS5Padding/ISO10126Padding/ 
  *
- *Improvement:If want to improve performence,you could cache Cipher to reduce the time of producing the Cipher.
- * @version
- *       1.0
- *       
- *       1.1 Implements improvement by apache collections LRUMap.
- * @author  zhangfeng@chinaduo.com
- * @time 2011-11-16 下午05:16:01
  */
-public class AESHelper {
+public class AESUtil {
 	/**
 	 * use password to encrypt content by AES(128bit). 
 	 * @param content	you want to encrypt message.
@@ -34,7 +27,7 @@ public class AESHelper {
 	public static String encrypt(String content, String password){
 		try {
 			byte[] ptext = content.getBytes();
-			byte[] ctext = AESHelper.getEncryptCipher(password).doFinal(ptext);
+			byte[] ctext = AESUtil.getEncryptCipher(password).doFinal(ptext);
 			return byte2hex(ctext);
 		} catch(Exception e) {
 			throw new CipherException(e);
@@ -48,7 +41,7 @@ public class AESHelper {
 	 */
 	public static String decrypt(String content, String password) {
 		try {
-			byte[] ptext = AESHelper.getDecryptCipher(password).doFinal(hex2byte(content)); 
+			byte[] ptext = AESUtil.getDecryptCipher(password).doFinal(hex2byte(content)); 
 			return new String(ptext);
 		} catch(Exception e) {
 			throw new CipherException(e);
@@ -62,7 +55,7 @@ public class AESHelper {
 		try {
 			Cipher cp = (Cipher) cacheEncryptCipher.get(password);
 			if(cp == null) {
-				Key key = AESHelper.getKey(password);
+				Key key = AESUtil.getKey(password);
 				cp = Cipher.getInstance("AES");
 				cp.init(Cipher.ENCRYPT_MODE, key);
 				
@@ -77,7 +70,7 @@ public class AESHelper {
 		try {
 			Cipher cp = (Cipher) cacheDecryptCipher.get(password);
 			if(cp == null) {
-				Key key = AESHelper.getKey(password);
+				Key key = AESUtil.getKey(password);
 				cp = Cipher.getInstance("AES");
 				cp.init(Cipher.DECRYPT_MODE, key);
 				
@@ -130,9 +123,9 @@ public class AESHelper {
 	public static void main(String[] args) {
 		String key="zhangf";
 		String content = "I'am testing...";
-		String encode = AESHelper.encrypt(content, key);
-		String base64 = Base64.encodeBase64String(AESHelper.hex2byte(encode));
-		String decode = AESHelper.decrypt(encode, key);
+		String encode = AESUtil.encrypt(content, key);
+		String base64 = Base64.encodeBase64String(AESUtil.hex2byte(encode));
+		String decode = AESUtil.decrypt(encode, key);
 		System.out.println(content+"\n"+encode+"\n"+base64+"\n"+decode);
 	}
 }

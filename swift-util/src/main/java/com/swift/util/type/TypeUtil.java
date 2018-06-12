@@ -164,5 +164,30 @@ public class TypeUtil {
         }
         return array;
     }
+    
+    public static boolean inList(Object[] list,Object obj) {
+        if(list==null || list.length<=0) return false;
+        if(obj==null) return false;
+        for(Object lobj : list) {
+            if(obj.equals(lobj)) return true;
+        }
+        return false;
+    }
+    
+    public static boolean inList(List<Object> list,Object obj) {
+        if(list==null || list.size()<=0) return false;
+        if(obj==null) return false;
+        for(Object lobj : list) {
+            if(obj.equals(lobj)) return true;
+        }
+        return false;
+    }
+    
+    public static boolean isNumber(String str) {
+        if (str == null || "".equals(str)) {
+            return false;
+        }
+        return str.matches("-?[0-9]+.*[0-9]*");
+    }
 
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swift.test.db.mybatis.SystemEnvMapper">
+	<parameterMap id="SystemEnv"
+		type="com.swift.test.db.SystemEnv" />
+	<resultMap id="SystemEnv"
+		type="com.swift.test.db.SystemEnv">
+		<id column="KEY_ID" property="keyId" />
+		<result column="VALUE_CONTENT" property="valueContent" />
+	</resultMap>
+
+	<select id="get" resultMap="SystemEnv">
+		SELECT KEY_ID,VALUE_CONTENT FROM System_Env
+		where KEY_ID = #{keyId}
+	</select>
+
+</mapper>

@@ -50,6 +50,10 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(date);
     }
+    
+    public static String formatDate(Date date) {
+        return formatDate(date, null);
+    }
 
     // 返回日期
     public static Date parseDate(String dateStr) {

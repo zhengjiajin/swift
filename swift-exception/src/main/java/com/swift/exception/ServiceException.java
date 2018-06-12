@@ -10,17 +10,27 @@ package com.swift.exception;
  * @author 郑家锦
  * @version 1.0 2018年1月31日
  */
-public class StatusCodeException extends SwiftRuntimeException {
+public class ServiceException extends SwiftRuntimeException {
     
     private static final long serialVersionUID = -6602097234016394961L;
     
     private int statusCode;
 
-    public StatusCodeException(int statusCode, String msg) {
+    public ServiceException(int statusCode) {
+        super("");
+        this.statusCode = statusCode;
+    }
+    
+    public ServiceException(int statusCode, String msg) {
         super(msg);
         this.statusCode = statusCode;
     }
 
+    public ServiceException(int statusCode, String message, Throwable cause) {
+        super(message, cause);
+        this.statusCode = statusCode;
+    }
+    
     public int getStatusCode() {
         return statusCode;
     }

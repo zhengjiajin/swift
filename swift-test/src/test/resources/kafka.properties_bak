@@ -1,0 +1,6 @@
+## 接入点，通过控制台获取
+bootstrap.servers=kafka-cn-internet.aliyun.com:8080
+## Topic前序，通过控制台创建,这里配置前序
+topicTop=alikafka-test-
+## ConsumerGrouo，通过控制台创建
+group.id=CID_alikafka_business_admin_test

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.zhengjiajin</groupId>
@@ -37,7 +38,7 @@
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
-	
+
 	<repositories>
 		<repository>
 			<id>maven</id>
@@ -48,9 +49,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<plugin.jar.version>2.5</plugin.jar.version>
-		<spring.version>4.2.9.RELEASE</spring.version>
+		<spring.version>4.3.5.RELEASE</spring.version>
 		<spring.security.version>3.2.3.RELEASE</spring.security.version>
-		<mybatis.version>3.2.6</mybatis.version>
+		<mybatis.version>3.4.1</mybatis.version>
 		<mybatis-spring.version>1.3.1</mybatis-spring.version>
 		<mybatis-ehcache.version>1.0.3</mybatis-ehcache.version>
 		<mysql-connector.version>5.1.12</mysql-connector.version>
@@ -70,44 +71,56 @@
 		<commons-io.version>2.4</commons-io.version>
 		<commons-fileupload.version>1.2.2</commons-fileupload.version>
 		<asl.version>4.1.2</asl.version>
-		<jackson-core.version>2.8.5</jackson-core.version>
-		<jackson.version>1.9.13</jackson.version>
+		<jackson.version>2.8.1</jackson.version>
 		<gson.version>2.8.2</gson.version>
 		<dom4j.version>1.6.1</dom4j.version>
 		<commons-lang.version>2.5</commons-lang.version>
 		<servlet-api.version>3.1.0</servlet-api.version>
 		<jedis.version>2.9.0</jedis.version>
 		<elasticsearch.version>5.0.1</elasticsearch.version>
-        <commons-codec.version>1.5</commons-codec.version>
+		<commons-codec.version>1.5</commons-codec.version>
 		<qiniu.version>7.2.11</qiniu.version>
 		<flume.version>1.6.0</flume.version>
 		<javapns.version>2.3.1</javapns.version>
 		<snappy-java.version>1.1.2.4</snappy-java.version>
 		<apache-log4j.version>2.7</apache-log4j.version>
 		<log4j.version>1.2.17</log4j.version>
-		<slf4j.version>1.7.9</slf4j.version>
+		<slf4j.version>1.7.21</slf4j.version>
 		<logback.version>1.1.2</logback.version>
 		<jetty.version>9.4.0.M1</jetty.version>
 		<junit.version>4.12</junit.version>
 		<netty.version>4.1.5.Final</netty.version>
 		<io-netty.version>3.10.6.Final</io-netty.version>
 		<joda-time.version>2.9.5</joda-time.version>
-		<aspectj.version>1.8.1</aspectj.version>  
+		<aspectj.version>1.8.1</aspectj.version>
 		<commons-lang3.version>3.7</commons-lang3.version>
 		<commons-compress.version>1.15</commons-compress.version>
 		<commons-math3.version>3.6.1</commons-math3.version>
 		<commons-io.version>1.3.2</commons-io.version>
 		<commons-exec.version>1.3</commons-exec.version>
 		<commons-beanutils.version>1.9.3</commons-beanutils.version>
-		<jackson-databind.version>2.5.4</jackson-databind.version>
 		<reflections.version>0.9.10</reflections.version>
-		<servlet-api.version>2.5</servlet-api.version>
 		<dom4j.version>1.6.1</dom4j.version>
+		<jetcache.version>2.4.4</jetcache.version>
+		<spring-data-jpa.version>2.0.1.RELEASE</spring-data-jpa.version>
+		<annotation-api.version>1.3.1</annotation-api.version>
+		<spring-data-jpa.version>1.9.6.RELEASE</spring-data-jpa.version>
+		<hibernate-entitymanager.version>5.2.1.Final</hibernate-entitymanager.version>
+		<usertype.core.version>6.0.1.GA</usertype.core.version>
+		<xml-apis.version>1.4.01</xml-apis.version>
+		<kafka.version>0.10.0.0</kafka.version>
+		
 	</properties>
 
 	<modules>
 		<module>swift-util</module>
 		<module>swift-exception</module>
+		<module>swift-server</module>
+		<module>swift-core</module>
+		<module>swift-dao</module>
+		<module>swift-client</module>
+		<module>swift-test</module>
+		<module>swift-auth</module>
 	</modules>
 	<dependencies>
 		<dependency>
@@ -151,7 +164,7 @@
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-test</artifactId>
-				<version>${spring.version}</version>
+				<version>4.2.9.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -194,6 +207,11 @@
 				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-core</artifactId>
 				<version>${spring.security.version}</version>
@@ -227,11 +245,11 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>commons-lang</groupId>
 				<artifactId>commons-lang</artifactId>
-				<version>${commons.lang.version}</version>
+				<version>${commons-lang.version}</version>
 			</dependency>
 
 			<dependency>
@@ -245,7 +263,7 @@
 				<artifactId>kafka-clients</artifactId>
 				<version>${kafka.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
@@ -279,7 +297,17 @@
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-databind</artifactId>
-				<version>${jackson-databind.version}</version>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-mapper-asl</artifactId>
+				<version>${codehaus.jackson.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.reflections</groupId>
@@ -288,9 +316,8 @@
 			</dependency>
 			<dependency>
 				<groupId>javax.servlet</groupId>
-				<artifactId>servlet-api</artifactId>
+				<artifactId>javax.servlet-api</artifactId>
 				<version>${servlet-api.version}</version>
-				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>dom4j</groupId>
@@ -300,98 +327,25 @@
 		</dependencies>
 
 	</dependencyManagement>
-	<build>
-		<plugins>
-			<!-- jar Plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-			<!-- Sources Plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- Javadoc Plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- GPG Sign Plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- PACKAGE -->
-			<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.7</version>
-					<executions>
-						<execution>
-							<id>copy</id>
-							<phase>package</phase>
-							<goals>
-								<goal>copy-dependencies</goal>
-							</goals>
-							<configuration>
-								<outputDirectory>${basedir}/lib</outputDirectory>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>${plugin.jar.version}</version>
-					<configuration>
-						<excludes>
-							<exclude>*.properties</exclude>
-						</excludes>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<configuration>
-						<skip>true</skip>
-					</configuration>
-				</plugin>
-		</plugins>
-	</build>
+	<!-- <build> <plugins> jar Plugin <plugin> <groupId>org.apache.maven.plugins</groupId> 
+		<artifactId>maven-compiler-plugin</artifactId> <version>3.2</version> <configuration> 
+		<source>1.8</source> <target>1.8</target> <encoding>UTF-8</encoding> </configuration> 
+		</plugin> Sources Plugin <plugin> <groupId>org.apache.maven.plugins</groupId> 
+		<artifactId>maven-source-plugin</artifactId> <version>2.2.1</version> <executions> 
+		<execution> <id>attach-sources</id> <goals> <goal>jar-no-fork</goal> </goals> 
+		</execution> </executions> </plugin> Javadoc Plugin <plugin> <groupId>org.apache.maven.plugins</groupId> 
+		<artifactId>maven-javadoc-plugin</artifactId> <version>2.9.1</version> <executions> 
+		<execution> <id>attach-javadocs</id> <goals> <goal>jar</goal> </goals> </execution> 
+		</executions> </plugin> GPG Sign Plugin <plugin> <groupId>org.apache.maven.plugins</groupId> 
+		<artifactId>maven-gpg-plugin</artifactId> <version>1.5</version> <executions> 
+		<execution> <id>sign-artifacts</id> <phase>verify</phase> <goals> <goal>sign</goal> 
+		</goals> </execution> </executions> </plugin> PACKAGE <plugin> <groupId>org.apache.maven.plugins</groupId> 
+		<artifactId>maven-dependency-plugin</artifactId> <version>2.7</version> <executions> 
+		<execution> <id>copy</id> <phase>package</phase> <goals> <goal>copy-dependencies</goal> 
+		</goals> <configuration> <outputDirectory>${basedir}/lib</outputDirectory> 
+		</configuration> </execution> </executions> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
+		<artifactId>maven-jar-plugin</artifactId> <version>${plugin.jar.version}</version> 
+		<configuration> <excludes> <exclude>*.properties</exclude> </excludes> </configuration> 
+		</plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId> 
+		<configuration> <skip>true</skip> </configuration> </plugin> </plugins> </build> -->
 </project>
