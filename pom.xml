@@ -28,7 +28,7 @@
 		<url>https://github.com/zhengjiajin/swift</url>
 	</scm>
 
-	<distributionManagement>
+	<!-- <distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
@@ -36,6 +36,17 @@
 		<repository>
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement> -->
+	
+	<distributionManagement>
+		<snapshotRepository>
+			<id>deployment</id>
+			<url>http://maven.ihealthcoming.com/content/repositories/snapshots/</url>
+		</snapshotRepository>
+		<repository>
+			<id>deployment</id>
+			<url>http://maven.ihealthcoming.com/content/repositories/releases/</url>
 		</repository>
 	</distributionManagement>
 
