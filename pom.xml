@@ -109,7 +109,7 @@
 		<usertype.core.version>6.0.1.GA</usertype.core.version>
 		<xml-apis.version>1.4.01</xml-apis.version>
 		<kafka.version>0.10.0.0</kafka.version>
-		
+
 	</properties>
 
 	<modules>
@@ -327,25 +327,92 @@
 		</dependencies>
 
 	</dependencyManagement>
-	<!-- <build> <plugins> jar Plugin <plugin> <groupId>org.apache.maven.plugins</groupId> 
-		<artifactId>maven-compiler-plugin</artifactId> <version>3.2</version> <configuration> 
-		<source>1.8</source> <target>1.8</target> <encoding>UTF-8</encoding> </configuration> 
-		</plugin> Sources Plugin <plugin> <groupId>org.apache.maven.plugins</groupId> 
-		<artifactId>maven-source-plugin</artifactId> <version>2.2.1</version> <executions> 
-		<execution> <id>attach-sources</id> <goals> <goal>jar-no-fork</goal> </goals> 
-		</execution> </executions> </plugin> Javadoc Plugin <plugin> <groupId>org.apache.maven.plugins</groupId> 
-		<artifactId>maven-javadoc-plugin</artifactId> <version>2.9.1</version> <executions> 
-		<execution> <id>attach-javadocs</id> <goals> <goal>jar</goal> </goals> </execution> 
-		</executions> </plugin> GPG Sign Plugin <plugin> <groupId>org.apache.maven.plugins</groupId> 
-		<artifactId>maven-gpg-plugin</artifactId> <version>1.5</version> <executions> 
-		<execution> <id>sign-artifacts</id> <phase>verify</phase> <goals> <goal>sign</goal> 
-		</goals> </execution> </executions> </plugin> PACKAGE <plugin> <groupId>org.apache.maven.plugins</groupId> 
-		<artifactId>maven-dependency-plugin</artifactId> <version>2.7</version> <executions> 
-		<execution> <id>copy</id> <phase>package</phase> <goals> <goal>copy-dependencies</goal> 
-		</goals> <configuration> <outputDirectory>${basedir}/lib</outputDirectory> 
-		</configuration> </execution> </executions> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
-		<artifactId>maven-jar-plugin</artifactId> <version>${plugin.jar.version}</version> 
-		<configuration> <excludes> <exclude>*.properties</exclude> </excludes> </configuration> 
-		</plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId> 
-		<configuration> <skip>true</skip> </configuration> </plugin> </plugins> </build> -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.2</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.7</version>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/lib</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${plugin.jar.version}</version>
+				<configuration>
+					<excludes>
+						<exclude>*.properties</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
