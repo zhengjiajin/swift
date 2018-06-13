@@ -39,7 +39,7 @@ public class ServiceIndexNameFactory {
      */
     private final String CLUSTER_IPS_SPLIT = ",";
 
-    @Value("${es.cluster.port}")
+    @Value("${es.cluster.port:9300}")
     private int CLUSTER_PORT = 9300;
 
     private TransportClient client;
