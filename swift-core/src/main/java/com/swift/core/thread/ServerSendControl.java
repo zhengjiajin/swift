@@ -31,7 +31,7 @@ import com.swift.exception.SwiftRuntimeException;
  * @author jiajin
  * @version 1.0 2014-5-16
  */
-public class ServerSendControl implements ThreadPoolInterface {
+public class ServerSendControl implements Runnable {
 
     private final static Logger log = LoggerFactory.getLogger(ServerSendControl.class);
 
@@ -115,16 +115,6 @@ public class ServerSendControl implements ThreadPoolInterface {
         forResponseFilter(res);
         // 线程结束
         forEndFilter();
-    }
-
-    /**
-     * @see com.zxh.paradise.server.excecutor.ThreadPoolInterface#getCompareTo()
-     */
-    @Override
-    public long getCompareTo() {
-        return 0;
-        // 没做权重优先级先
-        // return ReqInterfaceFactory.getLevel(req.getMethod(), req.getInterfaceVersion())+req.getTime()/levelWeight;
     }
 
     private void forInitFilter() {

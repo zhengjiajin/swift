@@ -177,11 +177,12 @@ public class SimpleBaseCode extends AbstractWebHandlerCode implements WebHandler
         return model;
     }
 
+    private static final String V_STR="/V";
     
     private String getInterfaceVersion(String target){
         try{
-            if(target.indexOf("V")==-1) return String.valueOf(Float.MAX_VALUE);
-            target = target.substring(target.indexOf("V")+1);
+            if(target.indexOf(V_STR)==-1) return String.valueOf(Float.MAX_VALUE);
+            target = target.substring(target.indexOf(V_STR)+V_STR.length());
             String v = target.substring(0,target.indexOf("/"));
             if(TypeUtil.isNumber(v)) return v;
         }catch(Exception e){
@@ -192,8 +193,9 @@ public class SimpleBaseCode extends AbstractWebHandlerCode implements WebHandler
     
     private String getMethod(String target){
         try{
-            if(target.lastIndexOf("/")==-1) return null;
-            return target.substring(target.lastIndexOf("/")+1);
+            if(target.indexOf(V_STR)!=-1) target = target.substring(target.indexOf(V_STR)+V_STR.length());
+            if(target.indexOf("/")==-1) return null;
+            return target.substring(target.indexOf("/")+1);
         }catch(Exception e){
             log.error("协议转成版本异常:"+target,e);
         }

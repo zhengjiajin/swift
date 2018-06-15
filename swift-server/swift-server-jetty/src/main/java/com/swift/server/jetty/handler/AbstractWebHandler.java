@@ -29,7 +29,7 @@ import com.swift.core.model.HttpServiceRequest;
 import com.swift.core.model.ServiceResponse;
 import com.swift.core.service.CallBackService;
 import com.swift.core.thread.ServerSendControl;
-import com.swift.core.thread.ThreadPoolExecutorImpl;
+import com.swift.core.thread.ThreadPoolFactory;
 import com.swift.exception.ServiceException;
 import com.swift.exception.SwiftRuntimeException;
 import com.swift.server.jetty.protocol.WebHandlerCode;
@@ -53,7 +53,7 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
     private WebHandlerCode[] webHandlerCode = new WebHandlerCode[0];
 
     @Autowired
-    protected ThreadPoolExecutorImpl threadPool;
+    protected ThreadPoolFactory threadPool;
     
     /**
      * 端口

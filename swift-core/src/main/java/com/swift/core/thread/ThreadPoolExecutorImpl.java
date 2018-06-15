@@ -5,18 +5,16 @@
  */
 package com.swift.core.thread;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+
+import com.swift.exception.SwiftRuntimeException;
 
 
 /**
@@ -25,7 +23,6 @@ import org.springframework.stereotype.Service;
  * @author jiajin
  * @version 1.0 2014-12-4
  */
-@Service
 public class ThreadPoolExecutorImpl {
     
     private static final Logger log = LoggerFactory.getLogger(ThreadPoolExecutorImpl.class);
@@ -33,22 +30,17 @@ public class ThreadPoolExecutorImpl {
     /**
      * 系统线程池
      */
-    private ExecutorService executorService;
+    private ThreadPoolExecutor executorService;
     /**
      * 优先级队列PriorityBlockingQueue
      */
-    private PriorityBlockingQueue<ThreadPoolChannel> queue = new PriorityBlockingQueue<ThreadPoolChannel>();
-    /**
-     * 是否直接插入queue
-     */
-    private AtomicInteger queueCheck = new AtomicInteger(0);
+    private ArrayBlockingQueue<ThreadPoolChannel> queue = new ArrayBlockingQueue<ThreadPoolChannel>(1000);
 
     private int corePoolSize = 0;
 
-    @PostConstruct
-    public void init() {
-        executorService = new ThreadPoolExecutor(corePoolSize(), maxPoolSize,
-                60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+    public ThreadPoolExecutorImpl() {
+        executorService = new ThreadPoolExecutor(corePoolSize(), maxPoolSize,60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+        executorService.setRejectedExecutionHandler(new ExecutionHandler());
     }
 
     /**
@@ -63,21 +55,9 @@ public class ThreadPoolExecutorImpl {
     /**
      * @see java.util.concurrent.Executor#execute(java.lang.Runnable)
      */
-    public void execute(ThreadPoolInterface command) {
+    public void execute(Runnable command) {
         ThreadPoolChannel exe = new ThreadPoolChannel(command);
-        if (queueCheck.get() >= maxPoolSize - corePoolSize) {
-            log.warn("线程池已满，请注意现队列长度为："+queue.size()+";内容为:"+getRunThread());
-            queue.offer(exe);
-        } else {
-            try {
-                queueCheck.incrementAndGet();
-                executorService.execute(exe);
-            } catch (Throwable e) {
-                log.error("主线程队列已满异常:"+e);
-                queue.offer(exe);
-                queueCheck.decrementAndGet();
-            }
-        }
+        executorService.execute(exe);
     }
     
     private String getRunThread() {
@@ -106,11 +86,11 @@ public class ThreadPoolExecutorImpl {
         this.maxPoolSize = maxPoolSize;
     }
 
-    private class ThreadPoolChannel implements Runnable,Comparable<ThreadPoolChannel> {
+    private class ThreadPoolChannel implements Runnable {
 
-        private ThreadPoolInterface command;
+        private Runnable command;
 
-        private ThreadPoolChannel(ThreadPoolInterface command) {
+        private ThreadPoolChannel(Runnable command) {
             this.command = command;
         }
 
@@ -122,18 +102,22 @@ public class ThreadPoolExecutorImpl {
                 qc.command.run();
                 qc = queue.poll();
             } 
-            queueCheck.decrementAndGet();
         }
+       
+    }
+    
+    private class  ExecutionHandler implements RejectedExecutionHandler{
+
         /** 
-         * @see java.lang.Comparable#compareTo(java.lang.Object)
+         * @see java.util.concurrent.RejectedExecutionHandler#rejectedExecution(java.lang.Runnable, java.util.concurrent.ThreadPoolExecutor)
          */
         @Override
-        public int compareTo(ThreadPoolChannel o) {
-            if(command.getCompareTo()-o.command.getCompareTo()>0) return 1;
-            if(command.getCompareTo()-o.command.getCompareTo()<0) return -1;
-            return 0;
+        public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+            boolean queueCheck = queue.offer((ThreadPoolChannel)r);
+            if(queueCheck) log.warn("线程池已满，请注意现队列长度为："+queue.size()+";内容为:"+getRunThread());
+            if(!queueCheck) throw new SwiftRuntimeException("系统忙，请稍后再试!");
         }
-
+        
     }
 
 }
