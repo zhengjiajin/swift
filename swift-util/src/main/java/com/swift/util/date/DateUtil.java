@@ -26,7 +26,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
 
     public static final String DEF_DATE_TYPE = "yyyy-MM-dd HH:mm:ss";
 
-    public static Date objToDate(Object obj) {
+    public static Date toDate(Object obj) {
         if (TypeUtil.isNotNull(obj)) {
             if (obj instanceof Date) {
                 return (Date) obj;

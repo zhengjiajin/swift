@@ -317,7 +317,7 @@ public abstract class AbstractBeanDataModel implements DataModel {
 		}
 	}
 
-	public static <T extends AbstractBeanDataModel> T mapToBean(DataModel beanData,Class<T> cla) {
+	public static <T extends DataModel> T mapToBean(DataModel beanData,Class<T> cla) {
 		return JsonUtil.toObj(JsonUtil.toJson(beanData), cla);
 	}
 

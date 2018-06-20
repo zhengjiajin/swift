@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.swift.exception.SwiftRuntimeException;
+import com.swift.util.type.TypeUtil;
 
 /**
  * Json格式转换类库
@@ -20,6 +21,7 @@ public class JsonUtil {
 
     public static String toJson(Object obj) {
         try{
+            if(obj==null) return "{}";
             return ObjectMapperFactory.getObjectMapper().writeValueAsString(obj);
         }catch(Exception ex){
             log.error("转JSON异常",ex);
@@ -29,6 +31,7 @@ public class JsonUtil {
 
     public static <T> T toObj(String json, Class<T> cla) {
         try {
+            if(TypeUtil.isNull(json)) return null;
             return ObjectMapperFactory.getObjectMapper().readValue(json, cla);
         }catch(Exception ex){
             log.error("转JSON异常",ex);

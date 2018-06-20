@@ -7,9 +7,10 @@ package com.swift.util.type;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * 用于处理类型
@@ -101,6 +102,7 @@ public class TypeUtil {
 
     public static Number toNumber(Object obj) {
         if (TypeUtil.isNotNull(obj)) {
+            if(obj instanceof Number) return (Number)obj;
             synchronized (nf) {
                 try {
                     return nf.parse(String.valueOf(obj));
@@ -120,16 +122,30 @@ public class TypeUtil {
         if (obj instanceof String) {
             if (((String) obj).equalsIgnoreCase("null")) return true;
         }
-        if (obj instanceof List) {
-            return ((List) obj).isEmpty();
-        }
-        if (obj instanceof Set) {
-            return ((Set) obj).isEmpty();
+        if (obj instanceof Collection) {
+            return ((Collection) obj).isEmpty();
         }
         if (obj instanceof Map) {
             return ((Map) obj).isEmpty();
         }
         return String.valueOf(obj).trim().isEmpty();
+    }
+    
+    @SuppressWarnings("rawtypes")
+    public static int getLength(Object obj) {
+        if (obj == null) {
+            return 0;
+        }
+        if (obj instanceof String) {
+            return ((String)obj).length();
+        }
+        if (obj instanceof Collection) {
+            return ((Collection)obj).size();
+        }
+        if (obj instanceof Map) {
+            return ((Map) obj).size();
+        }
+        return 0;
     }
 
     public static boolean isNotNull(Object obj) {
@@ -183,11 +199,17 @@ public class TypeUtil {
         return false;
     }
     
-    public static boolean isNumber(String str) {
-        if (str == null || "".equals(str)) {
+    public static boolean isNumber(Object obj) {
+        if (obj == null || "".equals(obj)) {
             return false;
         }
-        return str.matches("-?[0-9]+.*[0-9]*");
+        if(obj instanceof Number) return true;
+        return toString(obj).matches("-?[0-9]+.*[0-9]*");
     }
+    
+    public static boolean isEmail(String email) {     
+        String regex = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";  
+        return Pattern.matches(regex, email);     
+    } 
 
 }

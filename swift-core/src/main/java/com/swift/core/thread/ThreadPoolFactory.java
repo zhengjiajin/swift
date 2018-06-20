@@ -29,7 +29,7 @@ public class ThreadPoolFactory implements ResponseFilter{
     private static final int POOL_NUM=3;
     //分阶梯秒数
     private static final int EXE_TIME_SECOND=5;
-    
+    //统计调用方法的次数，取平均值
     private static final int METHOD_NUM=3;
     //线程池
     private Map<Integer,ThreadPoolExecutorImpl> poolMap = new ConcurrentHashMap<Integer,ThreadPoolExecutorImpl>();

@@ -9,6 +9,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
 
 import com.swift.core.model.data.IBaseModel;
 
@@ -23,9 +26,12 @@ public class SystemEnv extends IBaseModel{
     
     @Id
     @Column(name="key_Id")
+    @NotNull
     private String keyId;
     
     @Column(name="value_Content")
+    @Length(min=2,max=10)
+    @NotNull
     private String valueContent;
 
     public String getKeyId() {
