@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import com.swift.dao.db.annontation.AutoDb;
 import com.swift.dao.db.datasource.HandlerDataSource;
+import com.swift.util.bean.AnnotationUtil;
 import com.swift.util.type.TypeUtil;
 
 /**
@@ -51,16 +52,7 @@ public class HandlerDataSourceAop {
     public void doBefore(JoinPoint joinPoint) {
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         Class<?> cla = joinPoint.getTarget().getClass();
-        AutoDb autoDb = method.getAnnotation(AutoDb.class);
-        if (autoDb == null) {
-            autoDb = getAutoDbByInterfaceMethod(cla, method);
-        }
-        if (autoDb == null) {
-            autoDb = cla.getAnnotation(AutoDb.class);
-        }
-        if (autoDb == null) {
-            autoDb = getAutoDbByInterface(cla);
-        }
+        AutoDb autoDb = AnnotationUtil.getAnnotation(cla, method, AutoDb.class);
         if (autoDb != null) {
             String dataSource = autoDb.dbName();
             if(TypeUtil.isNull(dataSource)) {
@@ -72,32 +64,6 @@ public class HandlerDataSourceAop {
         }
     }
 
-    private AutoDb getAutoDbByInterface(Class<?> cla) {
-        Class<?> claInter[] = cla.getInterfaces();
-        if (claInter != null) {
-            for (Class<?> intre : claInter) {
-                AutoDb autoDb = intre.getAnnotation(AutoDb.class);
-                if (autoDb != null) return autoDb;
-            }
-        }
-        return null;
-    }
-
-    private AutoDb getAutoDbByInterfaceMethod(Class<?> cla, Method method) {
-        Class<?> claInter[] = cla.getInterfaces();
-        if (claInter != null) {
-            for (Class<?> intre : claInter) {
-                try {
-                    Method intreMethod = intre.getMethod(method.getName(), method.getParameterTypes());
-                    AutoDb autoDb = intreMethod.getAnnotation(AutoDb.class);
-                    if (autoDb != null) return autoDb;
-                } catch (Exception e) {
-                }
-            }
-        }
-        return null;
-    }
-
     @After("pointcut()")
     public void after(JoinPoint point) {
         if (HandlerDataSource.getDataSource() == null) return;
@@ -107,4 +73,5 @@ public class HandlerDataSourceAop {
             + ";dataSourceKey:" + HandlerDataSource.getDataSource());
         HandlerDataSource.clear();
     }
+    
 }

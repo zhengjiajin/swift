@@ -23,6 +23,7 @@ import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Component;
 
 import com.swift.dao.cache.redis.RedisClientFactory;
+import com.swift.util.bean.AnnotationUtil;
 import com.swift.util.date.DateUtil;
 import com.swift.util.type.TypeUtil;
 
@@ -55,7 +56,7 @@ public class TaskAop {
         Object target = pjp.getTarget();
         Method currentMethod = getMethod(pjp);
         String key = target.getClass().getName() + currentMethod.getName() + currentMethod.getParameterCount();
-        Scheduled scheduled = currentMethod.getAnnotation(Scheduled.class);
+        Scheduled scheduled = AnnotationUtil.getAnnotation(currentMethod, Scheduled.class);
         if (TypeUtil.isNull(scheduled.cron())) {
             log.error(key + "配置错误");
             return;

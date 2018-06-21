@@ -25,6 +25,7 @@ import com.swift.dao.index.es.factory.ServiceIndexNameFactory;
 import com.swift.dao.index.es.factory.UpdateIndexService;
 import com.swift.dao.index.es.factory.UpdateIndexService.ReturnIndexModel;
 import com.swift.exception.SwiftRuntimeException;
+import com.swift.util.bean.AnnotationUtil;
 
 /**
  * 添加说明
@@ -47,7 +48,7 @@ public class UpdateServiceIndexFilter implements ResponseFilter {
         if (res.getResultCode() != 0) return;
         ServiceRequest req = res.getRequest();
         Object obj = ReqInterfaceFactory.getInterfaceTrueObj(req.getMethod(), req.getInterfaceVersion());
-        ServiceIndex serviceIndex = obj.getClass().getAnnotation(ServiceIndex.class);
+        ServiceIndex serviceIndex = AnnotationUtil.getAnnotation(obj.getClass(), ServiceIndex.class);
         if (serviceIndex == null) return;
         UpdateIndexService updateIndexService = Spring.getBean(serviceIndex.updateIndexClassName());
         if(updateIndexService==null) return;

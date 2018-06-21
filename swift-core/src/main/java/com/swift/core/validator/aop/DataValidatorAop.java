@@ -26,6 +26,7 @@ import com.swift.core.validator.core.PojoValidator;
 import com.swift.core.validator.core.ValidatorBuilderString;
 import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
+import com.swift.util.bean.AnnotationUtil;
 import com.swift.util.type.TypeUtil;
 
 /**
@@ -53,10 +54,7 @@ public class DataValidatorAop {
     public void around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         Class<?> cla = pjp.getTarget().getClass();
-        DataValidator dataValidator = method.getAnnotation(DataValidator.class);
-        if (dataValidator == null) {
-            dataValidator = cla.getAnnotation(DataValidator.class);
-        }
+        DataValidator dataValidator = AnnotationUtil.getAnnotation(cla, method, DataValidator.class);
         if (dataValidator != null) {
             check(dataValidator, pjp.getArgs());
         }
