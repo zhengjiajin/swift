@@ -24,6 +24,14 @@ public class AbstractSession extends AbstractBeanDataModel{
      * 验证登录字段
      */
     private String unionTokenId;
+    /**
+     * 用户ID
+     */
+    private Integer userId;
+    /**
+     * 用户名称
+     */
+    private String userName;
 
     public String getTokenId() {
         return tokenId;
@@ -39,6 +47,22 @@ public class AbstractSession extends AbstractBeanDataModel{
 
     public void setUnionTokenId(String unionTokenId) {
         this.unionTokenId = unionTokenId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
     
     
