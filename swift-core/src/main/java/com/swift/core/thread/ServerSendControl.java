@@ -22,8 +22,8 @@ import com.swift.core.model.data.MapDataModel;
 import com.swift.core.service.CallBackService;
 import com.swift.core.service.ReqInterfaceFactory;
 import com.swift.core.spring.Spring;
+import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
-import com.swift.exception.SwiftRuntimeException;
 
 /**
  * 发送消息线程
@@ -85,19 +85,15 @@ public class ServerSendControl implements Runnable {
             DataModel obj = ReqInterfaceFactory.getInterface(req.getMethod(), req.getInterfaceVersion()).doService(req);
             if (obj == null) obj = new MapDataModel();
             res.setData(obj);
-            res.setResultCode(0);
+            res.setResultCode(ResultCode.SUCCESS);
             res.setReason("");
         } catch (ServiceException ex) {
             log.error("业务异常", ex);
             res.setResultCode(ex.getStatusCode());
             res.setReason(ex.getMessage());
-        } catch (SwiftRuntimeException ex) {
-            log.error("业务异常", ex);
-            res.setResultCode(-1);
-            res.setReason(ex.getMessage());
         } catch (Throwable ex) {
             log.error("系统异常", ex);
-            res.setResultCode(-1);
+            res.setResultCode(ResultCode.UNKNOWN);
             res.setReason("系统好像暂时不给力，请稍后再试。");
         }
         res.setResponseTime(System.currentTimeMillis());

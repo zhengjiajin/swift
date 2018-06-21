@@ -10,15 +10,19 @@ package com.swift.exception;
  * @author 郑家锦
  * @version 1.0 2018年1月31日
  */
-public class UnknownException extends SwiftRuntimeException {
+public class UnknownException extends ServiceException {
     
     private static final long serialVersionUID = -3616397576450593769L;
 
     public UnknownException() {
-        super("未知异常.");
+        super(ResultCode.UNKNOWN,"未知异常.");
     }
 
     public UnknownException(String message) {
-        super(message);
+        super(ResultCode.UNKNOWN,message);
+    }
+    
+    public UnknownException(String message,Throwable ex) {
+        super(ResultCode.UNKNOWN,message,ex);
     }
 }

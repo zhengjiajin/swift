@@ -25,6 +25,7 @@ import com.swift.core.model.ServiceRequest;
 import com.swift.core.model.ServiceResponse;
 import com.swift.dao.output.CallBackEngine;
 import com.swift.dao.output.http.jetty.WebClientCode.HttpContentExchange;
+import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
 import com.swift.exception.SwiftRuntimeException;
 
@@ -96,7 +97,7 @@ public class WebClient {
         //WebClientCode code = ServerEnum.valueOf(req.getMethod()).getCode();
     	WebClientCode code = clientCodeMapping.get(req.getMethod());
 		if (code == null) {
-			throw new ServiceException(500, "No WebClientCode for '" + req.getMethod() + "'");
+			throw new ServiceException(ResultCode.NO_METHOD, "No WebClientCode for '" + req.getMethod() + "'");
 		}
         HttpContentExchange exchange = code.encode(req);
         exchange.setHttpClient(httpClient);
@@ -153,7 +154,7 @@ public class WebClient {
 	private WebClientCode getWebClientCode(String method) {
 		WebClientCode code = clientCodeMapping.get(method);
 		if (code == null) {
-			throw new ServiceException(500, "No WebClientCode for '" + method + "'");
+			throw new ServiceException(ResultCode.NO_METHOD, "No WebClientCode for '" + method + "'");
 		}
 		return code;
 	}

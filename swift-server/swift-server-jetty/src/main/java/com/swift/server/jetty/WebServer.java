@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.swift.core.server.LifeCycle;
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.exception.UnknownException;
 import com.swift.server.jetty.handler.WebHandler;
 import com.swift.server.jetty.util.WebContextPathUtil;
 
@@ -68,7 +68,7 @@ public class WebServer implements LifeCycle{
                     log.info("连接器已启动:" + connector);
                 }
             } catch (Exception e) {
-                throw new SwiftRuntimeException("服务启动异常", e);
+                throw new UnknownException("服务启动异常", e);
             }
         }
 	}

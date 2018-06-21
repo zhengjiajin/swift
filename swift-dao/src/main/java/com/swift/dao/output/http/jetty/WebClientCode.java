@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.swift.core.model.ServiceRequest;
 import com.swift.core.model.ServiceResponse;
 import com.swift.dao.output.CallBackEngine;
+import com.swift.exception.ResultCode;
 import com.swift.exception.SwiftRuntimeException;
 
 /**
@@ -126,11 +127,11 @@ public abstract class WebClientCode {
                     res.setRequest(request);
                     res.setResponseTime(System.currentTimeMillis());
                 } catch (Exception ex) {
-                    return errorRes(5001, "返回包解释错误");
+                    return errorRes(ResultCode.PROTOCOL_ERROR, "返回包解释错误");
                 }
             } else {
                 log.error("收到Http错误响应：" + status + ":" + rsp);
-                return errorRes(status, rsp);
+                return errorRes(ResultCode.OTHER_SYS_ERROR, rsp);
             }
             return res;
         }

@@ -24,7 +24,7 @@ import com.swift.dao.index.es.annontation.ServiceIndex.Tnteraction;
 import com.swift.dao.index.es.factory.ServiceIndexNameFactory;
 import com.swift.dao.index.es.factory.UpdateIndexService;
 import com.swift.dao.index.es.factory.UpdateIndexService.ReturnIndexModel;
-import com.swift.exception.ServiceException;
+import com.swift.exception.SwiftRuntimeException;
 
 /**
  * 添加说明
@@ -63,7 +63,7 @@ public class UpdateServiceIndexFilter implements ResponseFilter {
             dm = res.getData();
         }
         List<String> ids = dm.getListString(serviceIndex.primaryPath());
-        if (ids == null || ids.isEmpty()) throw new ServiceException(500999, "取不到更新索引标志ID值");
+        if (ids == null || ids.isEmpty()) throw new SwiftRuntimeException("取不到更新索引标志ID值");
         String[] sss = new String[ids.size()];
         for (int i = 0; i < ids.size(); i++) {
             sss[i] = ids.get(i);

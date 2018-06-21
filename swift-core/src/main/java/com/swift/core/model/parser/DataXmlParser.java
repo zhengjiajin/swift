@@ -22,6 +22,7 @@ import com.ctc.wstx.stax.WstxInputFactory;
 import com.swift.core.model.data.DataModel;
 import com.swift.core.model.data.MapDataModel;
 import com.swift.exception.ServiceException;
+import com.swift.exception.SwiftRuntimeException;
 
 /**
  * 添加说明
@@ -44,9 +45,8 @@ public class DataXmlParser {
      * @param xml
      *            。
      * @return DataModel。
-     * @throws ServiceException
      */
-    public static DataModel xmlToObject(String xml) throws ServiceException {
+    public static DataModel xmlToObject(String xml) {
         XMLEventReader r = null;
         try {
             r = xmlInputFactory.createXMLEventReader(new StringReader(xml));
@@ -73,7 +73,7 @@ public class DataXmlParser {
             parseXml(r, data);
             return data;
         } catch (XMLStreamException ex) {
-            throw new ServiceException(401, "字段格式错误", ex);
+            throw new SwiftRuntimeException("字段格式错误", ex);
         } finally {
             try {
                 r.close();
@@ -168,7 +168,7 @@ public class DataXmlParser {
 	}
 
     private static void parseXml(XMLEventReader r, DataModel parent)
-        throws XMLStreamException, ServiceException {
+        throws XMLStreamException {
         Object object=null;
         while (r.hasNext()) {
             XMLEvent e = r.nextEvent();
@@ -205,14 +205,14 @@ public class DataXmlParser {
      * @throws XMLStreamException
      * @throws ServiceException
      */
-    private static void removeDataStartElement(XMLEventReader r) throws XMLStreamException, ServiceException {
+    private static void removeDataStartElement(XMLEventReader r) throws XMLStreamException {
         while (r.hasNext()) {
             XMLEvent e = r.nextEvent();
             if (e.isStartElement()) {
                 return;
             }
         }
-        throw new ServiceException(401, "XML不包含任何标签");
+        throw new SwiftRuntimeException("XML不包含任何标签");
     }
     
     public static void main(String[] args) throws Exception{

@@ -30,6 +30,7 @@ import com.swift.core.model.ServiceResponse;
 import com.swift.core.service.CallBackService;
 import com.swift.core.thread.ServerSendControl;
 import com.swift.core.thread.ThreadPoolFactory;
+import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
 import com.swift.exception.SwiftRuntimeException;
 import com.swift.server.jetty.protocol.WebHandlerCode;
@@ -77,11 +78,11 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
             continuation.setTimeout(getTimeout());
             continuation.suspend(rawHttpRequest.getResponse());
             if (continuation.isExpired()) {
-                throw new ServiceException(HttpServletResponse.SC_GATEWAY_TIMEOUT, "504 Gateway Timeout");
+                throw new ServiceException(ResultCode.PROTOCOL_ERROR, "504 Gateway Timeout");
             }
             WebHandlerCode handlerCode = selectHandler(target);
             if (handlerCode == null) {
-                throw new ServiceException(HttpServletResponse.SC_NOT_FOUND, "找不到相应协议");
+                throw new ServiceException(ResultCode.PROTOCOL_ERROR, "找不到相应协议");
             }
             HttpServiceRequest req = handlerCode.decode(target, rawHttpRequest, request, response);
             if (req == null) {
@@ -107,10 +108,6 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
         } catch (ServiceException ex) {
             log.error("请求处理失败", ex);
             sendHttpError(ex.getStatusCode(), ex.getMessage(), rawHttpRequest, target);
-            return;
-        } catch (SwiftRuntimeException ex) {
-            log.error("请求处理失败", ex);
-            sendHttpError(-1, ex.getMessage(), rawHttpRequest, target);
             return;
         } catch (Exception ex) {
             log.error("Http请求处理失败", ex);
@@ -141,7 +138,6 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
 	 * 
 	 * @param rawRequest
 	 * @param response
-	 * @throws ServiceException
 	 * @throws IOException
 	 */
 	private void sendResponse(ServiceResponse response,Request rawHttpRequest, String target) {
@@ -175,7 +171,7 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
         FileDefinition fileDef = (FileDefinition) sr.getData();
         InputStream input = fileDef.getInputStream();
         if (input == null) {
-            throw new ServiceException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "返回的文件流为空");
+            throw new SwiftRuntimeException("返回的文件流为空");
         }
 
         String contentType = fileDef.getContentType();

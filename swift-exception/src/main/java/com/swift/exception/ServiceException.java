@@ -10,7 +10,7 @@ package com.swift.exception;
  * @author 郑家锦
  * @version 1.0 2018年1月31日
  */
-public class ServiceException extends SwiftRuntimeException {
+public class ServiceException extends RuntimeException {
     
     private static final long serialVersionUID = -6602097234016394961L;
     

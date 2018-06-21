@@ -18,7 +18,7 @@ public class ThreadUtil {
         try {
             Thread.sleep(millis);
         } catch (Exception ex) {
-            new SwiftRuntimeException(ex);
+            new SwiftRuntimeException("系统忙",ex);
         }
     }
 }

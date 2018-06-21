@@ -10,19 +10,19 @@ package com.swift.exception;
  * @author 郑家锦
  * @version 1.0 2018年1月31日
  */
-public class SwiftRuntimeException extends RuntimeException {
+public class SwiftRuntimeException extends ServiceException {
 
     private static final long serialVersionUID = -501185588461465595L;
     
     public SwiftRuntimeException(String message) {
-        super(message);
+        super(ResultCode.SYS_ERROR,message);
     }
 
     public SwiftRuntimeException(Throwable cause) {
-        super(cause.getMessage(), cause);
+        super(ResultCode.SYS_ERROR,cause.getMessage(), cause);
     }
 
     public SwiftRuntimeException(String msg, Throwable cause) {
-        super(msg, cause);
+        super(ResultCode.SYS_ERROR,msg, cause);
     }
 }

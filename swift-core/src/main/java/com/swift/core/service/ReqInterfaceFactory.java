@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.swift.core.model.ServiceRequest;
 import com.swift.core.spring.Spring;
+import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
 import com.swift.util.type.TypeUtil;
 
@@ -84,9 +85,8 @@ public class ReqInterfaceFactory {
      * @param method 能力
      * @param version 版本号(必须是浮点型数字，不能出现字母)
      * @return
-     * @throws ServiceException
      */
-    public static SimpleInterface getInterface(String method, String version) throws ServiceException {
+    public static SimpleInterface getInterface(String method, String version) {
         Set<String> versions = interfaceVersions.get(method);
         if (versions != null) {
             String serviceName = findVersion(method, version, versions);
@@ -94,7 +94,7 @@ public class ReqInterfaceFactory {
         } else {
             String msg = "服务能力" + method + "找不到";
             log.error(msg);
-            throw new ServiceException(400, msg);
+            throw new ServiceException(ResultCode.NO_METHOD, msg);
         }
     }
     
@@ -103,14 +103,13 @@ public class ReqInterfaceFactory {
      * @param method
      * @param version
      * @return
-     * @throws ServiceException
      */
-    public static Object getInterfaceTrueObj(String method, String version) throws ServiceException {
+    public static Object getInterfaceTrueObj(String method, String version) {
         try {
             return AopTargetUtils.getTarget(getInterface(method, version));
         } catch (Exception ex) {
-            log.error("400", ex);
-            throw new ServiceException(400, "服务能力" + method + "找不到");
+            log.error(ResultCode.NO_METHOD+"",ex);
+            throw new ServiceException(ResultCode.NO_METHOD, "服务能力" + method + "找不到");
         }
     }
     
@@ -120,7 +119,6 @@ public class ReqInterfaceFactory {
 	 * @param method
 	 * @param version
 	 * @return
-	 * @throws ServiceException
 	 */
 	public static Object getInterfaceTrueObjSlient(String method, String version) {
 		Set<String> versions = interfaceVersions.get(method);

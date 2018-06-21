@@ -29,6 +29,7 @@ import com.swift.core.model.HttpServiceRequest;
 import com.swift.core.model.ServiceResponse;
 import com.swift.core.model.data.DataModel;
 import com.swift.core.model.data.MapDataModel;
+import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
 import com.swift.server.jetty.protocol.AbstractWebHandlerCode;
 import com.swift.server.jetty.protocol.WebHandlerCode;
@@ -156,7 +157,7 @@ public class SimpleBaseCode extends AbstractWebHandlerCode implements WebHandler
             return model;
         } catch (Exception ex) {
             log.error("输出解释出错:", ex);
-            throw new ServiceException(401, "协议解释异常");
+            throw new ServiceException(ResultCode.PROTOCOL_ERROR, "协议解释异常");
         }
     }
 
