@@ -129,9 +129,7 @@
 		<module>swift-server</module>
 		<module>swift-core</module>
 		<module>swift-dao</module>
-		<module>swift-client</module>
 		<module>swift-test</module>
-		<module>swift-auth</module>
 	</modules>
 	<dependencies>
 		<dependency>

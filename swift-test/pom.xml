@@ -22,7 +22,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.github.zhengjiajin</groupId>
-			<artifactId>swift-server-protocol-basehttp</artifactId>
+			<artifactId>swift-server-jetty</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

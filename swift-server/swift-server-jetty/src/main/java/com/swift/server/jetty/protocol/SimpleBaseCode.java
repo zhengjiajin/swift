@@ -3,7 +3,7 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
-package com.swift.server.protocol.basehttp;
+package com.swift.server.jetty.protocol;
 
 import java.io.IOException;
 import java.util.ArrayList;
