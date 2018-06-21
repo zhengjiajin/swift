@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import com.swift.core.model.FileDefinition;
 import com.swift.core.model.HttpServiceRequest;
+import com.swift.core.model.ServiceRequest;
 import com.swift.core.model.ServiceResponse;
 import com.swift.core.model.data.DataModel;
 import com.swift.core.model.data.MapDataModel;
@@ -182,7 +183,7 @@ public class SimpleBaseCode extends AbstractWebHandlerCode implements WebHandler
     
     private String getInterfaceVersion(String target){
         try{
-            if(target.indexOf(V_STR)==-1) return String.valueOf(Float.MAX_VALUE);
+            if(target.indexOf(V_STR)==-1) return ServiceRequest.DEFAULT_VERSION;
             target = target.substring(target.indexOf(V_STR)+V_STR.length());
             String v = target.substring(0,target.indexOf("/"));
             if(TypeUtil.isNumber(v)) return v;
