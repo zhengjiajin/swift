@@ -77,7 +77,6 @@
 		<javamail.version>1.4.1</javamail.version>
 		<aviator.version>2.3.3</aviator.version>
 		<apache-httpclient.version>4.5.3</apache-httpclient.version>
-		<commons-httpclient.version>3.1</commons-httpclient.version>
 		<commons-logging.version>1.2</commons-logging.version>
 		<commons-io.version>2.4</commons-io.version>
 		<commons-fileupload.version>1.2.2</commons-fileupload.version>

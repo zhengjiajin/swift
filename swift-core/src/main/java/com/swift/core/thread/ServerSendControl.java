@@ -76,12 +76,12 @@ public class ServerSendControl implements Runnable {
     public void run() {
         log.info("准备处理HTTP请求：" + req.getUuid() + ";" + req.toString());
         Thread.currentThread().setName(req.getMethod());
-        // 线程开始
-        forInitFilter();
-        forRequestFilter(req);
         ServiceResponse res = new ServiceResponse();
         res.setRequest(req);
         try {
+            // 线程开始
+            forInitFilter();
+            forRequestFilter(req);
             DataModel obj = ReqInterfaceFactory.getInterface(req.getMethod(), req.getInterfaceVersion()).doService(req);
             if (obj == null) obj = new MapDataModel();
             res.setData(obj);
@@ -105,12 +105,12 @@ public class ServerSendControl implements Runnable {
                 log.warn("处理请求时间过长:" + msg);
             }
             this.callback.callback(res);
+            forResponseFilter(res);
+            // 线程结束
+            forEndFilter();
         } catch (Throwable ex) {
-            log.error("发送响应失败", ex);
+            log.error("处理异常", ex);
         }
-        forResponseFilter(res);
-        // 线程结束
-        forEndFilter();
     }
 
     private void forInitFilter() {
