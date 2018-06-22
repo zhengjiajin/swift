@@ -115,10 +115,15 @@
 			<artifactId>ons-sasl-client</artifactId>
 			<version>0.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
+			<version>${apache-httpclient.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
 			<version>${apache-httpclient.version}</version>
 		</dependency>
 		<dependency>

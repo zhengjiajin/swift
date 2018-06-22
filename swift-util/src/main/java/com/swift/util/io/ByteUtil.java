@@ -11,7 +11,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -20,12 +19,20 @@ import java.nio.charset.Charset;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.swift.exception.SwiftRuntimeException;
+
 /**
  * 
  * @author 郑家锦
  * @version 1.0 2018年1月31日
  */
 public class ByteUtil {
+
+    private final static Logger log = LoggerFactory.getLogger(ByteUtil.class);
+
     public static int byteArrayToInt(byte[] bytes) {
         int value = 0;
         // 由高位到低位
@@ -45,7 +52,7 @@ public class ByteUtil {
         result[3] = (byte) (i & 0xFF);
         return result;
     }
-    
+
     /**
      * 把十六进制串（HEX）转换为byte[]。
      * 
@@ -90,46 +97,59 @@ public class ByteUtil {
      * 解压
      * 
      * @param b
-     * @return
-     * @throws IOException
+     * @return @
      */
-    public static byte[] uncompress(byte[] b) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ByteArrayInputStream in = new ByteArrayInputStream(b);
-        GZIPInputStream gunzip = new GZIPInputStream(in);
-        byte[] buffer = new byte[256];
-        int n;
-        while ((n = gunzip.read(buffer)) >= 0) {
-            out.write(buffer, 0, n);
+    public static byte[] uncompress(byte[] b) {
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ByteArrayInputStream in = new ByteArrayInputStream(b);
+            GZIPInputStream gunzip = new GZIPInputStream(in);
+            byte[] buffer = new byte[256];
+            int n;
+            while ((n = gunzip.read(buffer)) >= 0) {
+                out.write(buffer, 0, n);
+            }
+            out.close();
+            return out.toByteArray();
+        } catch (IOException ex) {
+            log.error("IO异常", ex);
+            throw new SwiftRuntimeException("IO异常");
         }
-        out.close();
-        return out.toByteArray();
     }
 
     /**
      * 压缩
      * 
      * @param b
-     * @return
-     * @throws IOException
+     * @return @
      */
-    public static byte[] compress(byte[] b) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        GZIPOutputStream gout = new GZIPOutputStream(out);
-        gout.write(b);
-        gout.close();
-        return out.toByteArray();
+    public static byte[] compress(byte[] b) {
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            GZIPOutputStream gout = new GZIPOutputStream(out);
+            gout.write(b);
+            gout.close();
+            return out.toByteArray();
+        } catch (IOException ex) {
+            log.error("IO异常", ex);
+            throw new SwiftRuntimeException("IO异常");
+        }
     }
 
-    public static byte[] getInputStream(InputStream in) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] b_in = new byte[1024];
-        int length = 0;
-        while ((length = in.read(b_in)) > 0) {
-            out.write(b_in, 0, length);
+    public static byte[] getInputStream(InputStream in) {
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] b_in = new byte[1024];
+            int length = 0;
+            while ((length = in.read(b_in)) > 0) {
+                out.write(b_in, 0, length);
+            }
+            out.close();
+            return out.toByteArray();
+        } catch (IOException ex) {
+            log.error("IO异常", ex);
+            throw new SwiftRuntimeException("IO异常");
         }
-        out.close();
-        return out.toByteArray();
     }
 
     public static byte[] getBytes(char[] chars) {
@@ -144,12 +164,17 @@ public class ByteUtil {
     /**
      * 抛出IOException会使Jetty返回HTTP 500错误，并关闭连接。
      */
-    public static  String readBody(BufferedReader reader) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        for(String line; (line = reader.readLine()) != null;) {
-            sb.append(line).append("\r\n");
+    public static String readBody(BufferedReader reader) {
+        try {
+            StringBuilder sb = new StringBuilder();
+            for (String line; (line = reader.readLine()) != null;) {
+                sb.append(line).append("\r\n");
+            }
+            return sb.toString();
+        } catch (IOException ex) {
+            log.error("IO异常", ex);
+            throw new SwiftRuntimeException("IO异常");
         }
-        return sb.toString();
     }
     // byte转char
 
@@ -161,27 +186,32 @@ public class ByteUtil {
         CharBuffer cb = cs.decode(bb);
         return cb.array();
     }
-    
+
     public static final InputStream byteToInput(byte[] buf) {
         return new ByteArrayInputStream(buf);
     }
 
-    public static final byte[] inputToByte(InputStream inStream) throws IOException {
-        ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
-        byte[] buff = new byte[100];
-        int rc = 0;
-        while ((rc = inStream.read(buff, 0, 100)) > 0) {
-            swapStream.write(buff, 0, rc);
+    public static final byte[] inputToByte(InputStream inStream) {
+        try {
+            ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
+            byte[] buff = new byte[100];
+            int rc = 0;
+            while ((rc = inStream.read(buff, 0, 100)) > 0) {
+                swapStream.write(buff, 0, rc);
+            }
+            byte[] in2b = swapStream.toByteArray();
+            return in2b;
+        } catch (IOException ex) {
+            log.error("IO异常", ex);
+            throw new SwiftRuntimeException("IO异常");
         }
-        byte[] in2b = swapStream.toByteArray();
-        return in2b;
     }
-    
-    public static byte[] toByteArray(String filename) throws IOException {
+
+    public static byte[] toByteArray(String filename) {
 
         File f = new File(filename);
         if (!f.exists()) {
-            throw new FileNotFoundException(filename);
+            throw new SwiftRuntimeException(filename + "文件不存在");
         }
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream((int) f.length());
@@ -195,16 +225,16 @@ public class ByteUtil {
                 bos.write(buffer, 0, len);
             }
             return bos.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw e;
+        } catch (IOException ex) {
+            log.error("IO异常", ex);
+            throw new SwiftRuntimeException("IO异常");
         } finally {
             try {
                 in.close();
+                bos.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("IO异常", e);
             }
-            bos.close();
         }
     }
 }
