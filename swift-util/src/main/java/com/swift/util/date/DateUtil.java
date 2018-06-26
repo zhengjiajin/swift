@@ -5,6 +5,7 @@
  */
 package com.swift.util.date;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -274,5 +275,24 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
         int mm = (int) (d - hh * 3600) / 60;
         int ss = (int) d - hh * 3600 - mm * 60;
         return (hh < 10 ? "0" + hh : hh) + ":" + (mm < 10 ? "0" + mm : mm) + ":" + (ss < 10 ? "0" + ss : ss);
+    }
+    
+    /**
+     * 存在时区问题，使用时注意
+     */
+    public static long toDateTime(Object obj, String type) {
+        if (obj != null) {
+            DateFormat format = new SimpleDateFormat(type);
+            try {
+                if (obj instanceof Date) {
+                    return format.parse(format.format(obj)).getTime();
+                } else {
+                    return format.parse(TypeUtil.toString(obj)).getTime();
+                }
+            } catch (ParseException e) {
+                throw new RuntimeException("格式转换出错:" + obj, e);
+            }
+        }
+        return 0;
     }
 }
