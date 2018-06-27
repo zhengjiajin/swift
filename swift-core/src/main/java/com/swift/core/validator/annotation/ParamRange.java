@@ -16,5 +16,5 @@ import org.hibernate.validator.constraints.Range;
 public @interface ParamRange {
     String param();
 
-    Range anno();
+    Range anno()  default @Range;
 }

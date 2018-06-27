@@ -15,5 +15,5 @@ import org.hibernate.validator.constraints.NotEmpty;
 public @interface ParamNotEmpty {
     String param();
     
-    NotEmpty anno();
+    NotEmpty anno() default @NotEmpty;
 }

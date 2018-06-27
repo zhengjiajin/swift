@@ -15,5 +15,5 @@ import javax.validation.constraints.AssertTrue;
 public @interface ParamAssertTrue {
     String param();
     
-    AssertTrue anno();
+    AssertTrue anno() default @AssertTrue;
 }

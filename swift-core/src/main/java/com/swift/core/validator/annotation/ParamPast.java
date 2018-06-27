@@ -16,5 +16,5 @@ import javax.validation.constraints.Past;
 public @interface ParamPast {
     String param();
 
-    Past anno();
+    Past anno() default @Past;
 }

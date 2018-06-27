@@ -15,5 +15,5 @@ import org.hibernate.validator.constraints.Length;
 public @interface ParamLength {
     String param();
     
-    Length anno();
+    Length anno() default @Length;
 }

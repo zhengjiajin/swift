@@ -15,5 +15,5 @@ import javax.validation.constraints.Future;
 public @interface ParamFuture {
     String param();
     
-    Future anno();
+    Future anno() default @Future;
 }

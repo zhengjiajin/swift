@@ -16,5 +16,5 @@ import javax.validation.constraints.Size;
 public @interface ParamSize {
     String param();
 
-    Size anno();
+    Size anno() default @Size;
 }

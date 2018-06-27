@@ -15,5 +15,5 @@ import javax.validation.constraints.NotNull;
 public @interface ParamNotNull {
     String param();
     
-    NotNull anno();
+    NotNull anno() default @NotNull;
 }

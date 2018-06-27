@@ -150,13 +150,4 @@ public class WebClient {
 		clientCodeMapping.put(key, value);
 	}
     
-    @SuppressWarnings("unused")
-	private WebClientCode getWebClientCode(String method) {
-		WebClientCode code = clientCodeMapping.get(method);
-		if (code == null) {
-			throw new ServiceException(ResultCode.NO_METHOD, "No WebClientCode for '" + method + "'");
-		}
-		return code;
-	}
-
 }

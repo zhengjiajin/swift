@@ -15,5 +15,5 @@ import org.hibernate.validator.constraints.Email;
 public @interface ParamEmail {
     String param();
     
-    Email anno();
+    Email anno() default @Email;
 }

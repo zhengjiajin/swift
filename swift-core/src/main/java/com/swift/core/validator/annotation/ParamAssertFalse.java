@@ -16,5 +16,5 @@ import javax.validation.constraints.AssertFalse;
 public @interface ParamAssertFalse {
     String param();
 
-    AssertFalse anno();
+    AssertFalse anno() default @AssertFalse;
 }
