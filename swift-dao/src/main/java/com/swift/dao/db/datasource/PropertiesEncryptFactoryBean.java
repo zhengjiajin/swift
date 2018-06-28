@@ -76,4 +76,9 @@ public class PropertiesEncryptFactoryBean implements FactoryBean<Properties> {
             throw new RuntimeException(ex);
         }
     }  
+    
+    public static void main(String[] args) throws Exception{
+        System.out.println(DesUtil.encrypt("hhmkroot", "sYHN3d2f"));
+        System.out.println(DesUtil.encrypt("hhmkroot@WSX", "sYHN3d2f"));
+    }
 }
