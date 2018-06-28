@@ -14,7 +14,7 @@ import org.springframework.aop.framework.AopContext;
  */
 public class AopContextUtil {
     
-    public Object currentProxy(Object thisObj) {
+    public static Object currentProxy(Object thisObj) {
         try {
             return AopContext.currentProxy();
         }catch (IllegalStateException e) {
