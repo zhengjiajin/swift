@@ -39,7 +39,7 @@ import com.swift.util.type.TypeUtil;
  */
 public abstract class AbstractBeanDataModel implements DataModel {
 
-	private static final Set<Class<?>> SUPPORTED_CLASS = new HashSet<Class<?>>() {
+    private static final Set<Class<?>> SUPPORTED_CLASS = new HashSet<Class<?>>() {
 		private static final long serialVersionUID = 1L;
 
 		{

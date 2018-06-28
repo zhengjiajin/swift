@@ -165,7 +165,11 @@ public class CommonKafkaConsumer extends Thread implements Closeable {
 		    Topic topic = AnnotationUtil.getAnnotation(handler.getClass(), Topic.class);
 		    if(topic==null) continue;
 		    if(!TypeUtil.inList(topic.value(), KafkaConfigurer.localTopic(record.topic())))  continue;
-			handler.handle(record.value());
+		    try {
+		        handler.handle(record.value());
+		    } catch (Throwable ex) {
+	            LOGGER.error(handler+" error ", ex);
+	        }
 		}
 	}
 }
