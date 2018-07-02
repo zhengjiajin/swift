@@ -64,6 +64,7 @@
 		<spring.security.version>3.2.3.RELEASE</spring.security.version>
 		<mybatis.version>3.4.1</mybatis.version>
 		<mybatis-spring.version>1.3.1</mybatis-spring.version>
+		<mybatis-pagehelper.version>5.0.2</mybatis-pagehelper.version>
 		<mybatis-ehcache.version>1.0.3</mybatis-ehcache.version>
 		<mysql-connector.version>5.1.12</mysql-connector.version>
 		<c3p0.version>0.9.1.2</c3p0.version>
