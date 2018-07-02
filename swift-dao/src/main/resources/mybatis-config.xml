@@ -9,8 +9,8 @@
 	<!-- 配置分页插件 -->
 	<plugins>
 		<plugin interceptor="com.github.pagehelper.PageInterceptor">
-			<!-- 指定数据库方言 -->
-			<property name="dialect" value="mysql" />
+			<!-- 指定数据库方言4.0后的不需要了 -->
+			<!-- <property name="dialect" value="mysql" /> -->
 		</plugin>
 	</plugins>
 </configuration> 
