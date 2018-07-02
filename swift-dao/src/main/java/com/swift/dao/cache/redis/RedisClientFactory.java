@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
 import com.esotericsoftware.minlog.Log;
+import com.swift.core.env.EnvDecode;
 import com.swift.util.type.IpUtil;
 import com.swift.util.type.TypeUtil;
 
@@ -55,6 +56,7 @@ public static final Logger LOG = LoggerFactory.getLogger(RedisClientFactory.clas
             Log.warn("******没有配置REDIS地址******");
             return;
         }
+        String pwd = EnvDecode.decode(password);
         // 池基本配置 
         JedisPoolConfig config = new JedisPoolConfig(); 
         config.setMaxTotal(maxActive);
@@ -62,9 +64,9 @@ public static final Logger LOG = LoggerFactory.getLogger(RedisClientFactory.clas
         config.setMaxWaitMillis(maxWait); 
         config.setTestOnBorrow(test);
         if(hosts.indexOf(":")==-1){
-            pool = new JedisPool(config,IpUtil.domainToIp(hosts),Protocol.DEFAULT_PORT, Protocol.DEFAULT_TIMEOUT, password, Protocol.DEFAULT_DATABASE);
+            pool = new JedisPool(config,IpUtil.domainToIp(hosts),Protocol.DEFAULT_PORT, Protocol.DEFAULT_TIMEOUT, pwd, Protocol.DEFAULT_DATABASE);
         }else{
-            pool = new JedisPool(config,IpUtil.domainToIp(hosts.split(":")[0]),Integer.valueOf(hosts.split(":")[1]),Protocol.DEFAULT_TIMEOUT, password, Protocol.DEFAULT_DATABASE);
+            pool = new JedisPool(config,IpUtil.domainToIp(hosts.split(":")[0]),Integer.valueOf(hosts.split(":")[1]),Protocol.DEFAULT_TIMEOUT, pwd, Protocol.DEFAULT_DATABASE);
         }
     }
     

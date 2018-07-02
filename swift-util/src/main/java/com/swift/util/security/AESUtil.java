@@ -8,6 +8,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.map.LRUMap;
 
+import com.swift.exception.UnknownException;
+
 /**
  * This class is used for ...
  * AES Coder<br/> 
@@ -30,7 +32,7 @@ public class AESUtil {
 			byte[] ctext = AESUtil.getEncryptCipher(password).doFinal(ptext);
 			return byte2hex(ctext);
 		} catch(Exception e) {
-			throw new CipherException(e);
+		    throw new UnknownException("AES异常",e);
 		}
 	}
 	/**
@@ -44,7 +46,7 @@ public class AESUtil {
 			byte[] ptext = AESUtil.getDecryptCipher(password).doFinal(hex2byte(content)); 
 			return new String(ptext);
 		} catch(Exception e) {
-			throw new CipherException(e);
+		    throw new UnknownException("AES异常",e);
 		}
 	}
 	
@@ -63,7 +65,7 @@ public class AESUtil {
 			}
 			return cp;
 		} catch (Exception e) {
-			throw new CipherException(e);
+		    throw new UnknownException("AES异常",e);
 		}
 	}
 	private static Cipher getDecryptCipher(String password) {
@@ -78,15 +80,8 @@ public class AESUtil {
 			}
 			return cp;
 		} catch (Exception e) {
-			throw new CipherException(e);
+			throw new UnknownException("AES异常",e);
 		}
-	}
-	public static class CipherException extends RuntimeException {
-		private static final long serialVersionUID = -7938919648349659765L;
-
-		public CipherException(Exception e) {
-	        super(e);
-	    }
 	}
 	
 	private static Key getKey(String publickey) {
