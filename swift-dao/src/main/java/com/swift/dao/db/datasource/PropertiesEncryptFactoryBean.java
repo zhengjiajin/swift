@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import org.springframework.beans.factory.FactoryBean;
 
+import com.swift.core.env.EnvDecode;
 import com.swift.util.security.DesUtil;
 
 /**
@@ -52,30 +53,15 @@ public class PropertiesEncryptFactoryBean implements FactoryBean<Properties> {
         String originalUsername = properties.getProperty("user");  
         String originalPassword = properties.getProperty("password");  
         if (originalUsername != null){  
-            String newUsername = deEncryptUsername(originalUsername);  
+            String newUsername = EnvDecode.decode(originalUsername);
             properties.put("user", newUsername);  
         }  
         if (originalPassword != null){  
-            String newPassword = deEncryptPassword(originalPassword);  
+            String newPassword = EnvDecode.decode(originalPassword);  
             properties.put("password", newPassword);  
         }  
     }  
-      
-    private String deEncryptUsername(String originalUsername){  
-        return deEncryptString(originalUsername);  
-    }  
-      
-    private String deEncryptPassword(String originalPassword){  
-        return deEncryptString(originalPassword);  
-    }  
-    //简单加密  
-    private String deEncryptString(String originalString) {
-        try {
-            return DesUtil.decrypt(originalString, "sYHN3d2f");
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }  
+  
     
     public static void main(String[] args) throws Exception{
         System.out.println(DesUtil.encrypt("hhmkroot", "sYHN3d2f"));
