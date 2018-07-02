@@ -26,7 +26,7 @@ public class MybatisBeanConfig {
     @Bean
     public SqlSessionFactoryBean sqlSessionFactory(DataSource dataSource,
         @Value("classpath*:mybatis/**/*.xml") Resource[] mapperLocations,
-        @Value("classpath:mybatis-config.xml") Resource configLocation) {
+        @Value("classpath*:mybatis-config.xml") Resource configLocation) {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
         bean.setMapperLocations(mapperLocations);
