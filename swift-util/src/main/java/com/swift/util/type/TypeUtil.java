@@ -5,6 +5,8 @@
  */
 package com.swift.util.type;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Collection;
@@ -205,6 +207,23 @@ public class TypeUtil {
         }
         if(obj instanceof Number) return true;
         return toString(obj).matches("-?[0-9]+.*[0-9]*");
+    }
+    
+    public static BigDecimal toBigDecimal(Object obj) {
+        if (obj == null) return null;
+        BigDecimal ret = null;
+        if( obj instanceof BigDecimal ) {
+            ret = (BigDecimal) obj;
+        } else if( obj instanceof String ) {
+            ret = new BigDecimal( (String) obj );
+        } else if( obj instanceof BigInteger ) {
+            ret = new BigDecimal( (BigInteger) obj );
+        } else if( obj instanceof Number ) {
+            ret = new BigDecimal( ((Number)obj).doubleValue() );
+        } else {
+            throw new ClassCastException("Not possible to coerce ["+obj+"] from class "+obj.getClass()+" into a BigDecimal.");
+        }
+        return ret;
     }
     
     public static boolean isEmail(String email) {     
