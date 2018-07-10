@@ -8,8 +8,8 @@ package com.swift.test.kafka;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.swift.dao.mq.kafka.KafkaRequest;
-import com.swift.dao.mq.kafka.KafkaService;
+import com.swift.dao.kafka.KafkaRequest;
+import com.swift.dao.kafka.KafkaService;
 import com.swift.test.BaseJunit4Test;
 import com.swift.util.exec.ThreadUtil;
 

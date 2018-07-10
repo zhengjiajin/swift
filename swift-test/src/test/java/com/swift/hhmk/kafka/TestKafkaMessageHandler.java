@@ -7,9 +7,9 @@ package com.swift.hhmk.kafka;
 
 import org.springframework.stereotype.Service;
 
-import com.swift.dao.mq.kafka.KafkaRequest;
-import com.swift.dao.mq.kafka.KafkaService.KafkaMessageHandler;
-import com.swift.dao.mq.kafka.KafkaService.Topic;
+import com.swift.dao.kafka.KafkaRequest;
+import com.swift.dao.kafka.KafkaService.KafkaMessageHandler;
+import com.swift.dao.kafka.KafkaService.Topic;
 import com.swift.util.text.JsonUtil;
 
 /**

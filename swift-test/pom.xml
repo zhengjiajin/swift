@@ -17,13 +17,37 @@
 		</dependency>
 		<dependency>
 			<groupId>com.github.zhengjiajin</groupId>
-			<artifactId>swift-dao</artifactId>
+			<artifactId>swift-dao-redis</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.zhengjiajin</groupId>
-			<artifactId>swift-server-jetty</artifactId>
+			<artifactId>swift-dao-db</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.zhengjiajin</groupId>
+			<artifactId>swift-dao-es</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.zhengjiajin</groupId>
+			<artifactId>swift-dao-kafka</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.zhengjiajin</groupId>
+			<artifactId>swift-dao-output</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.zhengjiajin</groupId>
+			<artifactId>swift-dao-util</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
