@@ -18,6 +18,7 @@
 		<module>swift-dao-output</module>
 		<module>swift-dao-util</module>
 		<module>swift-dao-es</module>
+		<module>swift-dao-alimq</module>
 	</modules>
 	<dependencies>
 		<dependency>
