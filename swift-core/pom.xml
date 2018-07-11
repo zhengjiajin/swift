@@ -68,5 +68,19 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
+
+
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>${javax.el.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>${javax.el.version}</version>
+		</dependency>
+
 	</dependencies>
 </project>
