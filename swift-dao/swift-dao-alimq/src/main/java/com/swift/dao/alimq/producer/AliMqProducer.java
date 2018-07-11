@@ -53,7 +53,7 @@ public class AliMqProducer implements AliMqService {
     }
     
     private Message createMsg(String topic, AliMqRequest request) {
-        Message msg = new Message(topic, request.getMethod(),JsonUtil.toJson(request).getBytes());
+        Message msg = new Message(AliMqConfigurer.removeTopic(topic), request.getMethod(),JsonUtil.toJson(request).getBytes());
         msg.setKey(request.getMsgId());
         return msg;
     }
