@@ -51,7 +51,7 @@ public class TestDb extends BaseJunit4Test{
     @Transactional
     public void testJpa() {
         System.out.println(systemEnvRepository.findOne("jpa.test"));
-        systemEnvRepository.delete("jpa.test");
+        //systemEnvRepository.delete("jpa.test");
         System.out.println(systemEnvRepository.findOne("jpa.test"));
         SystemEnv s = new SystemEnv();
         s.setKeyId("jpa.test");
@@ -59,6 +59,8 @@ public class TestDb extends BaseJunit4Test{
         systemEnvServiceImpl.save(s);
         systemEnvJdbcImpl.add(s);
         systemEnvMapper.insert(s);
+        System.out.println(systemEnvRepository.findOne("jpa.test"));
+        systemEnvRepository.delete("jpa.test");
         System.out.println(systemEnvRepository.findOne("jpa.test"));
     }
     
