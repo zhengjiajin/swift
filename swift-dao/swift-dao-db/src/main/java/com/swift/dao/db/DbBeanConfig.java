@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -26,8 +26,8 @@ public class DbBeanConfig {
 
     @Bean
     @Autowired
-    public DataSourceTransactionManager transactionManager(DataSource dataSource) {
-        DataSourceTransactionManager bean = new DataSourceTransactionManager();
+    public JpaTransactionManager transactionManager(DataSource dataSource) {
+        JpaTransactionManager bean = new JpaTransactionManager();
         bean.setDataSource(dataSource);
         return bean;
     }

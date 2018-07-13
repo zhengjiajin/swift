@@ -8,9 +8,12 @@ package com.swift.test.db;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.swift.core.spring.Spring;
 import com.swift.dao.db.springjdbc.MarkObject;
 import com.swift.test.BaseJunit4Test;
+import com.swift.test.db.jdbc.SystemEnvJdbcImpl;
 import com.swift.test.db.jpa.SystemEnvRepository;
 import com.swift.test.db.mybatis.SystemEnvMapper;
 
@@ -28,9 +31,35 @@ public class TestDb extends BaseJunit4Test{
     
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    
+    @Autowired
+    private SystemEnvServiceImpl systemEnvServiceImpl;
+    @Autowired
+    private SystemEnvJdbcImpl systemEnvJdbcImpl;
+    
+    
+    public static void main(String[] args) {
+        SystemEnvRepository aa = Spring.getBean(SystemEnvRepository.class);
+        SystemEnv s = new SystemEnv();
+        s.setKeyId("jpa.test");
+        s.setValueContent("test");
+        aa.save(s);
+        System.out.println(aa.findOne("jpa.test"));
+    }
+    
     @Test
+    @Transactional
     public void testJpa() {
-        System.out.println(systemEnvRepository.findOne("alipay.appid"));
+        System.out.println(systemEnvRepository.findOne("jpa.test"));
+        systemEnvRepository.delete("jpa.test");
+        System.out.println(systemEnvRepository.findOne("jpa.test"));
+        SystemEnv s = new SystemEnv();
+        s.setKeyId("jpa.test");
+        s.setValueContent("test");
+        systemEnvServiceImpl.save(s);
+        systemEnvJdbcImpl.add(s);
+        systemEnvMapper.insert(s);
+        System.out.println(systemEnvRepository.findOne("jpa.test"));
     }
     
     @Test

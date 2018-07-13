@@ -27,7 +27,7 @@ import org.springframework.stereotype.Repository;
  * @version 1.0 2018年6月5日
  */
 @Configuration
-@EnableJpaRepositories(value = { "com.swift" }, includeFilters = { @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Repository.class) })
+@EnableJpaRepositories(value = { "com.swift" }, includeFilters = { @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Repository.class)})
 public class JpaBeanConfig {
     private static final Logger log = LoggerFactory.getLogger(JpaBeanConfig.class);
 
@@ -39,7 +39,7 @@ public class JpaBeanConfig {
         bean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         bean.setJpaDialect(new HibernateJpaDialect());
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-        if (log.isDebugEnabled()) {
+        if (log.isInfoEnabled()) {
             jpaVendorAdapter.setShowSql(true);
         }
         bean.setJpaVendorAdapter(jpaVendorAdapter);

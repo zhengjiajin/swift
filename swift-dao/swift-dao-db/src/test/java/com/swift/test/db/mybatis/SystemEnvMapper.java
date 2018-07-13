@@ -5,6 +5,8 @@
  */
 package com.swift.test.db.mybatis;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.swift.dao.db.mybatis.MybatisMapper;
 import com.swift.test.db.SystemEnv;
 
@@ -17,4 +19,6 @@ import com.swift.test.db.SystemEnv;
 public interface SystemEnvMapper {
 
     public SystemEnv get(String keyId);
+    
+    public void insert(@Param("params") SystemEnv t);
 }

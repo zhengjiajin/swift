@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import com.swift.core.model.ServiceRequest;
 import com.swift.core.model.data.DataModel;
 import com.swift.core.service.SimpleInterface;
-import com.swift.core.validator.DataValidator;
-import com.swift.test.db.SystemEnv;
 
 /**
  * 添加说明 
@@ -25,7 +23,6 @@ public class TestViPojoService implements SimpleInterface{
      * @see com.swift.core.service.SimpleInterface#doService(com.swift.core.model.ServiceRequest)
      */
     @Override
-    @DataValidator(SystemEnv.class)
     public DataModel doService(ServiceRequest req) {
         System.out.println(req.getData());
         return req.getData();

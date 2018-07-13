@@ -157,6 +157,7 @@ public class DataSourceFactory extends AbstractRoutingDataSource implements EndF
         bean.setAcquireRetryDelay(10000);
         bean.setBreakAfterAcquireFailure(false);
         bean.setTestConnectionOnCheckout(false);
+        bean.setAutoCommitOnClose(true);
         return bean;
     }
 
