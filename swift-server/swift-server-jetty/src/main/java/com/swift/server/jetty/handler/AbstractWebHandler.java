@@ -156,7 +156,7 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
     				rawResponse.addCookie(cookie);
     			}
     		}
-    		serAccessHeader(rawResponse);
+    		serAccessHeader(rawHttpRequest,rawResponse);
     		try {
                 rawResponse.getOutputStream().write(resModel.getBody());
             } catch (IOException e) {
@@ -189,7 +189,7 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
                 fileName = fileName.substring(idx + 1);
             }
         }
-        serAccessHeader(rawResponse);
+        serAccessHeader(rawHttpRequest,rawResponse);
         rawResponse.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         rawResponse.setStatus(200);
 
@@ -220,9 +220,13 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
 	}
 
 
-    private void serAccessHeader(HttpServletResponse rawResponse) {
-        rawResponse.addHeader("Access-Control-Allow-Origin", "*");
-        rawResponse.addHeader("Access-Control-Allow-Credentials", "false");
+    private void serAccessHeader(HttpServletRequest reques,HttpServletResponse rawResponse) {
+        if(TypeUtil.isNull(reques.getHeader("Origin"))) {
+            rawResponse.addHeader("Access-Control-Allow-Origin", reques.getHeader("Host"));
+        }else {
+            rawResponse.addHeader("Access-Control-Allow-Origin", reques.getHeader("Origin"));
+        }
+        rawResponse.addHeader("Access-Control-Allow-Credentials", "true");
     }
 
     /**
@@ -235,7 +239,7 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
      */
     protected void sendHttpError(int status, String msg, Request rawHttpRequest, String target) {
         Response rawHttpResponse = rawHttpRequest.getResponse();
-        serAccessHeader(rawHttpResponse);
+        serAccessHeader(rawHttpRequest,rawHttpResponse);
         try {
             WebHandlerCode handler = selectHandler(target);
             if(handler!=null){
