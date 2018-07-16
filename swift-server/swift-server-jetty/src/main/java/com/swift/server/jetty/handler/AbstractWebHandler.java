@@ -222,7 +222,7 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
 
     private void serAccessHeader(HttpServletRequest reques,HttpServletResponse rawResponse) {
         if(TypeUtil.isNull(reques.getHeader("Origin"))) {
-            rawResponse.addHeader("Access-Control-Allow-Origin", reques.getHeader("Host"));
+            rawResponse.addHeader("Access-Control-Allow-Origin", reques.getHeader("Referer"));
         }else {
             rawResponse.addHeader("Access-Control-Allow-Origin", reques.getHeader("Origin"));
         }
