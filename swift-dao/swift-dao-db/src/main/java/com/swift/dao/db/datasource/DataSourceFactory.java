@@ -42,8 +42,15 @@ public class DataSourceFactory extends AbstractRoutingDataSource implements EndF
     //用于保持同一线程同一连接源
     private static ThreadLocal<Map<String,Integer>> thredLocalDb = new ThreadLocal<Map<String,Integer>>();
 
-    @Value("${jdbc.driverClassName}")
+    @Value("${jdbc.driverClassName:org.gjt.mm.mysql.Driver}")
     private String driverClassName;
+    
+    @Value("${jdbc.minPoolSize:5}")
+    private String minPoolSize;
+    
+    @Value("${jdbc.maxPoolSize:100}")
+    private String maxPoolSize;
+    
     @Value("${classpath*:jdbc.properties}")
     private Resource resource;
 
@@ -146,12 +153,12 @@ public class DataSourceFactory extends AbstractRoutingDataSource implements EndF
             throw new RuntimeException("driverClassName出错");
         }
         bean.setJdbcUrl(url);
-        bean.setMinPoolSize(5);
-        bean.setMaxPoolSize(100);
+        bean.setMinPoolSize(TypeUtil.toInt(minPoolSize));
+        bean.setMaxPoolSize(TypeUtil.toInt(maxPoolSize));
         bean.setMaxIdleTime(1800);
         bean.setAcquireIncrement(2);
         bean.setMaxStatements(0);
-        bean.setInitialPoolSize(5);
+        bean.setInitialPoolSize(TypeUtil.toInt(minPoolSize));
         bean.setIdleConnectionTestPeriod(300);
         bean.setAcquireRetryAttempts(30);
         bean.setAcquireRetryDelay(10000);
