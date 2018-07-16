@@ -3,7 +3,11 @@ package com.swift.util.security;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class MD5Utils {
+    private static final Logger log = LoggerFactory.getLogger(MD5Utils.class);
 	// 全局数组
     private final static String[] strDigits = { "0", "1", "2", "3", "4", "5",
             "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
@@ -48,7 +52,7 @@ public class MD5Utils {
             // md.digest() 该函数返回值为存放哈希值结果的byte数组
             resultString = byteToString(md.digest(strObj.getBytes()));
         } catch (NoSuchAlgorithmException ex) {
-            ex.printStackTrace();
+            log.error("MD5签名失败",ex);
         }
         return resultString;
     }
