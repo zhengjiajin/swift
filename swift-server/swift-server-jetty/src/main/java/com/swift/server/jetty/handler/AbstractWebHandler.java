@@ -22,7 +22,6 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.swift.core.model.FileDefinition;
 import com.swift.core.model.HttpServiceRequest;
@@ -56,11 +55,6 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
     @Autowired
     protected ThreadPoolFactory threadPool;
     
-    /**
-     * 端口
-     */
-    @Value("${webServer.http.port:8090}")
-    private int port = 8090;
     
     /**
      * 处理接收到的请求
@@ -281,30 +275,8 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
         this.webHandlerCode = webHandlerCode;
     }
 
-	
-
-    /** 
-     * @see com.WebHandler.hospital.server.core.handler.HandlerFilter#isPutHandler()
-     */
-    @Override
-    public boolean isPutHandler() {
-        if(port<0) {
-            log.info(getClass().getName()+":port为"+port+"不启动");
-            return false;
-        }
-        log.info(getClass().getName()+":port为"+port+"启动");
-        return true;
-    }
-    
     protected long getTimeout() {
 		return DEFAULT_TIMEOUT;
 	}
     
-    /** 
-     * @see com.WebHandler.hospital.server.core.handler.HandlerFilter#port()
-     */
-    @Override
-    public int port() {
-        return port;
-    }
 }

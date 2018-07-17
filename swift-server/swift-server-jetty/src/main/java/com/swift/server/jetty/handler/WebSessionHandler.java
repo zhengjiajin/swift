@@ -67,23 +67,6 @@ public class WebSessionHandler extends SessionHandler implements WebHandler {
         return true;
     }
 
-    /**
-     * @see com.WebHandler.hospital.server.core.handler.HandlerFilter#isPutHandler()
-     */
-    @Override
-    public boolean isPutHandler() {
-        log.info(getClass().getName()+"启动");
-        return true;
-    }
-
-    /** 
-     * @see com.WebHandler.hospital.server.core.handler.HandlerFilter#port()
-     */
-    @Override
-    public int port() {
-        return 0;
-    }
-
     /** 
      * NULL的话所有都要通过
      * @see com.WebHandler.hospital.server.core.handler.HandlerFilter#getContextPath()

@@ -23,16 +23,6 @@ public interface WebHandler extends Handler{
      */
     public boolean isThisHandler(String target, HttpServletRequest httpRequest); 
     /**
-     * 启动时是否加载此控制
-     * @return
-     */
-    public boolean isPutHandler();
-    /**
-     * 端口
-     * @return
-     */
-    public int port();
-    /**
      * 工程名称
      * @return
      */
