@@ -3,7 +3,7 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
-package com.swift.dao.lock;
+package com.swift.dao.util.lock;
 
 import java.util.Collections;
 

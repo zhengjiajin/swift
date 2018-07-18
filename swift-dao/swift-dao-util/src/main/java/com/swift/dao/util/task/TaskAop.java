@@ -3,7 +3,7 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
-package com.swift.dao.task;
+package com.swift.dao.util.task;
 
 import java.lang.reflect.Method;
 import java.util.Date;
