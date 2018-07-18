@@ -25,9 +25,9 @@ import redis.clients.jedis.Jedis;
  * @author zhengjiajin
  * @version 1.0 2018年6月4日
  */
-@Component("disLock")
-public class DisLock {
-    private static final Logger log = LoggerFactory.getLogger(DisLock.class);
+@Component("redisDisLock")
+public class RedisDisLock {
+    private static final Logger log = LoggerFactory.getLogger(RedisDisLock.class);
     private static final String REDIS_KEY = "DISLOCK_LOCK_KEY:";
     //锁最长使用时间S
     private static final int LOCK_SEC=15;
