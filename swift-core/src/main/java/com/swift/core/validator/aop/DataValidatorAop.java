@@ -51,14 +51,14 @@ public class DataValidatorAop {
     private DataModelValidator dataModelValidator;
 
     @Around(DataValidatorAop.FILTER_STR)
-    public void around(ProceedingJoinPoint pjp) throws Throwable {
+    public Object around(ProceedingJoinPoint pjp) throws Throwable {
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         Class<?> cla = pjp.getTarget().getClass();
         DataValidator dataValidator = AnnotationUtil.getAnnotation(cla, method, DataValidator.class);
         if (dataValidator != null) {
             check(dataValidator, pjp.getArgs());
         }
-        pjp.proceed(pjp.getArgs());
+        return pjp.proceed(pjp.getArgs());
     }
 
     private void check(DataValidator dataValidator, Object[] obj) {
