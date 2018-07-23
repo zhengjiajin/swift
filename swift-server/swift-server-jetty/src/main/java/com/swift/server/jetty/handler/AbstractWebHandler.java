@@ -225,6 +225,8 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
         rawResponse.addHeader("Access-Control-Allow-Origin", origin);
         log.info("origin:"+origin);
         rawResponse.addHeader("Access-Control-Allow-Credentials", "true");
+        rawResponse.addHeader("Access-Control-Allow-Headers", "*");
+        rawResponse.addHeader("Access-Control-Allow-Methods", "*");
     }
 
     /**
