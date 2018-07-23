@@ -70,12 +70,14 @@ public class SimpleBaseCode extends AbstractWebHandlerCode implements WebHandler
             req.setRequest(request);
             req.setResponse(response);
             DataModel data = new MapDataModel();
+            log.info("Content-Type:"+rawHttpRequest.getHeader("Content-Type"));
             String contentType = TypeUtil.toString(rawHttpRequest.getHeader("Content-Type"), CONTENT_TYPE_FORM);
             if(contentType.indexOf(CONTENT_TYPE_JSON)!=-1) {
                 doJson(rawHttpRequest,data);
+            }else {
+                req.setFiles(doPost(rawHttpRequest, data));
+                doGet(rawHttpRequest, data);
             }
-            req.setFiles(doPost(rawHttpRequest, data));
-            doGet(rawHttpRequest, data);
             req.setData(data);
             return req;
     }
@@ -83,6 +85,7 @@ public class SimpleBaseCode extends AbstractWebHandlerCode implements WebHandler
     private void doJson(HttpServletRequest rawHttpRequest,DataModel data) {
         try {
             String json = new String(ByteUtil.getInputStream(rawHttpRequest.getInputStream()));
+            log.info("json:"+json);
             if (TypeUtil.isNull(json)) return;
             DataModel jsonDataModel = JsonUtil.toObj(json, MapDataModel.class);
             for(String key : jsonDataModel.keySet()) {
