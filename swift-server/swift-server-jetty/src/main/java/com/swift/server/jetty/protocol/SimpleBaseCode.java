@@ -49,7 +49,7 @@ import com.swift.util.type.TypeUtil;
 public class SimpleBaseCode extends AbstractWebHandlerCode implements WebHandlerCode {
     private final static Logger log = LoggerFactory.getLogger(SimpleBaseCode.class);
 
-    private final static String CONTENT_TYPE_JSON = "text/json";
+    private final static String CONTENT_TYPE_JSON = "application/json";
     
     private final static String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
     
