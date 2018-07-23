@@ -57,14 +57,29 @@ public class TaskAop {
         Method currentMethod = getMethod(pjp);
         String key = target.getClass().getName() + currentMethod.getName() + currentMethod.getParameterCount();
         Scheduled scheduled = AnnotationUtil.getAnnotation(currentMethod, Scheduled.class);
-        if (TypeUtil.isNull(scheduled.cron())) {
-            log.error(key + "配置错误");
-            return;
+        int seconds = 0;
+        if (TypeUtil.isNotNull(scheduled.cron())) {
+            CronTrigger cronTrigger = new CronTrigger(scheduled.cron());
+            Date nextExec = cronTrigger.nextExecutionTime(triggerContext);
+            seconds = TypeUtil.toInt((nextExec.getTime() - System.currentTimeMillis()) / 1000);
+            log.info(key + "当前运行时间:" + DateUtil.formatDate(new Date()) + ";下次运行时间:" + DateUtil.formatDate(nextExec));
         }
-        CronTrigger cronTrigger = new CronTrigger(scheduled.cron());
-        Date nextExec = cronTrigger.nextExecutionTime(triggerContext);
-        int seconds = TypeUtil.toInt((nextExec.getTime() - System.currentTimeMillis()) / 1000);
-        log.info(key + "当前运行时间:" + DateUtil.formatDate(new Date()) + ";下次运行时间:" + DateUtil.formatDate(nextExec));
+        if(scheduled.fixedDelay()>0){
+            seconds=TypeUtil.toInt(scheduled.fixedDelay()/1000);
+        }
+        
+        if(TypeUtil.isNotNull(scheduled.fixedDelayString())) {
+            seconds=TypeUtil.toInt(scheduled.fixedDelayString())/1000;
+        }
+        
+        if(scheduled.fixedRate()>0){
+            seconds=TypeUtil.toInt(scheduled.fixedRate()/1000);
+        }
+        
+        if(TypeUtil.isNotNull(scheduled.fixedRateString())) {
+            seconds=TypeUtil.toInt(scheduled.fixedRateString())/1000;
+        }
+       
         if (!isThisJob(key, seconds)) {
             log.info("不在此机器执行:" + key);
             return;
