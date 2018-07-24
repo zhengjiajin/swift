@@ -66,6 +66,17 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
     public void handle(String target, Request rawHttpRequest, HttpServletRequest request, HttpServletResponse response)
         throws IOException {
         log.info("收到请求:"+target+";parameter:"+JsonUtil.toJson(request.getParameterMap()));
+        serAccessHeader(request, response);
+        if(isDomainCheck(rawHttpRequest)) {
+            log.info("判断URL为浏览器跨域检测:"+target);
+            sendNullHttp(rawHttpRequest);
+            return;
+        }
+        if(isFavicon(target)) {
+            sendNullHttp(rawHttpRequest);
+            return;
+        }
+        
         if(!isThisHandler(target, request)) return;
         try {
             Continuation continuation = ContinuationSupport.getContinuation(rawHttpRequest);
@@ -150,7 +161,6 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
     				rawResponse.addCookie(cookie);
     			}
     		}
-    		serAccessHeader(rawHttpRequest,rawResponse);
     		try {
                 rawResponse.getOutputStream().write(resModel.getBody());
             } catch (IOException e) {
@@ -183,7 +193,6 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
                 fileName = fileName.substring(idx + 1);
             }
         }
-        serAccessHeader(rawHttpRequest,rawResponse);
         rawResponse.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         rawResponse.setStatus(200);
 
@@ -239,7 +248,6 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
      */
     protected void sendHttpError(int status, String msg, Request rawHttpRequest, String target) {
         Response rawHttpResponse = rawHttpRequest.getResponse();
-        serAccessHeader(rawHttpRequest,rawHttpResponse);
         try {
             WebHandlerCode handler = selectHandler(target);
             if(handler!=null){
@@ -252,6 +260,32 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
                 rawHttpResponse.setStatus(status);
                 rawHttpResponse.getOutputStream().write(msg.getBytes());
             }
+            rawHttpResponse.flushBuffer();
+        } catch (Exception ex) {
+            log.error("系统异常", ex);
+        }
+        completeContinuation(rawHttpRequest);
+    }
+    
+    private boolean isFavicon(String target) {
+        if(TypeUtil.isNull(target)) return true;
+        if(target.indexOf("favicon.ico")!=-1) return true;
+        return false;
+    }
+    
+    private boolean isDomainCheck(Request rawHttpRequest) {
+        if(TypeUtil.isNotNull(rawHttpRequest.getHeader("Access-Control-Allow-Origin"))) return true;
+        if(TypeUtil.isNotNull(rawHttpRequest.getHeader("Access-Control-Allow-Credentials"))) return true;
+        if(TypeUtil.isNotNull(rawHttpRequest.getHeader("Access-Control-Allow-Headers"))) return true;
+        if(TypeUtil.isNotNull(rawHttpRequest.getHeader("Access-Control-Allow-Methods"))) return true;
+        return false;
+    }
+    
+    private void sendNullHttp(Request rawHttpRequest) {
+        Response rawHttpResponse = rawHttpRequest.getResponse();
+        try {
+            rawHttpResponse.setContentType("text/html;charset=UTF-8");
+            rawHttpResponse.setStatus(200);
             rawHttpResponse.flushBuffer();
         } catch (Exception ex) {
             log.error("系统异常", ex);
