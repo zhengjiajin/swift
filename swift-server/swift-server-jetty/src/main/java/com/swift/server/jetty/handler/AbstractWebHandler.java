@@ -274,10 +274,8 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
     }
     
     private boolean isDomainCheck(Request rawHttpRequest) {
-        if(TypeUtil.isNotNull(rawHttpRequest.getHeader("Access-Control-Allow-Origin"))) return true;
-        if(TypeUtil.isNotNull(rawHttpRequest.getHeader("Access-Control-Allow-Credentials"))) return true;
-        if(TypeUtil.isNotNull(rawHttpRequest.getHeader("Access-Control-Allow-Headers"))) return true;
-        if(TypeUtil.isNotNull(rawHttpRequest.getHeader("Access-Control-Allow-Methods"))) return true;
+        if(TypeUtil.isNotNull(rawHttpRequest.getHeader("Access-Control-Request-Headers"))) return true;
+        if(TypeUtil.isNotNull(rawHttpRequest.getHeader("Access-Control-Request-Method"))) return true;
         return false;
     }
     
