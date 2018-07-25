@@ -8,7 +8,6 @@ package com.swift.core.model.data;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,9 +77,10 @@ public class MapDataModel extends LinkedHashMap<String, Object> implements DataM
 	/**
 	 * @see com.hhmk.hospital.common.model.service.data.DataModel#getList(java.lang.String)
 	 */
-	@Override
+	@SuppressWarnings("unchecked")
+    @Override
 	public List<DataModel> getList(String objectPath) {
-		return getListInternal(objectPath, DataModel.class);
+		return (List<DataModel>)(Object)getListInternal(objectPath, MapDataModel.class);
 	}
 
 	/**
@@ -445,14 +445,19 @@ public class MapDataModel extends LinkedHashMap<String, Object> implements DataM
 	@SuppressWarnings("unchecked")
 	protected <T> List<T> getListInternal(String path, Class<T> clazz) {
 		Object value = getObjectInternal(path, this);
-		if (value == null) {
+		if (TypeUtil.isNull(value)) {
 			return new ArrayList<T>();
 		} else if (value instanceof List) {
-			return (List<T>) value;
+		    Object obj = ((List<?>)value).get(0);
+		    if(clazz.isAssignableFrom(obj.getClass())) {
+		        return (List<T>) value;
+		    }else {
+		       return JsonUtil.toListObject(JsonUtil.toJson(value), clazz);
+		    }
 		}
 		return Arrays.asList((T) value);
 	}
-
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void remove(String path, Map<String, Object> parent) {
 		if (path == null) {
@@ -515,278 +520,4 @@ public class MapDataModel extends LinkedHashMap<String, Object> implements DataM
 		parent.put(key, list);
 	}
 
-	public static void main(String[] args) throws IOException {
-		MapDataModel s1 = new MapDataModel();
-		s1.addObject("a", 1);
-		System.out.println(s1);
-		// s1.remove("a");
-		System.out.println(s1);
-		s1.addObject("*abc.a", 2);
-		System.out.println(s1);
-		// s1.remove("abc.a");
-		System.out.println(s1);
-		s1.addObject("*abc.a", 3);
-		System.out.println(s1);
-		s1.addObject("*abc.b", 4);
-		System.out.println(s1);
-		s1.addObject("*abc.a", 12321);
-		System.out.println(s1);
-		s1.addObject("*abc.a", 12322);
-		System.out.println(s1);
-		s1.addObject("*abc.b", 5);
-		System.out.println(s1);
-
-		System.out.println("getList:" + s1.getList("abc"));
-		System.out.println("getInteger:" + s1.getInteger("abc.a"));
-		System.out.println("getInteger:" + s1.getInteger("abc.b"));
-		System.out.println("getInteger(abc[0].a):" + s1.getInteger("abc[0].a"));
-		System.out.println("getInteger(abc[1].a):" + s1.getInteger("abc[1].a"));
-		System.out.println("getInteger(abc[0].b):" + s1.getInteger("abc[0].b"));
-		System.out.println("getInteger(abc[1].b):" + s1.getInteger("abc[1].b"));
-		s1.addObject("*abc.b", 6);
-		System.out.println(s1);
-		s1.addObject("*abc.c", 7);
-		System.out.println(s1);
-		s1.addObject("*abc.*v1.a", 8);
-		System.out.println(s1);
-		s1.addObject("*abc.*v2.a", 9);
-		System.out.println(s1);
-		s1.addObject("*abc.*v1.b", 10);
-		System.out.println(s1);
-		s1.addObject("*abc.*v2.b", 11);
-		System.out.println(s1);
-		s1.addObject("*abc.*v1.c", 12);
-		System.out.println(s1);
-		s1.addObject("*abc.*v1.a", 13);
-		System.out.println(s1);
-		s1.addObject("*abc.*v1.*t1.a", 14);
-		System.out.println(s1);
-		System.out.println("getInteger(abc.v1.t1.a):" + s1.getInteger("abc.v1.t1.a"));
-		s1.addObject("*abc.*v1.*t1.b", 15);
-		System.out.println(s1);
-		System.out.println("getInteger(abc.v1.t1.b):" + s1.getInteger("abc.v1.t1.b"));
-		s1.addObject("*abc.*v1.*t2.a", 16);
-		System.out.println(s1);
-		s1.addObject("*abc.*v1.*t2.a", 17);
-		System.out.println(s1);
-		s1.addObject("*abc.*v1.*t2.*n", 18);
-		System.out.println(s1);
-		s1.addObject("*abc.*v1.*t2.*n", 19);
-		System.out.println(s1);
-		System.out.println("getInteger(abc.v1.t2.n):" + s1.getInteger("abc.v1.t2.n"));
-		System.out.println("getInteger(abc.v1.t2.n[0]):" + s1.getInteger("abc.v1.t2.n[0]"));
-		System.out.println("getInteger(abc.v1.t2.n[1]):" + s1.getInteger("abc.v1.t2.n[1]"));
-		// System.out.println("getObject:" + s2.getObject("abc.v2.t1.r1.b"));
-
-		System.out.println("------------------------------------------------------");
-
-		MapDataModel s2 = new MapDataModel();
-		s2.addObject("a", 1);
-		System.out.println(s2);
-		s2.addObject("b", 2);
-		System.out.println(s2);
-		s2.addObject("c", 3);
-		System.out.println(s2);
-		s2.addObject("abc.a", 4);
-		System.out.println(s2);
-		s2.addObject("abc.b", 5);
-		System.out.println(s2);
-		s2.addObject("abc.c", 6);
-		System.out.println(s2);
-		s2.addObject("abc.a", 7);
-		System.out.println(s2);
-		s2.addObject("abc.v1.a", 8);
-		System.out.println(s2);
-		s2.addObject("abc.v1.b", 9);
-		System.out.println(s2);
-		s2.addObject("abc.v1.c", 10);
-		System.out.println(s2);
-		s2.addObject("abc.v2.a", 11);
-		System.out.println(s2);
-		s2.addObject("abc.v2.b", 12);
-		System.out.println(s2);
-		s2.addObject("abc.v2.c", 13);
-		System.out.println(s2);
-		s2.addObject("abc.v2.t1.a", 14);
-		System.out.println(s2);
-		s2.addObject("abc.v2.t1.r1.a", 15);
-		System.out.println(s2);
-		s2.addObject("abc.v2.t1.r1.b", 16);
-		System.out.println(s2);
-		s2.addObject("abc.v2.t1.r1.b", 17);
-		System.out.println(s2);
-		System.out.println("getList:" + s2.getList("abc.v2.t1.r1.b"));
-		System.out.println("getInteger:" + s2.getInteger("abc.v2.t1.r1.b"));
-		System.out.println("getInteger:" + s2.getInteger("abc.v2.t1.r1.b[0]"));
-		System.out.println("getInteger:" + s2.getInteger("abc.v2.t1.r1.b[1]"));
-		// System.out.println("getMap:" + s2.getMap("abc.v2.t1.r1"));
-
-		System.out.println("------------------------------------------------------");
-		MapDataModel s3 = new MapDataModel();
-		s3.addObject("*n", 1);
-		System.out.println(s3);
-		s3.addObject("*n", 2);
-		System.out.println(s3);
-
-		System.out.println("------------------------------------------------------");
-		MapDataModel s4 = new MapDataModel();
-		s4.addObject("a", 1);
-		System.out.println(s4);
-		s4.addObject("b.*a", 2);
-		System.out.println(s4);
-		s4.addObject("b.*a", 3);
-		System.out.println(s4);
-		s4.addObject("b.*a", 4);
-		System.out.println(s4);
-		s4.addObject("b.*b", 5);
-		System.out.println(s4);
-		s4.addObject("b.*b", 6);
-		System.out.println(s4);
-		s4.addObject("b.*b", 7);
-		System.out.println(s4);
-		s4.addObject("b.*c.b", 8);
-		System.out.println(s4);
-		s4.addObject("b.*c.*d", 9);
-		System.out.println(s4);
-		s4.addObject("b.*c.*d", 10);
-		System.out.println(s4);
-		s4.addObject("b.*c.*e.*f", 11);
-		System.out.println(s4);
-		s4.addObject("b.*c.*e.*f", 12);
-		System.out.println(s4);
-		s4.addObject("b.*c.*g.*f", 13);
-		System.out.println(s4);
-
-		System.out.println("------------------------------------------------------");
-		System.out.println(s2.getList("abc.a"));
-		System.out.println(s2);
-		s2.putObject("abc.a", 99);
-		System.out.println(s2);
-		s2.putObject("abc.v2.t1.r1.b", 98);
-		System.out.println(s2);
-
-		System.out.println("------------------------------------------------------");
-		MapDataModel s5 = new MapDataModel();
-		s1.addObject("a", 1);
-		System.out.println(s5);
-		s5.addObject("*abc.a", 2);
-		System.out.println(s5);
-		s5.addObject("*abc.a", 3);
-		System.out.println(s5);
-		s5.addObject("*abc.b", 4);
-		System.out.println(s5);
-		s5.addObject("*abc.b", 5);
-		System.out.println(s5);
-		s5.addObject("*abc.b", 6);
-		System.out.println(s5);
-		s5.addObject("*abc.c", 7);
-		System.out.println(s5);
-		s5.putObject("*abc.a", 99);
-		System.out.println(s5);
-		s5.putObject("*abc", 98);
-		System.out.println(s5);
-
-		System.out.println("------------------------------------------------------");
-
-		MapDataModel s6 = new MapDataModel();
-		s6.addObject("a", 1);
-		s6.addObject("a", 2);
-		s6.addObject("a", 3);
-		s6.addObject("a", 4);
-		s6.addObject("a", 5);
-		s6.addObject("b.a", 6);
-		s6.addObject("b.a", 7);
-		s6.addObject("b.a", 8);
-		s6.addObject("b.a", 9);
-		s6.addObject("b.a", 10);
-		s6.addObject("*c", 11);
-		s6.addObject("*c", 12);
-		s6.addObject("*c", 13);
-		s6.addObject("d.*a", 14);
-		s6.addObject("d.*a", 15);
-		s6.addObject("d.*a", 16);
-		System.out.println(s6);
-
-		System.out.println("------------------------------------------------------");
-
-		s6 = new MapDataModel();
-		s6.putObject("a", 1);
-		s6.putObject("a", 2);
-		s6.putObject("a", 3);
-		s6.putObject("a", 4);
-		s6.putObject("a", 5);
-		s6.putObject("b.a", 6);
-		s6.putObject("b.a", 7);
-		s6.putObject("b.a", 8);
-		s6.putObject("b.a", 9);
-		s6.putObject("b.a", 10);
-		s6.putObject("c", 11);
-		System.out.println(s6);
-
-		// String str1 = "{\"pushTitle\":\"老婆你好哦\",\"pushContent\":\"\"}";
-		// MapDataModel s7 = TypeUtil.jsonToObj(str1, MapDataModel.class);
-		// System.out.println(s7);
-
-		System.out.println("------------------------------------------------------");
-
-		MapDataModel s8 = new MapDataModel();
-		s8.addObject("*userList.*laber.laberId", 1);
-		s8.addObject("*userList.*laber.laberName", "a");
-		s8.addObject("*userList.*laber.laberId", 2);
-		s8.addObject("*userList.*laber.laberName", "b");
-		s8.addObject("*userList.*laber.laberId", 3);
-		s8.addObject("*userList.*laber.laberName", "c");
-		System.out.println(s8);
-
-		System.out.println("------------------------------------------------------");
-
-		// MapDataModel s9 = new MapDataModel();
-		// SessionUser s11 = new SessionUser();
-		// s11.setUserId(1);
-		// s9.putObject("a1", s11);
-		// SessionUser sl2 = new SessionUser();
-		// sl2.setUserId(2);
-		// s9.putObject("a2", sl2);
-		// s9.putObject("a3", sl2);
-		// SessionUser sl3 = new SessionUser();
-		// sl3.setUserId(4);
-		// s9.putObject("a4.a", sl3);
-		//
-		// System.out.println(s9);
-		// SessionUser t1 = (SessionUser) s9.getObject("a1");
-		// System.out.println(t1.getUserId());
-		// SessionUser t2 = (SessionUser) s9.getObject("a4.a");
-		// System.out.println(t2.getUserId());
-		// SessionUser t2_1 = s9.getObject("a4.a", SessionUser.class);
-		// System.out.println(t2_1.getUserId());
-		//
-		// System.out.println("------------------------------------------------------");
-		//
-		// MapDataModel s10 = new MapDataModel();
-		// SessionUser sr1 = new SessionUser();
-		// sr1.setUserId(1);
-		// SessionUser sr2 = new SessionUser();
-		// sr2.setUserId(2);
-		// SessionUser sr3 = new SessionUser();
-		// sr3.setUserId(3);
-		// s10.addObject("a", sr1);
-		// s10.addObject("a", sr2);
-		// s10.addObject("a", sr3);
-		// s10.addObject("a", sr3);
-		// s10.addObject("a", sr3);
-		// s10.addObject("b.a", sr1);
-		// s10.addObject("b.a", sr2);
-		// s10.addObject("b.a", sr3);
-		// s10.addObject("b.a", 8);
-		// s10.addObject("b.a", sr3);
-		// s10.addObject("*c", sr1);
-		// s10.addObject("*c", sr2);
-		// s10.addObject("*c", sr3);
-		// s10.addObject("d.*a", sr1);
-		// s10.addObject("d.*a", sr2);
-		// s10.addObject("d.*a", sr3);
-		// System.out.println(s10);
-	}
-
-    
 }

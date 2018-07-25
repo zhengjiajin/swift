@@ -5,9 +5,13 @@
  */
 package com.swift.util.text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.swift.exception.SwiftRuntimeException;
 import com.swift.util.type.TypeUtil;
 
@@ -50,4 +54,21 @@ public class JsonUtil {
             throw new SwiftRuntimeException(ex);
         }
     }
+    
+    public static <T> List<T> toListObject(String content, Class<T> valueType) {
+        if (TypeUtil.isNull(content)) {
+            return null;
+        }
+        try {
+            JavaType javaType = getCollectionType(ArrayList.class, valueType); 
+            return ObjectMapperFactory.getObjectMapper().readValue(content,javaType);
+        }catch (Exception e) {
+            throw new SwiftRuntimeException(e.getMessage(), e);
+        }
+    }
+    
+    public static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {   
+        return ObjectMapperFactory.getObjectMapper().getTypeFactory().constructParametricType(collectionClass, elementClasses);   
+    }
+    
 }
