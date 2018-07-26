@@ -33,6 +33,7 @@ public class DefaultWebHandler extends AbstractWebHandler {
      */
     @Override
     public boolean isThisHandler(String target, HttpServletRequest httpRequest) {
+        if(target.indexOf(".")!=-1) return false;
         if (WebContextPathUtil.isContextPath(target, getContextPath())) {
             LOGGER.info("DefaultWebHandler收到请求地址：" + target);
             return true;

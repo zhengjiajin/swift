@@ -38,9 +38,9 @@ public class StartMain {
                 for (LifeCycle s : servers) {
                     log.info("准备启动服务:" + s);
                     if(args!=null && args.length>0) {
-                        s.start(TypeUtil.toInt(args[0], 8090)); 
+                        s.start(TypeUtil.toInt(args[0], 80)); 
                     }else {
-                        s.start(8090); 
+                        s.start(80); 
                     }
                     log.info("结束启动服务:" + s);
                 }
