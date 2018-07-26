@@ -1,7 +1,0 @@
-http://127.0.0.1:8090/V1.0/testGetService?mapx=12&mapy=kkads&nono=&uuid=123
-
-http://127.0.0.1:8090/testGetService?mapx=12&mapy=kkads&nono=&uuid=
-
-http://127.0.0.1:8090/testJsonService?mapx=12&mapy=kkads
-
-http://127.0.0.1:8090/testFormService?mapx=12&mapy=kkads

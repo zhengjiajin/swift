@@ -3,7 +3,7 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
-package com.swift.test.db;
+package com.swift.test;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import redis.clients.jedis.Jedis;
  * @author zhengjiajin
  * @version 1.0 2018年6月4日
  */
-public class TestRedis extends BaseJunit4Test{
+public class CleanTaskAopRedis extends BaseJunit4Test{
 
     @Autowired
     private RedisClientFactory redisClientFactory;
@@ -26,10 +26,10 @@ public class TestRedis extends BaseJunit4Test{
     @Test
     public void testNx() {
         Jedis jedis = redisClientFactory.getJedis();
-        String str = jedis.set("TestRedis.testNx", String.valueOf(100), "NX", "EX", 60);
-        System.out.println(str);
-        str = jedis.set("TestRedis.testNx", String.valueOf(100), "NX", "EX", 60);
-        System.out.println(str);
+        System.out.println(jedis.get("TaskAop:com.swift.hhmk.basicadmin.task.UpdateSystemMiniProgramTaskdoUpdate0"));
+        System.out.println(jedis.get("TaskAop:com.swift.hhmk.basicadmin.task.UpdateSystemWebchatAppTaskdoUpdate0"));
+        System.out.println(jedis.del("TaskAop:com.swift.hhmk.basicadmin.task.UpdateSystemMiniProgramTaskdoUpdate0"));
+        System.out.println(jedis.del("TaskAop:com.swift.hhmk.basicadmin.task.UpdateSystemWebchatAppTaskdoUpdate0"));
     }
     
 }
