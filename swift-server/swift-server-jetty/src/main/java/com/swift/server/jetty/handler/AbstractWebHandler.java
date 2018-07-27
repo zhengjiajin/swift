@@ -180,9 +180,10 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
 
         String contentType = fileDef.getContentType();
         if (StringUtils.isBlank(contentType)) {
-            contentType = "application/octet-stream";
+            contentType = "application/octet-stream;charset=UTF-8";
         }
         rawResponse.setContentType(contentType);
+        rawResponse.setCharacterEncoding("utf-8");
         String fileName = fileDef.getFileName();
         if (StringUtils.isBlank(fileName)) {
             fileName = RandomUtil.createReqId();
