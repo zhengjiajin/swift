@@ -90,7 +90,7 @@ public class JdbcMysqlImpl implements Jdbc {
     public <T> Page<T> queryForPage(String sql, Class<T> elementType, int pageNo, int pageSize) {
         Pageable pageable = new PageRequest(pageNo, pageSize, null);
         String countSql = SqlBuilder.toCountSql(sql);
-        String limitSql = SqlBuilder.appendLimitSql(countSql, pageable.getOffset(), pageable.getPageSize());
+        String limitSql = SqlBuilder.appendLimitSql(sql, pageable.getOffset(), pageable.getPageSize());
         int count = this.queryForInt(countSql);
         List<T> list = new ArrayList<T>();
         if (count > 0) {
