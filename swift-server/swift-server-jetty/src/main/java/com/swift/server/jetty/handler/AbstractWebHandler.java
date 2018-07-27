@@ -7,6 +7,8 @@ package com.swift.server.jetty.handler;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -180,7 +182,7 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
 
         String contentType = fileDef.getContentType();
         if (StringUtils.isBlank(contentType)) {
-            contentType = "application/octet-stream;charset=UTF-8";
+            contentType = "application/octet-stream";
         }
         rawResponse.setContentType(contentType);
         rawResponse.setCharacterEncoding("utf-8");
@@ -194,7 +196,11 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
                 fileName = fileName.substring(idx + 1);
             }
         }
-        rawResponse.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+        try {
+            rawResponse.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(fileName, "UTF-8") + "\"");
+        } catch (UnsupportedEncodingException e) {
+            rawResponse.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+        }
         rawResponse.setStatus(200);
 
         long size = fileDef.getSize();
