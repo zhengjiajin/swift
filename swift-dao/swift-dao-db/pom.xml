@@ -79,7 +79,7 @@
 			<groupId>com.github.zhengjiajin</groupId>
 			<artifactId>swift-test</artifactId>
 			<version>${project.version}</version>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
