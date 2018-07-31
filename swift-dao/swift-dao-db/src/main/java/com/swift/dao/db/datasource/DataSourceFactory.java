@@ -62,7 +62,7 @@ public class DataSourceFactory extends AbstractRoutingDataSource implements EndF
 
     @PostConstruct
     protected void init() throws Exception {
-        if (resource == null) return;
+        if (resource == null || !resource.exists()) return;
         if (TypeUtil.isNull(driverClassName)) throw new RuntimeException("jdbc.driverClassName is null");
         Properties properties = new Properties();
         properties.load(resource.getInputStream());
