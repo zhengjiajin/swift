@@ -70,5 +70,12 @@ public class RandomUtil {
        return Long.toHexString(stvalue)+Long.toHexString(value);
     }
     
-    
+    /**
+     * 生成短信6位验证码
+     * 
+     * @return 短信6位验证码
+     */
+    public static int createCode(int min,int max) {
+        return ThreadLocalRandom.current().nextInt(min, max);
+    }
 }
