@@ -11,6 +11,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aliyun.openservices.ons.api.Action;
 import com.aliyun.openservices.ons.api.ConsumeContext;
 import com.aliyun.openservices.ons.api.Message;
@@ -36,9 +39,14 @@ public interface AliMqService {
      * @date Mar 6, 2017 3:15:49 PM
      */
     public abstract class AliMqMessageHandler implements MessageListener{
+        private final static Logger log = LoggerFactory.getLogger(AliMqMessageHandler.class);
         
         public Action consume(Message message, ConsumeContext context) {
-            handle(JsonUtil.toObj(message.getBody(), AliMqRequest.class));
+            try {
+                handle(JsonUtil.toObj(message.getBody(), AliMqRequest.class));
+            }catch(Throwable ex) {
+                log.error("MQ处理信息异常:",ex);
+            }
             return Action.CommitMessage;
         }
         

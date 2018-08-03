@@ -15,6 +15,10 @@ import java.util.Base64;
 
 import javax.imageio.ImageIO;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 import com.swift.exception.SwiftRuntimeException;
 
 /**
@@ -42,6 +46,21 @@ public class PicUtil {
             return outputString.toByteArray();
         } catch (IOException e) {
             throw new SwiftRuntimeException("图片生成失败");
+        }
+    }
+    
+    public static byte[] createQrCodePic(int width,int height,String contents) {
+        return createQrCodePic(width, height, contents, "png");
+    }
+    
+    public static byte[] createQrCodePic(int width,int height,String contents,String format) {
+        try {
+            BitMatrix bm = new MultiFormatWriter().encode(contents, BarcodeFormat.QR_CODE, width, height);
+            ByteArrayOutputStream outputString = new ByteArrayOutputStream();
+            MatrixToImageWriter.writeToStream(bm, format, outputString);
+            return outputString.toByteArray();
+        } catch (Exception e) {
+            throw new SwiftRuntimeException("二维码生成失败");
         }
     }
     
