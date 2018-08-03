@@ -5,11 +5,11 @@
  */
 package com.swift.core.thread;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.swift.core.filter.EndFilter;
 import com.swift.core.filter.InitFilter;
@@ -21,7 +21,6 @@ import com.swift.core.model.data.DataModel;
 import com.swift.core.model.data.MapDataModel;
 import com.swift.core.service.CallBackService;
 import com.swift.core.service.ReqInterfaceFactory;
-import com.swift.core.spring.Spring;
 import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
 
@@ -39,27 +38,30 @@ public class ServerSendControl implements Runnable {
 
     private CallBackService callback;
 
-    private static List<InitFilter> initFilterList;
-
-    private static List<EndFilter> endFilterList;
-
-    private static List<RequestFilter> requestFilterList;
-
-    private static List<ResponseFilter> responseFilterList;
+    @Autowired(required=false)
+    private List<InitFilter> initFilterList;
+    @Autowired(required=false)
+    private List<EndFilter> endFilterList;
+    @Autowired(required=false)
+    private List<RequestFilter> requestFilterList;
+    @Autowired(required=false)
+    private List<ResponseFilter> responseFilterList;
 
     /**
      * 优先级权值ms秒
      */
     // private final int levelWeight = 50;
+   
+    public CallBackService getCallback() {
+        return callback;
+    }
 
-    public ServerSendControl(CallBackService callback, ServiceRequest req) {
-        if (req.getRequestTime() <= 0) req.setRequestTime(System.currentTimeMillis());
-        this.req = req;
+    public void setCallback(CallBackService callback) {
         this.callback = callback;
-        initInitFilter();
-        initEndFilter();
-        initRequestFilter();
-        initResponseFilter();
+    }
+
+    public void setReq(ServiceRequest req) {
+        this.req = req;
     }
 
     /**
@@ -114,12 +116,14 @@ public class ServerSendControl implements Runnable {
     }
 
     private void forInitFilter() {
+        if(initFilterList==null) return;
         for(InitFilter filter:initFilterList) {
             filter.init();
         }
     }
 
     private void forEndFilter() {
+        if(endFilterList==null) return;
         for(EndFilter filter:endFilterList) {
             try {
                 filter.end();
@@ -130,12 +134,14 @@ public class ServerSendControl implements Runnable {
     }
 
     private void forRequestFilter(ServiceRequest req) {
+        if(requestFilterList==null) return;
         for(RequestFilter filter:requestFilterList) {
             filter.doFilter(req);
         }
     }
 
     private void forResponseFilter(ServiceResponse res ) {
+        if(responseFilterList==null) return;
         for(ResponseFilter filter:responseFilterList) {
             try {
                 filter.doFilter(res);
@@ -145,53 +151,4 @@ public class ServerSendControl implements Runnable {
         }
     }
     
-
-    private void initInitFilter() {
-        if (initFilterList == null) {
-            synchronized ("initFilterList") {
-                if (initFilterList == null) {
-                    initFilterList = new LinkedList<InitFilter>();
-                    List<InitFilter> list = Spring.getBeans(InitFilter.class);
-                    initFilterList.addAll(list);
-                }
-            }
-        }
-    }
-
-    private void initEndFilter() {
-        if (endFilterList == null) {
-            synchronized ("endFilterList") {
-                if (endFilterList == null) {
-                    endFilterList = new LinkedList<EndFilter>();
-                    List<EndFilter> list = Spring.getBeans(EndFilter.class);
-                    endFilterList.addAll(list);
-                }
-            }
-        }
-    }
-
-    private void initRequestFilter() {
-        if (requestFilterList == null) {
-            synchronized ("requestFilterList") {
-                if (requestFilterList == null) {
-                    requestFilterList = new LinkedList<RequestFilter>();
-                    List<RequestFilter> list = Spring.getBeans(RequestFilter.class);
-                    requestFilterList.addAll(list);
-                }
-            }
-        }
-    }
-
-    private void initResponseFilter() {
-        if (responseFilterList == null) {
-            synchronized ("responseFilterList") {
-                if (responseFilterList == null) {
-                    responseFilterList = new LinkedList<ResponseFilter>();
-                    List<ResponseFilter> list = Spring.getBeans(ResponseFilter.class);
-                    responseFilterList.addAll(list);
-                }
-            }
-        }
-    }
-
 }

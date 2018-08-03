@@ -29,6 +29,7 @@ import com.swift.core.model.FileDefinition;
 import com.swift.core.model.HttpServiceRequest;
 import com.swift.core.model.ServiceResponse;
 import com.swift.core.service.CallBackService;
+import com.swift.core.spring.Spring;
 import com.swift.core.thread.ServerSendControl;
 import com.swift.core.thread.ThreadPoolFactory;
 import com.swift.exception.ResultCode;
@@ -95,13 +96,14 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
             if (req == null) {
                 sendHttpError(200, "200", rawHttpRequest, target);
             }
+            req.setRequestTime(System.currentTimeMillis());
             req.setRequest(request);
             req.setResponse(response);
             if(TypeUtil.isNull(req.getIp())) {
                 req.setIp(rawHttpRequest.getRemoteAddr());
             }
             rawHttpRequest.setHandled(true);
-            threadPool.execute(new ServerSendControl(new CallBackService() {
+            CallBackService callback = new CallBackService() {
                 @Override
                 public void callback(ServiceResponse res) {
                     try {
@@ -111,7 +113,11 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
                         sendHttpError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage(), rawHttpRequest, target);
                     }
                 }
-            }, req));
+            };
+            ServerSendControl serverSendControl = Spring.getApplicationContext().getAutowireCapableBeanFactory().createBean(ServerSendControl.class);
+            serverSendControl.setCallback(callback);
+            serverSendControl.setReq(req);
+            threadPool.execute(serverSendControl);
         } catch (ServiceException ex) {
             log.error("请求处理失败", ex);
             sendHttpError(ex.getStatusCode(), ex.getMessage(), rawHttpRequest, target);
