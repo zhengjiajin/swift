@@ -56,7 +56,6 @@ public abstract class WebClientCodeOutput<T, R> extends WebClientCode implements
     @Override
     public R sendRequest(T req) {
         ServiceRequest sr = createServerRequest(req);
-        sr.setMethod(getClass().getName());
         ServiceResponse res = webClient.sendRequest(sr);
         return createResponse(res);
     }
