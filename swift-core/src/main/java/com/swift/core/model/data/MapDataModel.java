@@ -454,8 +454,13 @@ public class MapDataModel extends LinkedHashMap<String, Object> implements DataM
 		    }else {
 		       return JsonUtil.toListObject(JsonUtil.toJson(value), clazz);
 		    }
+		}else {
+		    if(value.getClass().equals(clazz)) {
+		        return Arrays.asList((T)value);
+		    }else {
+		        return Arrays.asList(JsonUtil.toObj(JsonUtil.toJson(value), clazz));
+		    }
 		}
-		return Arrays.asList((T) value);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
