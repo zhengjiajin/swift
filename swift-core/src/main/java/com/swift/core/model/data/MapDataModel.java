@@ -71,7 +71,12 @@ public class MapDataModel extends LinkedHashMap<String, Object> implements DataM
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends DataModel> T getObject(String objectPath, Class<T> classType) {
-		return (T) getObjectInternal(objectPath, this);
+	    Object value = getObjectInternal(objectPath, this);
+	    if(value.getClass().equals(classType)) {
+            return (T)value;
+        }else {
+            return JsonUtil.toObj(JsonUtil.toJson(value), classType);
+        }
 	}
 
 	/**
