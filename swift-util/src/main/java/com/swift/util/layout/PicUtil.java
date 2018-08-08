@@ -12,13 +12,17 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.swift.exception.SwiftRuntimeException;
 
 /**
@@ -55,7 +59,11 @@ public class PicUtil {
     
     public static byte[] createQrCodePic(int width,int height,String contents,String format) {
         try {
-            BitMatrix bm = new MultiFormatWriter().encode(contents, BarcodeFormat.QR_CODE, width, height);
+            Map<EncodeHintType,Object> hints = new HashMap<EncodeHintType,Object>();
+            hints.put(EncodeHintType.CHARACTER_SET, "utf-8"); //编码
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H); //容错率
+            hints.put(EncodeHintType.MARGIN, 0);  //二维码边框宽度，这里文档说设置0-4，但是设置后没有效果，不知原因，
+            BitMatrix bm = new MultiFormatWriter().encode(contents, BarcodeFormat.QR_CODE, width, height,hints);
             ByteArrayOutputStream outputString = new ByteArrayOutputStream();
             MatrixToImageWriter.writeToStream(bm, format, outputString);
             return outputString.toByteArray();
