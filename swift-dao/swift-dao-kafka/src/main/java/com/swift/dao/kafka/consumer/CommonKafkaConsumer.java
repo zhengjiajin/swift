@@ -40,6 +40,7 @@ import com.swift.dao.kafka.KafkaService.KafkaMessageHandler;
 import com.swift.dao.kafka.KafkaService.Topic;
 import com.swift.dao.kafka.deserializer.KafkaMessageDeserializer;
 import com.swift.util.bean.AnnotationUtil;
+import com.swift.util.bean.AopTargetUtils;
 import com.swift.util.type.TypeUtil;
 
 /**
@@ -71,7 +72,7 @@ public class CommonKafkaConsumer extends Thread implements Closeable {
 		if(handlers==null ||handlers.isEmpty()) return;
 		ArrayList<String> subscribeTopics = new ArrayList<String>();
 		for(KafkaMessageHandler handler:handlers) {
-		    Topic topic = AnnotationUtil.getAnnotation(handler.getClass(), Topic.class);
+		    Topic topic = AnnotationUtil.getAnnotation(AopTargetUtils.getTarget(handler).getClass(), Topic.class);
             if(topic==null) continue;
             for(String tp:topic.value()) {
                 tp = KafkaConfigurer.removeTopic(tp);
@@ -162,7 +163,7 @@ public class CommonKafkaConsumer extends Thread implements Closeable {
 			return;
 		}
 		for (KafkaMessageHandler handler : handlers) {
-		    Topic topic = AnnotationUtil.getAnnotation(handler.getClass(), Topic.class);
+		    Topic topic = AnnotationUtil.getAnnotation(AopTargetUtils.getTarget(handler).getClass(), Topic.class);
 		    if(topic==null) continue;
 		    if(!TypeUtil.inList(topic.value(), KafkaConfigurer.localTopic(record.topic())))  continue;
 		    try {

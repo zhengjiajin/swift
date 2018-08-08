@@ -38,6 +38,17 @@ public class AnnotationUtil {
     public static <T extends Annotation > T getAnnotation(Class<?> objClass, Class<T> annotationClass) {
         return getAnnotation(objClass, null, annotationClass);
     }
+    /**
+     * 取得SPRING目标对象的注解
+     * @param springBean
+     * @param annotationClass
+     * @return
+     */
+    public static <T extends Annotation > T getAnnotation(Object springBean, Class<T> annotationClass) {
+        return getAnnotation(AopTargetUtils.getTarget(springBean).getClass(), null, annotationClass);
+    }
+    
+    
     
     public static <T extends Annotation > T getAnnotation(Method method, Class<T> annotationClass) {
         return getAnnotation(method.getDeclaringClass(), method, annotationClass);

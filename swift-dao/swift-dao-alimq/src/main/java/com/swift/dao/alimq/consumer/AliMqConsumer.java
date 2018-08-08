@@ -20,6 +20,7 @@ import com.swift.dao.alimq.AliMqConfigurer;
 import com.swift.dao.alimq.AliMqService.AliMqMessageHandler;
 import com.swift.dao.alimq.AliMqService.Topic;
 import com.swift.util.bean.AnnotationUtil;
+import com.swift.util.bean.AopTargetUtils;
 import com.swift.util.type.TypeUtil;
 
 /**
@@ -42,7 +43,7 @@ public class AliMqConsumer {
         if (TypeUtil.isNull(handlers)) return;
         consumer = ONSFactory.createConsumer(AliMqConfigurer.getProperties());
         for (AliMqMessageHandler handler : handlers) {
-            Topic topic = AnnotationUtil.getAnnotation(handler.getClass(), Topic.class);
+            Topic topic = AnnotationUtil.getAnnotation(AopTargetUtils.getTarget(handler).getClass(), Topic.class);
             if (topic == null) continue;
             for(String top:topic.value()) {
                 consumer.subscribe(AliMqConfigurer.removeTopic(top), subExpression(topic.method()), handler);
