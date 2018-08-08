@@ -10,6 +10,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +33,8 @@ import com.swift.util.type.TypeUtil;
  */
 @Component
 public class AliMqConsumer {
-
+    private static final Logger log = LoggerFactory.getLogger(AliMqConsumer.class);
+    
     private Consumer consumer;
 
     @Autowired(required = false)
@@ -45,6 +48,7 @@ public class AliMqConsumer {
         for (AliMqMessageHandler handler : handlers) {
             Topic topic = AnnotationUtil.getAnnotation(AopTargetUtils.getTarget(handler).getClass(), Topic.class);
             if (topic == null) continue;
+            log.info("监听MQ:"+topic);
             for(String top:topic.value()) {
                 consumer.subscribe(AliMqConfigurer.removeTopic(top), subExpression(topic.method()), handler);
             }
