@@ -50,7 +50,7 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
 
 	private final static Logger log = LoggerFactory.getLogger(AbstractWebHandler.class);
     
-	private static final long DEFAULT_TIMEOUT = 300 * 1000;
+	//private static final long DEFAULT_TIMEOUT = 300 * 1000;
 	
     @Autowired
     private WebHandlerCode[] webHandlerCode = new WebHandlerCode[0];
@@ -83,7 +83,7 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
         if(!isThisHandler(target, request)) return;
         try {
             Continuation continuation = ContinuationSupport.getContinuation(rawHttpRequest);
-            continuation.setTimeout(getTimeout());
+            //continuation.setTimeout(getTimeout());
             continuation.suspend(rawHttpRequest.getResponse());
             if (continuation.isExpired()) {
                 throw new ServiceException(ResultCode.PROTOCOL_ERROR, "504 Gateway Timeout");
@@ -326,8 +326,8 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
         this.webHandlerCode = webHandlerCode;
     }
 
-    protected long getTimeout() {
+    /*protected long getTimeout() {
 		return DEFAULT_TIMEOUT;
-	}
+	}*/
     
 }
