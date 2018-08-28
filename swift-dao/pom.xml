@@ -19,6 +19,7 @@
 		<module>swift-dao-util</module>
 		<module>swift-dao-es</module>
 		<module>swift-dao-alimq</module>
+		<module>swift-dao-zookeeper</module>
 	</modules>
 	<dependencies>
 		<dependency>

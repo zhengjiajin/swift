@@ -2,10 +2,10 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.github.zhengjiajin</groupId>
-    <artifactId>swift-server</artifactId>
+    <artifactId>swift</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>swift-server-netty</artifactId>
-  <name>swift-server-netty</name>
-  <description>swift-server-netty</description>
+  <artifactId>swift-monitor</artifactId>
+  <name>swift-monitor</name>
+  <description>swift-monitor</description>
 </project>

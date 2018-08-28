@@ -26,8 +26,7 @@ public class ServiceRequest {
     /**
      * 每次请求的唯一编码
      */
-    @JsonIgnore
-    private String uuid = RandomUtil.createReqId();
+    private String reqId = RandomUtil.createReqId();
     /**
      * 客户端IP地址
      */
@@ -125,18 +124,12 @@ public class ServiceRequest {
         this.requestTime = requestTime;
     }
 
-    /**
-     * @return the uuid
-     */
-    public String getUuid() {
-        return uuid;
+    public String getReqId() {
+        return reqId;
     }
 
-    /**
-     * @param uuid the uuid to set
-     */
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setReqId(String reqId) {
+        this.reqId = reqId;
     }
 
     /**

@@ -4,21 +4,23 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.github.zhengjiajin</groupId>
-		<artifactId>swift</artifactId>
+		<artifactId>swift-dao</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>swift-server</artifactId>
-	<packaging>pom</packaging>
-	<name>swift-server</name>
-	<description>swift-server</description>
-	<modules>
-		<module>swift-server-jetty</module>
-	</modules>
+	<artifactId>swift-dao-zookeeper</artifactId>
+	<name>swift-dao-zookeeper</name>
+	<description>swift-dao-zookeeper</description>
 	<dependencies>
 		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-recipes</artifactId>
+			<version>2.9.1</version>
+		</dependency>
+		<dependency>
 			<groupId>com.github.zhengjiajin</groupId>
-			<artifactId>swift-core</artifactId>
+			<artifactId>swift-test</artifactId>
 			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

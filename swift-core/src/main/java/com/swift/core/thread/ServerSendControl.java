@@ -76,7 +76,7 @@ public class ServerSendControl implements Runnable {
      */
     @Override
     public void run() {
-        log.info("准备处理HTTP请求：" + req.getUuid() + ";" + req.toString());
+        log.info("准备处理HTTP请求：" + req.getReqId() + ";" + req.toString());
         Thread.currentThread().setName(req.getMethod());
         ServiceResponse res = new ServiceResponse();
         res.setRequest(req);
@@ -101,7 +101,7 @@ public class ServerSendControl implements Runnable {
         res.setResponseTime(System.currentTimeMillis());
         try {
             long stTime = res.getResponseTime() - req.getRequestTime();
-            String msg = req.getUuid() + ";" + req.getMethod() + ";占用时间:" + stTime;
+            String msg = req.getReqId() + ";" + req.getMethod() + ";占用时间:" + stTime;
             log.info("处理HTTP请求完毕：" + msg);
             if (stTime > 5000) {
                 log.warn("处理请求时间过长:" + msg);
