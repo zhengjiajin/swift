@@ -5,8 +5,11 @@
  */
 package com.swift.util.type;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Collection;
@@ -14,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.swift.exception.SwiftRuntimeException;
 
 /**
  * 用于处理类型
@@ -237,5 +242,22 @@ public class TypeUtil {
         Matcher m = p.matcher(mobile);
         return m.matches();
     }
+    
+    public static String urlEncode(String str) {
+        try {
+            return URLEncoder.encode(str, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new SwiftRuntimeException("urlEncode错误:"+str);
+        }
+    }
+    
+    public static String urlDecode(String str) {
+        try {
+            return URLDecoder.decode(str, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new SwiftRuntimeException("URLDecoder错误:"+str);
+        }
+    }
+    
 
 }

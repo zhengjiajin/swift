@@ -32,8 +32,6 @@ import com.swift.core.model.data.DataModel;
 import com.swift.core.model.data.MapDataModel;
 import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
-import com.swift.server.jetty.protocol.AbstractWebHandlerCode;
-import com.swift.server.jetty.protocol.WebHandlerCode;
 import com.swift.util.io.ByteUtil;
 import com.swift.util.text.JsonUtil;
 import com.swift.util.type.TypeUtil;
@@ -100,14 +98,14 @@ public class SimpleBaseCode extends AbstractWebHandlerCode implements WebHandler
         Map<String, String[]> old = rawHttpRequest.getParameterMap();
         for (Entry<String, String[]> entry : old.entrySet()) {
             if(entry.getKey().equals(SERVICE_KEY)) {
-                DataModel model = JsonUtil.toObj(entry.getValue()[0], MapDataModel.class);
+                DataModel model = JsonUtil.toObj(TypeUtil.urlDecode(entry.getValue()[0]), MapDataModel.class);
                 for(String key : model.keySet()) {
                     data.addObject(key, model.getObject(key));
                 }
             }else {
                 if (entry.getValue().length > 0) {
                     for(String value:entry.getValue()){
-                        data.addObject(entry.getKey(), value); 
+                        data.addObject(entry.getKey(), TypeUtil.urlDecode(value)); 
                     }
                 }
             }
@@ -124,7 +122,7 @@ public class SimpleBaseCode extends AbstractWebHandlerCode implements WebHandler
                     FileItem f = (FileItem) list.get(i);
                     if (f.isFormField()) {
                         log.info("收到POST参数:" + f.getFieldName() + ":长度：" + f.getSize());
-                        data.addObject(f.getFieldName(), f.getString());
+                        data.addObject(f.getFieldName(), TypeUtil.urlDecode(f.getString()));
                     }else {
                         log.info("收到POST文件:" + f.getName() + ":长度：" + f.getSize());
                         definitions.add(createFileDefinition(f));
