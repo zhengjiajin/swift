@@ -12,9 +12,6 @@ package com.swift.util.layout;
  * @version 1.0 2015年8月29日
  */
 public class EmojiCleanUtil {
-    
-    public static final String EMOJI_URLENCODE="EMOJI_URLENCODE=";
-    
     /**
      * Emoji String
      * @param source
