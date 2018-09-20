@@ -30,7 +30,7 @@ public class AliMqRequest {
      * 请求业务字段
      * SimpleDataModel extends HashMap
      * data里可以嵌套String,List,Map等数据结构,也支持Map里再嵌套多层Map或List
-     * 
+     * 接口固定参数：Request，Session，Response
      */
     @JsonDeserialize(using = DataModelDeserializer.class)
     private DataModel data = new MapDataModel();
