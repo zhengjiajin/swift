@@ -37,6 +37,7 @@ public class DataXmlParser {
         // SUN JDK6自带StAX实现非线程安全，而Wstx实现为线程安全，且性能优于JDK6自带实现（快10~30%）。
         xmlInputFactory = new WstxInputFactory();
         xmlInputFactory.setProperty("javax.xml.stream.isCoalescing", true);
+        xmlInputFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
     }
 
     /**
