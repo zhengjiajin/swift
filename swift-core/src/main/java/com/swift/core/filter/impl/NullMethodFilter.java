@@ -3,7 +3,7 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangDong Eshore Technology Company LTD.
  */
-package com.swift.core.server.filter;
+package com.swift.core.filter.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

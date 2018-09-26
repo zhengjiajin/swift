@@ -1,4 +1,4 @@
-package com.swift.core.server.filter;
+package com.swift.core.filter.impl;
 
 
 import java.util.regex.Pattern;
@@ -8,9 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.swift.core.filter.RequestFilter;
+import com.swift.core.filter.annotation.NoSqlVal;
 import com.swift.core.model.ServiceRequest;
+import com.swift.core.service.ReqInterfaceFactory;
 import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
+import com.swift.util.bean.AnnotationUtil;
 
 /**
  * 添加说明 
@@ -29,6 +32,12 @@ public class SqlInjectionFilter implements RequestFilter {
 
 	@Override
 	public void doFilter(ServiceRequest req) throws ServiceException {
+	    String method = req.getMethod();
+        Object obj = ReqInterfaceFactory.getInterfaceTrueObj(method, req.getInterfaceVersion());
+        if (obj == null) throw new ServiceException(ResultCode.NO_METHOD, "没有找到方法对应的OBJ");
+        NoSqlVal noSqlVal = AnnotationUtil.getAnnotation(obj.getClass(), NoSqlVal.class);
+	    if(noSqlVal!=null) return;
+	    
 		String sql = req.getData().toString();
         if (sqlValidate(sql)) {
             String msg = "您发送请求中的参数中含有非法字符";
