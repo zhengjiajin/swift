@@ -59,6 +59,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     // 返回日期
     public static Date parseDate(String dateStr) {
         try {
+            if(TypeUtil.isNumber(dateStr)) return new Date(TypeUtil.toLong(dateStr));
             return parseDate(dateStr, PARSE_PATTERNS);
         } catch (ParseException e) {
             throw new RuntimeException("解析日期出错:" + dateStr + e.getMessage());
