@@ -43,6 +43,7 @@ public interface AliMqService {
         
         public Action consume(Message message, ConsumeContext context) {
             try {
+                log.info("收到MQ消息:"+new String(message.getBody()));
                 handle(JsonUtil.toObj(message.getBody(), AliMqRequest.class));
             }catch(Throwable ex) {
                 log.error("MQ处理信息异常:",ex);
