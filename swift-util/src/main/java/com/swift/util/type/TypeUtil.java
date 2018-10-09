@@ -212,7 +212,8 @@ public class TypeUtil {
             return false;
         }
         if(obj instanceof Number) return true;
-        return toString(obj).matches("-?[0-9]+.*[0-9]*");
+        return toString(obj).matches("-?[0-9]+\\.?[0-9]*");
+        //-?[0-9]+\\.?[0-9]*
     }
     
     public static BigDecimal toBigDecimal(Object obj) {

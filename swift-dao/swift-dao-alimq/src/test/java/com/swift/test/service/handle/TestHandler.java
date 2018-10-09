@@ -8,7 +8,7 @@ package com.swift.test.service.handle;
 import org.springframework.stereotype.Service;
 
 import com.swift.dao.alimq.AliMqRequest;
-import com.swift.dao.alimq.AliMqService.AliMqMessageHandler;
+import com.swift.dao.alimq.AliMqService.AliMqMessageListener;
 import com.swift.dao.alimq.AliMqService.Topic;
 import com.swift.util.text.JsonUtil;
 
@@ -19,7 +19,7 @@ import com.swift.util.text.JsonUtil;
  */
 @Service
 @Topic("test-service")
-public class TestHandler extends AliMqMessageHandler {
+public class TestHandler implements AliMqMessageListener{
 
     /** 
      * @see com.swift.dao.alimq.AliMqService.AliMqMessageHandler#handle(com.swift.dao.alimq.AliMqRequest)

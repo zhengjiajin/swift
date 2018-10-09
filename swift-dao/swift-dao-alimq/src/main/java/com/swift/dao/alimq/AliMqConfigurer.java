@@ -21,6 +21,8 @@ import com.swift.util.type.TypeUtil;
 public class AliMqConfigurer {
 
     private static Properties properties;
+    
+    //private static final int CONSUME_THREAD_NUMS = 100;
 
     public synchronized static Properties getProperties() {
         if (null != properties) {
@@ -42,6 +44,8 @@ public class AliMqConfigurer {
         properties.put(PropertyKeyConst.SecretKey, EnvDecode.decode(mqproperties.getProperty("alimq.SecretKey")));
         // 设置 TCP 接入域名（此处以公共云公网环境接入为例）
         properties.put(PropertyKeyConst.ONSAddr, mqproperties.getProperty("alimq.ONSAddr"));
+        
+        //properties.put(PropertyKeyConst.ConsumeThreadNums, CONSUME_THREAD_NUMS);
         
         properties.put("topicTop",  mqproperties.getProperty("topicTop"));
         return properties;

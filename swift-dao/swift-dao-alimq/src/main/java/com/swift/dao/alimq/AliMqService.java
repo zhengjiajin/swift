@@ -11,15 +11,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.aliyun.openservices.ons.api.Action;
-import com.aliyun.openservices.ons.api.ConsumeContext;
-import com.aliyun.openservices.ons.api.Message;
-import com.aliyun.openservices.ons.api.MessageListener;
 import com.aliyun.openservices.ons.api.SendCallback;
-import com.swift.util.text.JsonUtil;
 
 /**
  * 添加说明 
@@ -30,28 +22,11 @@ public interface AliMqService {
     public void sendRequest(String topic, AliMqRequest request);
     
     public void sendRequest(String topic, AliMqRequest request, SendCallback callback);
-    
     /**
      * 收到消息时通知
-     * 
-     * @author Avery Xiao
-     * @version 0.0.1-SNAPSHOT
-     * @date Mar 6, 2017 3:15:49 PM
      */
-    public abstract class AliMqMessageHandler implements MessageListener{
-        private final static Logger log = LoggerFactory.getLogger(AliMqMessageHandler.class);
-        
-        public Action consume(Message message, ConsumeContext context) {
-            try {
-                log.info("收到MQ消息:"+new String(message.getBody()));
-                handle(JsonUtil.toObj(message.getBody(), AliMqRequest.class));
-            }catch(Throwable ex) {
-                log.error("MQ处理信息异常:",ex);
-            }
-            return Action.CommitMessage;
-        }
-        
-        public abstract void handle(AliMqRequest request);
+    public interface AliMqMessageListener {
+        public void handle(AliMqRequest request);
     }
     
     @Target(value= {ElementType.TYPE})
