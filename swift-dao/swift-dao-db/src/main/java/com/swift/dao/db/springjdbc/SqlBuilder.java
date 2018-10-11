@@ -26,10 +26,11 @@ public class SqlBuilder {
     }
     
     public static String toCountSql(String sql) {
-        int union = sql.toLowerCase().indexOf(" union ");
-        if (union != -1) {
-            return "select count(tableTagwsz.*) from ("+sql+") tableTagwsz" ;
-        }
+        boolean selectAll = false;
+        if (sql.toLowerCase().indexOf(" union ") != -1) selectAll=true;
+        if (sql.toLowerCase().indexOf(" group ") != -1) selectAll=true;
+        if (sql.toLowerCase().indexOf(" order ") != -1) selectAll=true;
+        if(selectAll) return "select count(*) from ("+sql+") tableTagwsz" ;
         return "select count(*) " + removeSelect(sql);
     }
     
