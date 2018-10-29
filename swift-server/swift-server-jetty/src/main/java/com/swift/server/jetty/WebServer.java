@@ -45,13 +45,21 @@ public class WebServer implements LifeCycle{
 	
 	@Autowired
 	private NetworkTrafficListener networkTrafficListener;
+	
+	private static int SERVER_PORT;
     
-	public void start(int port) {
+	
+	public static int getServerPort() {
+        return SERVER_PORT;
+    }
+
+    public void start(int port) {
 	    log.info("准备启动："+port);
 	    if(port<=0) {
 	        log.info("不启动："+port);
 	        return;
 	    }
+	    WebServer.SERVER_PORT=port;
         server = new Server(new QueuedThreadPool(200));
         server.setAttribute("org.eclipse.jetty.server.Request.maxFormContentSize", Integer.MAX_VALUE);
         server.setConnectors(new Connector[] { httpConnector(server,port)});
