@@ -44,7 +44,7 @@ import com.swift.util.type.TypeUtil;
  */
 @Service
 @Order
-public class SimpleBaseCode extends AbstractWebHandlerCode implements WebHandlerCode {
+public class SimpleBaseCode implements WebHandlerCode {
     private final static Logger log = LoggerFactory.getLogger(SimpleBaseCode.class);
 
     private final static String CONTENT_TYPE_JSON = "application/json";

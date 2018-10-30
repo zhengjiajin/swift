@@ -18,6 +18,7 @@ import org.eclipse.jetty.server.Request;
 
 import com.swift.core.model.HttpServiceRequest;
 import com.swift.core.model.ServiceResponse;
+import com.swift.util.type.TypeUtil;
 
 /**
  * 接收服务的编解码器
@@ -119,5 +120,17 @@ public interface WebHandlerCode {
         }
         
         
+    }
+    
+    public default String getIp(HttpServletRequest httpRequest){
+        String ip = httpRequest.getHeader("X-Forwarded-For");
+        if(TypeUtil.isNull(ip)){
+            ip=httpRequest.getRemoteAddr();
+        }else{
+            if(ip.indexOf(",")>0){
+                ip=ip.substring(0, ip.indexOf(","));
+            }
+        }
+        return ip;
     }
 }
