@@ -10,7 +10,7 @@ import java.io.Serializable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * 添加说明 
+ * 注意高并发场景不能使用save和saveAndFlush,除非加锁
  * @author zhengjiajin
  * @version 1.0 2018年6月5日
  */
