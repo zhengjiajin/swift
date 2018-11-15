@@ -6,7 +6,6 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.collections.map.LRUMap;
 
 import com.swift.exception.UnknownException;
 import com.swift.util.io.ByteUtil;
@@ -82,23 +81,16 @@ public class AESUtil {
         }
     }
 	
-	private static final int maxSize = 100;
-	private static LRUMap cacheEncryptCipher = new LRUMap(maxSize);
-	private static LRUMap cacheDecryptCipher = new LRUMap(maxSize);
 	private static Cipher getEncryptCipher(byte[] password, byte[] iv,String transformation) {
 		try {
 		    if(TypeUtil.isNull(transformation)) transformation="AES";
-			Cipher cp = (Cipher) cacheEncryptCipher.get(password);
-			if(cp == null) {
-				Key key = new SecretKeySpec(password, "AES");
-				cp = Cipher.getInstance(transformation);
-				if(iv!=null && iv.length>0) {
-				    IvParameterSpec ivSpec = new IvParameterSpec(iv);
-				    cp.init(Cipher.ENCRYPT_MODE, key,ivSpec); 
-				}else {
-				    cp.init(Cipher.ENCRYPT_MODE, key); 
-				}
-				cacheEncryptCipher.put(password, cp);
+			Cipher cp = Cipher.getInstance(transformation);
+			Key key = new SecretKeySpec(password, "AES");
+			if(iv!=null && iv.length>0) {
+			    IvParameterSpec ivSpec = new IvParameterSpec(iv);
+			    cp.init(Cipher.ENCRYPT_MODE, key,ivSpec); 
+			}else {
+			    cp.init(Cipher.ENCRYPT_MODE, key); 
 			}
 			return cp;
 		} catch (Exception e) {
@@ -108,18 +100,14 @@ public class AESUtil {
 	private static Cipher getDecryptCipher(byte[] password, byte[] iv,String transformation) {
 		try {
 		    if(TypeUtil.isNull(transformation)) transformation="AES";
-			Cipher cp = (Cipher) cacheDecryptCipher.get(password);
-			if(cp == null) {
-			    Key key = new SecretKeySpec(password, "AES");
-				cp = Cipher.getInstance(transformation);
-				if(iv!=null && iv.length>0) {
-                    IvParameterSpec ivSpec = new IvParameterSpec(iv);
-                    cp.init(Cipher.DECRYPT_MODE, key,ivSpec); 
-                }else {
-                    cp.init(Cipher.DECRYPT_MODE, key); 
-                }
-				cacheDecryptCipher.put(password, cp);
-			}
+			Cipher cp = Cipher.getInstance(transformation);
+		    Key key = new SecretKeySpec(password, "AES");
+			if(iv!=null && iv.length>0) {
+                IvParameterSpec ivSpec = new IvParameterSpec(iv);
+                cp.init(Cipher.DECRYPT_MODE, key,ivSpec); 
+            }else {
+                cp.init(Cipher.DECRYPT_MODE, key); 
+            }
 			return cp;
 		} catch (Exception e) {
 			throw new UnknownException("AES异常",e);
