@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.support.ResourceTransactionManager;
 
 /**
  * 添加说明
@@ -24,7 +25,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class DbBeanConfig {
 
     @Bean
-    public JpaTransactionManager transactionManager(DataSource dataSource) {
+    public ResourceTransactionManager transactionManager(DataSource dataSource) {
         JpaTransactionManager bean = new JpaTransactionManager();
         bean.setDataSource(dataSource);
         return bean;
