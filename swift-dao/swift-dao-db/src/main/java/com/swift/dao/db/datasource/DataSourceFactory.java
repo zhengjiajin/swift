@@ -56,6 +56,8 @@ public class DataSourceFactory extends AbstractRoutingDataSource implements EndF
 
     private static final String DEFAULT_DB = DataSource.master.getDbName();
 
+    private boolean isStart = false;
+    
     public DataSourceFactory() {
         super.setTargetDataSources(targetDataSources);
     }
@@ -78,6 +80,7 @@ public class DataSourceFactory extends AbstractRoutingDataSource implements EndF
             if (TypeUtil.isNull(usls) || TypeUtil.isNull(userNames) || TypeUtil.isNull(passwords)) return;
             splitDataSource(source, usls, userNames, passwords);
         }
+        isStart=true;
     }
 
     private void splitDataSource(String source, String urls, String userNames, String passwords) {
@@ -174,5 +177,9 @@ public class DataSourceFactory extends AbstractRoutingDataSource implements EndF
     @Override
     public void end() {
         thredLocalDb.remove();
+    }
+
+    public boolean isStart() {
+        return isStart;
     }
 }

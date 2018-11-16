@@ -40,7 +40,7 @@ import com.swift.exception.SwiftRuntimeException;
 @Component("jdbc")
 public class JdbcMysqlImpl implements Jdbc {
     private static final Logger log = LoggerFactory.getLogger(JdbcMysqlImpl.class);
-    @Autowired
+    @Autowired(required=false)
     private JdbcTemplate jdbcTemplate;
 
     /**
