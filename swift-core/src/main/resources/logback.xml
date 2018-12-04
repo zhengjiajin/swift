@@ -3,7 +3,7 @@
 
 	<jmxConfigurator />
 	
-	<property name="pattern" value="%date %5level %thread %class{0}:%line - %message%n" />
+	<property name="pattern" value="%date→%level→%thread→%class{0}→%line→%message%n" />
 	<property name="fileNamePattern" value="%d{yyyyMMdd}.%i" />
 	<property name="maxHistory" value="365" />
 	<property name="maxFileSize" value="200MB" />
