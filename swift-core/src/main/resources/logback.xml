@@ -34,11 +34,31 @@
 		<includeCallerData>true</includeCallerData>
 	</appender>
 	
-	
+	<appender name="error" class="ch.qos.logback.classic.AsyncAppender">
+		<appender name="file0" class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<File>log/log_error_.log</File>
+			<encoder><pattern>${pattern}</pattern></encoder>
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<FileNamePattern>log/log_error_.log.${fileNamePattern}</FileNamePattern>
+				<MaxHistory>${maxHistory}</MaxHistory>
+				<TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+					<MaxFileSize>${maxFileSize}</MaxFileSize>
+				</TimeBasedFileNamingAndTriggeringPolicy>
+			</rollingPolicy>
+			<filter class="ch.qos.logback.classic.filter.LevelFilter">
+				<level>ERROR</level> 
+				<onMatch>ACCEPT</onMatch> 
+				<onMismatch>DENY</onMismatch> 
+			</filter> 
+		</appender>
+		<discardingThreshold>1</discardingThreshold>
+		<includeCallerData>true</includeCallerData>
+	</appender>
 
 	<root level="INFO">
 		<!-- <appender-ref ref="stdout" /> -->
 		<appender-ref ref="file" />
+		<appender-ref ref="error" />
 	</root>
 	
 </configuration>
