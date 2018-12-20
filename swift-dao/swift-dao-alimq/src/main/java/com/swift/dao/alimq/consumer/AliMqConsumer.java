@@ -29,6 +29,7 @@ import com.swift.dao.alimq.AliMqConfigurer;
 import com.swift.dao.alimq.AliMqRequest;
 import com.swift.dao.alimq.AliMqService.AliMqMessageListener;
 import com.swift.dao.alimq.AliMqService.Topic;
+import com.swift.exception.SwiftRuntimeException;
 import com.swift.util.bean.AnnotationUtil;
 import com.swift.util.bean.AopTargetUtils;
 import com.swift.util.text.JsonUtil;
@@ -56,6 +57,7 @@ public class AliMqConsumer {
         consumer = ONSFactory.createConsumer(AliMqConfigurer.getProperties());
         List<AliMqMessageHandler> handlerList = createHandler();
         if(TypeUtil.isNull(handlerList)) return;
+        if(handlerList.size()>1) throw new SwiftRuntimeException("暂时不支持消费多TOPIC");
         for (AliMqMessageHandler handler : handlerList) {
              log.info("创建MQ监听:"+handler.topic+";expression="+handler.expression);
              consumer.subscribe(AliMqConfigurer.removeTopic(handler.topic), handler.expression, handler);
@@ -146,6 +148,7 @@ public class AliMqConsumer {
         StringBuffer sb = new StringBuffer();
         //tag1 || tag2 || tag3
         for(String m:method) {
+            if("*".equals(m)) return "*";
             sb.append(m).append(" || ");
         }
         return sb.substring(0, sb.length()-4);
