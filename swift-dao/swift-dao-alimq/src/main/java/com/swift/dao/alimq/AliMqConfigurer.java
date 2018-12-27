@@ -7,6 +7,9 @@ package com.swift.dao.alimq;
 
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aliyun.openservices.ons.api.PropertyKeyConst;
 import com.swift.core.env.EnvDecode;
 import com.swift.core.env.EnvLoader;
@@ -21,6 +24,8 @@ import com.swift.util.type.TypeUtil;
  */
 public class AliMqConfigurer {
 
+    private static final Logger log = LoggerFactory.getLogger(AliMqConfigurer.class);
+    
     private static Properties properties;
     
     //private static final int CONSUME_THREAD_NUMS = 100;
@@ -31,6 +36,7 @@ public class AliMqConfigurer {
         }
         // 获取配置文件kafka.properties的内容
         Properties mqproperties = PropertiesUtil.getProperties(EnvLoader.getEnvPath()+"alimq.properties");
+        log.info(EnvLoader.getEnvPath()+"alimq.properties内容:"+mqproperties);
         properties = new Properties();
         if(mqproperties==null) return properties;
         // 您在 MQ 控制台创建的 Consumer ID
