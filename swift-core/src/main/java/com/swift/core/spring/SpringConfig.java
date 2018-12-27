@@ -8,6 +8,8 @@ package com.swift.core.spring;
 import java.io.IOException;
 
 import org.apache.logging.log4j.core.config.Order;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,13 +30,20 @@ import com.swift.exception.SwiftRuntimeException;
 @Order(1)
 public class SpringConfig {
 
+    private static final Logger log = LoggerFactory.getLogger(SpringConfig.class);
+    
     @Bean
     public PropertyPlaceholderConfigurer propertyConfigurer() {
         PropertyPlaceholderConfigurer propertyLoad = new PropertyPlaceholderConfigurer();
         ResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
         try {
             Resource[] resources = loader.getResources("classpath*:"+EnvLoader.getEnvPath()+"*.properties");
-            propertyLoad.setLocations(resources);
+            if(resources!=null) {
+                for(Resource re:resources) {
+                    log.info("加载配置文件:"+re.getURL());
+                }
+                propertyLoad.setLocations(resources);
+            }
         } catch (IOException e) {
             throw new SwiftRuntimeException("加载配置文件失败", e);
         }
