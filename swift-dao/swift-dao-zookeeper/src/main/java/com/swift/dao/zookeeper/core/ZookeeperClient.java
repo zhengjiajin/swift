@@ -23,6 +23,7 @@ import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Id;
 import org.springframework.stereotype.Component;
 
+import com.swift.core.env.EnvLoader;
 import com.swift.exception.SwiftRuntimeException;
 import com.swift.util.io.PropertiesUtil;
 import com.swift.util.type.TypeUtil;
@@ -39,7 +40,7 @@ public class ZookeeperClient {
     
     @PostConstruct
     private void init() {
-        Properties properties = PropertiesUtil.getProperties("zookeeper.properties");
+        Properties properties = PropertiesUtil.getProperties(EnvLoader.getEnvPath()+"zookeeper.properties");
         if(properties==null) return;
         String servers = properties.getProperty("zookeeper.servers");
         if(TypeUtil.isNull(servers))  throw new SwiftRuntimeException("zookeeper.properties里的zookeeper.servers必须配置");

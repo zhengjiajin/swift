@@ -10,6 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.swift.core.env.EnvLoader;
 import com.swift.core.server.LifeCycle;
 import com.swift.core.spring.Spring;
 import com.swift.util.exec.ThreadUtil;
@@ -24,24 +25,33 @@ import com.swift.util.type.TypeUtil;
 public class StartMain {
     private final static Logger log = LoggerFactory.getLogger(StartMain.class);
 
+    public static String ENV="";
     /**
      * @param args
      */
     public static void main(String[] args) {
         try {
-            log.info("starting...");
+            int port = 80;
+            String env="";
+            if(args!=null && args.length>0) {
+                for(String arg:args) {
+                    if(TypeUtil.isNumber(arg)) {
+                        port=TypeUtil.toInt(arg);
+                    }else {
+                        env=arg;
+                    }
+                }
+            }
+            StartMain.ENV=EnvLoader.getEnv(env);
+            log.info("starting...ENV:"+StartMain.ENV);
             for (String str : Spring.getAllBeanName()) {
                 log.info("spring存在BEAN..." + str);
             }
             List<LifeCycle> servers = Spring.getBeans(LifeCycle.class);
             if (TypeUtil.isNotNull(servers)) {
                 for (LifeCycle s : servers) {
-                    log.info("准备启动服务:" + s);
-                    if(args!=null && args.length>0) {
-                        s.start(TypeUtil.toInt(args[0], 80)); 
-                    }else {
-                        s.start(80); 
-                    }
+                    log.info("准备启动服务:" + s+";port:"+port);
+                    s.start(port); 
                     log.info("结束启动服务:" + s);
                 }
             }

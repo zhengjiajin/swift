@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import com.aliyun.openservices.ons.api.PropertyKeyConst;
 import com.swift.core.env.EnvDecode;
+import com.swift.core.env.EnvLoader;
 import com.swift.util.io.PropertiesUtil;
 import com.swift.util.type.TypeUtil;
 
@@ -29,7 +30,7 @@ public class AliMqConfigurer {
             return properties;
         }
         // 获取配置文件kafka.properties的内容
-        Properties mqproperties = PropertiesUtil.getProperties("alimq.properties");
+        Properties mqproperties = PropertiesUtil.getProperties(EnvLoader.getEnvPath()+"alimq.properties");
         properties = new Properties();
         if(mqproperties==null) return properties;
         // 您在 MQ 控制台创建的 Consumer ID
