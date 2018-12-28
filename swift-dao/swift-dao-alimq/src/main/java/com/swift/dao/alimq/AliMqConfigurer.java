@@ -39,9 +39,6 @@ public class AliMqConfigurer {
         log.info(EnvLoader.getEnvPath()+"alimq.properties内容:"+mqproperties);
         properties = new Properties();
         if(mqproperties==null) return properties;
-        // 您在 MQ 控制台创建的 Consumer ID
-        if(TypeUtil.isNotNull(mqproperties.getProperty("group.ConsumerId")))
-            properties.put(PropertyKeyConst.ConsumerId, mqproperties.getProperty("group.ConsumerId"));
         // 您在 MQ 控制台创建的 Producer ID
         if(TypeUtil.isNotNull(mqproperties.getProperty("group.ProducerId")))
             properties.put(PropertyKeyConst.ProducerId, mqproperties.getProperty("group.ProducerId"));

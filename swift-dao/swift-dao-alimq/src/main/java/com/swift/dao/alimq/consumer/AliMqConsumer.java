@@ -16,6 +16,7 @@ import javax.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.aliyun.openservices.ons.api.Action;
@@ -49,10 +50,14 @@ public class AliMqConsumer {
 
     @Autowired(required = false)
     private List<AliMqMessageListener> handlers;
+    
+    @Value("${group.ConsumerId:}")
+    private String CONSUMER_ID;
 
     @PostConstruct
     private void init() {
-        if (TypeUtil.isNull(AliMqConfigurer.getProperties().get(PropertyKeyConst.ConsumerId))) return;
+        if (TypeUtil.isNull(CONSUMER_ID)) return;
+        AliMqConfigurer.getProperties().setProperty(PropertyKeyConst.ConsumerId, CONSUMER_ID);
         if (TypeUtil.isNull(handlers)) return;
         consumer = ONSFactory.createConsumer(AliMqConfigurer.getProperties());
         List<AliMqMessageHandler> handlerList = createHandler();
