@@ -146,6 +146,33 @@ public class JdbcMysqlImpl implements Jdbc {
         sql = SqlBuilder.appendLimitSql(sql, start, size);
         return this.queryForList(sql, elementType);
     }
+    
+    /** 
+     * @see com.swift.dao.db.springjdbc.Jdbc#queryForList(java.lang.String, java.lang.Object[])
+     */
+    @Override
+    public List<Map<String, Object>> queryForList(String sql, Object... args) {
+        try {
+            List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args);
+            return list;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+    
+    /** 
+     * @see com.swift.dao.db.springjdbc.Jdbc#queryForList(java.lang.String, java.lang.Class, java.lang.Object[])
+     */
+    @Override
+    public <T> List<T> queryForList(String sql, Class<T> elementType, Object... args) {
+        try {
+            List<T> list = jdbcTemplate.queryForList(sql, elementType, args);
+            return list;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
 
     /**
      * @see com.swift.dao.db.springjdbc.Jdbc#queryForLongs(java.lang.String)
@@ -287,4 +314,7 @@ public class JdbcMysqlImpl implements Jdbc {
         log.error("数据异常", e);
         throw new SwiftRuntimeException("数据异常", e);
     }
+
+
+    
 }

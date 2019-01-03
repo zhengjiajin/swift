@@ -34,6 +34,10 @@ public interface Jdbc {
     
     public <T> List<T> queryForList(String sql, Class<T> elementType);
     
+    public List<Map<String, Object>> queryForList(String sql, Object... args);
+    
+    public <T> List<T> queryForList(String sql, Class<T> elementType, Object... args);
+    
     public <T> List<T> queryForList(String sql, Class<T> elementType, int start, int size);
     
     public List<Long> queryForLongs(String sql);
