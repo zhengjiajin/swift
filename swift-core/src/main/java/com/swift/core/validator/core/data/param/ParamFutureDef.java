@@ -44,7 +44,7 @@ public class ParamFutureDef extends ConstraintDef<ParamFuture> {
      */
     @Override
     protected String formatMsg(ParamFuture anno) {
-        return getLocalMessage(anno.anno().message());
+        return getLocalMessage(anno.message());
     }
 
     /** 

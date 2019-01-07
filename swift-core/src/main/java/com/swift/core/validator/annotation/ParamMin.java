@@ -5,8 +5,6 @@
  */
 package com.swift.core.validator.annotation;
 
-import javax.validation.constraints.Min;
-
 /**
  * 添加说明 
  * @author zhengjiajin
@@ -15,5 +13,7 @@ import javax.validation.constraints.Min;
 public @interface ParamMin {
     String param();
     
-    Min anno();
+    String message() default "参数错误 ";
+    
+    double min();
 }

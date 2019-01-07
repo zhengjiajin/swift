@@ -5,8 +5,6 @@
  */
 package com.swift.core.validator.annotation;
 
-import javax.validation.constraints.Digits;
-
 /**
  * 添加说明 
  * @author zhengjiajin
@@ -15,5 +13,9 @@ import javax.validation.constraints.Digits;
 public @interface ParamDigits {
     String param();
     
-    Digits anno();
+    String message() default "参数错误 ";
+    
+    int integer();
+    
+    int fraction();
 }

@@ -39,7 +39,7 @@ public class ParamNullDef extends ConstraintDef<ParamNull> {
      */
     @Override
     protected String formatMsg(ParamNull anno) {
-        return getLocalMessage(anno.anno().message());
+        return getLocalMessage(anno.message());
     }
 
     /**

@@ -34,7 +34,7 @@ public class ParamPatternDef extends ConstraintDef<ParamPattern> {
     @Override
     protected boolean checkObj(Object obj, ParamPattern anno) {
         if(obj==null) return true;
-        return Pattern.matches(anno.anno().regexp(), TypeUtil.toString(obj));
+        return Pattern.matches(anno.regexp(), TypeUtil.toString(obj));
     }
 
     /** 
@@ -42,8 +42,8 @@ public class ParamPatternDef extends ConstraintDef<ParamPattern> {
      */
     @Override
     protected String formatMsg(ParamPattern anno) {
-        String msg = getLocalMessage(anno.anno().message());
-        return msg.replace("{regexp}", TypeUtil.toString(anno.anno().regexp()));
+        String msg = getLocalMessage(anno.message());
+        return msg.replace("{regexp}", TypeUtil.toString(anno.regexp()));
     }
 
     /** 

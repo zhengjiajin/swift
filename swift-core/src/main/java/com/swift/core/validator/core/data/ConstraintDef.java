@@ -37,7 +37,7 @@ public abstract class ConstraintDef<ANNO extends Annotation> {
         for (DataModel model : list) {
             Object obj = model.getObject(param);
             boolean check = checkObj(obj, anno);
-            if (!check) listStr.add(ValidatorBuilderString.builderString(obj, formatMsg(anno)));
+            if (!check) listStr.add(ValidatorBuilderString.builderString(param, formatMsg(anno)));
         }
         return ValidatorBuilderString.builderString(listStr);
     }

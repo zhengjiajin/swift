@@ -5,8 +5,6 @@
  */
 package com.swift.core.validator.annotation;
 
-import javax.validation.constraints.DecimalMin;
-
 /**
  * 添加说明 
  * @author zhengjiajin
@@ -15,5 +13,7 @@ import javax.validation.constraints.DecimalMin;
 public @interface ParamDecimalMin {
     String param();
     
-    DecimalMin anno();
+    String message() default "参数错误 ";
+    
+    double min();
 }

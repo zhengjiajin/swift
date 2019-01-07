@@ -34,10 +34,10 @@ public class ParamDecimalMinDef extends ConstraintDef<ParamDecimalMin> {
     protected boolean checkObj(Object obj, ParamDecimalMin anno) {
         if(obj==null) return true;
         if(TypeUtil.isNumber(obj)) {
-            if(TypeUtil.toNumber(obj).doubleValue()<TypeUtil.toDouble(anno.anno().value(), 0)) return false;
+            if(TypeUtil.toNumber(obj).doubleValue()<anno.min()) return false;
         }else {
             int length = TypeUtil.getLength(obj);
-            if(length<TypeUtil.toDouble(anno.anno().value(), 0)) return false;
+            if(length<anno.min()) return false;
         }
         return true;
     }
@@ -47,8 +47,8 @@ public class ParamDecimalMinDef extends ConstraintDef<ParamDecimalMin> {
      */
     @Override
     protected String formatMsg(ParamDecimalMin anno) {
-        String msg = getLocalMessage(anno.anno().message());
-        return msg.replace("{value}", TypeUtil.toString(anno.anno().value()));
+        String msg = getLocalMessage(anno.message());
+        return msg.replace("{min}", TypeUtil.toString(anno.min()));
     }
 
     /** 

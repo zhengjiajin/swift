@@ -33,10 +33,10 @@ public class ParamMinDef extends ConstraintDef<ParamMin> {
     protected boolean checkObj(Object obj, ParamMin anno) {
         if(obj==null) return true;
         if(TypeUtil.isNumber(obj)) {
-            if(TypeUtil.toNumber(obj).doubleValue()<anno.anno().value()) return false;
+            if(TypeUtil.toNumber(obj).doubleValue()<anno.min()) return false;
         }else {
             int length = TypeUtil.getLength(obj);
-            if(length<anno.anno().value()) return false;
+            if(length<anno.min()) return false;
         }
         return true;
     }
@@ -46,8 +46,8 @@ public class ParamMinDef extends ConstraintDef<ParamMin> {
      */
     @Override
     protected String formatMsg(ParamMin anno) {
-        String msg = getLocalMessage(anno.anno().message());
-        return msg.replace("{value}", TypeUtil.toString(anno.anno().value()));
+        String msg = getLocalMessage(anno.message());
+        return msg.replace("{min}", TypeUtil.toString(anno.min()));
     }
 
     /** 

@@ -5,8 +5,6 @@
  */
 package com.swift.core.validator.annotation;
 
-import org.hibernate.validator.constraints.Email;
-
 /**
  * 添加说明 
  * @author zhengjiajin
@@ -15,5 +13,5 @@ import org.hibernate.validator.constraints.Email;
 public @interface ParamEmail {
     String param();
     
-    Email anno() default @Email;
+    String message() default "参数错误 ";
 }

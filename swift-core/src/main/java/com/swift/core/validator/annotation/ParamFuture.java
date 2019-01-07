@@ -5,8 +5,6 @@
  */
 package com.swift.core.validator.annotation;
 
-import javax.validation.constraints.Future;
-
 /**
  * 添加说明 
  * @author zhengjiajin
@@ -15,5 +13,5 @@ import javax.validation.constraints.Future;
 public @interface ParamFuture {
     String param();
     
-    Future anno() default @Future;
+    String message() default "参数错误 ";
 }

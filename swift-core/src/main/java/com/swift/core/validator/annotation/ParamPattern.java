@@ -5,8 +5,6 @@
  */
 package com.swift.core.validator.annotation;
 
-import javax.validation.constraints.Pattern;
-
 /**
  * 添加说明
  * 
@@ -16,5 +14,7 @@ import javax.validation.constraints.Pattern;
 public @interface ParamPattern {
     String param();
 
-    Pattern anno();
+    String message() default "参数错误 ";
+    
+    String regexp();
 }

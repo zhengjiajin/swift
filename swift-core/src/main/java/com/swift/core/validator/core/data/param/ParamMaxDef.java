@@ -33,10 +33,10 @@ public class ParamMaxDef extends ConstraintDef<ParamMax> {
     protected boolean checkObj(Object obj, ParamMax anno) {
         if(obj==null) return true;
         if(TypeUtil.isNumber(obj)) {
-            if(TypeUtil.toNumber(obj).doubleValue()>anno.anno().value()) return false;
+            if(TypeUtil.toNumber(obj).doubleValue()>anno.max()) return false;
         }else {
             int length = TypeUtil.getLength(obj);
-            if(length>anno.anno().value()) return false;
+            if(length>anno.max()) return false;
         }
         return true;
     }
@@ -46,8 +46,8 @@ public class ParamMaxDef extends ConstraintDef<ParamMax> {
      */
     @Override
     protected String formatMsg(ParamMax anno) {
-        String msg = getLocalMessage(anno.anno().message());
-        return msg.replace("{value}", TypeUtil.toString(anno.anno().value()));
+        String msg = getLocalMessage(anno.message());
+        return msg.replace("{max}", TypeUtil.toString(anno.max()));
     }
 
     /** 

@@ -5,8 +5,6 @@
  */
 package com.swift.core.validator.annotation;
 
-import org.hibernate.validator.constraints.Range;
-
 /**
  * 添加说明
  * 
@@ -16,5 +14,9 @@ import org.hibernate.validator.constraints.Range;
 public @interface ParamRange {
     String param();
 
-    Range anno()  default @Range;
+    String message() default "参数错误 ";
+    
+    long min() default 0;
+    
+    long max() default Long.MAX_VALUE;
 }

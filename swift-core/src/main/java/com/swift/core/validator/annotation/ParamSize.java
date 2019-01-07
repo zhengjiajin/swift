@@ -5,8 +5,6 @@
  */
 package com.swift.core.validator.annotation;
 
-import javax.validation.constraints.Size;
-
 /**
  * 添加说明
  * 
@@ -16,5 +14,9 @@ import javax.validation.constraints.Size;
 public @interface ParamSize {
     String param();
 
-    Size anno() default @Size;
+    String message() default "参数错误 ";
+    
+    int min();
+    
+    int max();
 }

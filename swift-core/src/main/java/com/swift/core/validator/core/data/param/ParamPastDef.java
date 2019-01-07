@@ -43,7 +43,7 @@ public class ParamPastDef extends ConstraintDef<ParamPast> {
      */
     @Override
     protected String formatMsg(ParamPast anno) {
-        return getLocalMessage(anno.anno().message());
+        return getLocalMessage(anno.message());
     }
 
     /** 

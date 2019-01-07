@@ -5,8 +5,6 @@
  */
 package com.swift.core.validator.annotation;
 
-import org.hibernate.validator.constraints.Length;
-
 /**
  * 添加说明 
  * @author zhengjiajin
@@ -15,5 +13,9 @@ import org.hibernate.validator.constraints.Length;
 public @interface ParamLength {
     String param();
     
-    Length anno() default @Length;
+    String message() default "参数错误 ";
+    
+    int max();
+    
+    int min();
 }

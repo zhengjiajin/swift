@@ -5,8 +5,6 @@
  */
 package com.swift.core.validator.annotation;
 
-import javax.validation.constraints.Null;
-
 /**
  * 添加说明 
  * @author zhengjiajin
@@ -15,5 +13,5 @@ import javax.validation.constraints.Null;
 public @interface ParamNull {
     String param();
     
-    Null anno()  default @Null;
+    String message() default "参数错误 ";
 }

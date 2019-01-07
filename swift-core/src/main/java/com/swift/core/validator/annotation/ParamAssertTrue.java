@@ -5,8 +5,6 @@
  */
 package com.swift.core.validator.annotation;
 
-import javax.validation.constraints.AssertTrue;
-
 /**
  * 添加说明 
  * @author zhengjiajin
@@ -15,5 +13,5 @@ import javax.validation.constraints.AssertTrue;
 public @interface ParamAssertTrue {
     String param();
     
-    AssertTrue anno() default @AssertTrue;
+    String message() default "参数错误 ";
 }

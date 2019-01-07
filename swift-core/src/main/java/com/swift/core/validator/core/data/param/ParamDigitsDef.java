@@ -42,8 +42,8 @@ public class ParamDigitsDef extends ConstraintDef<ParamDigits> {
         }else {
             inter=str;
         }
-        if(inter.length()>anno.anno().integer()) return false;
-        if(fraction.length()>anno.anno().fraction()) return false;
+        if(inter.length()>anno.integer()) return false;
+        if(fraction.length()>anno.fraction()) return false;
         return true;
     }
 
@@ -52,8 +52,8 @@ public class ParamDigitsDef extends ConstraintDef<ParamDigits> {
      */
     @Override
     protected String formatMsg(ParamDigits anno) {
-        String msg = getLocalMessage(anno.anno().message());
-        return msg.replace("{integer}", TypeUtil.toString(anno.anno().integer())).replace("{fraction}", TypeUtil.toString(anno.anno().fraction()));
+        String msg = getLocalMessage(anno.message());
+        return msg.replace("{integer}", TypeUtil.toString(anno.integer())).replace("{fraction}", TypeUtil.toString(anno.fraction()));
     }
 
     /** 

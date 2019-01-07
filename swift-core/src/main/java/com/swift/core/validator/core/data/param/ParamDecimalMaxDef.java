@@ -35,10 +35,10 @@ public class ParamDecimalMaxDef extends ConstraintDef<ParamDecimalMax> {
     protected boolean checkObj(Object obj, ParamDecimalMax anno) {
         if(obj==null) return true;
         if(TypeUtil.isNumber(obj)) {
-            if(TypeUtil.toNumber(obj).doubleValue()>TypeUtil.toDouble(anno.anno().value(), 0)) return false;
+            if(TypeUtil.toNumber(obj).doubleValue()>anno.max()) return false;
         }else {
             int length = TypeUtil.getLength(obj);
-            if(length>TypeUtil.toDouble(anno.anno().value(), 0)) return false;
+            if(length>anno.max()) return false;
         }
         return true;
     }
@@ -48,8 +48,8 @@ public class ParamDecimalMaxDef extends ConstraintDef<ParamDecimalMax> {
      */
     @Override
     protected String formatMsg(ParamDecimalMax anno) {
-        String msg = getLocalMessage(anno.anno().message());
-        return msg.replace("{value}", TypeUtil.toString(anno.anno().value()));
+        String msg = getLocalMessage(anno.message());
+        return msg.replace("{max}", TypeUtil.toString(anno.max()));
     }
 
     /** 

@@ -40,7 +40,7 @@ public class ParamEmailDef extends ConstraintDef<ParamEmail> {
      */
     @Override
     protected String formatMsg(ParamEmail anno) {
-        return getLocalMessage(anno.anno().message());
+        return getLocalMessage(anno.message());
     }
 
     /** 

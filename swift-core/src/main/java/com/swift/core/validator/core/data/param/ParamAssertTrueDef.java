@@ -39,7 +39,7 @@ public class ParamAssertTrueDef extends ConstraintDef<ParamAssertTrue> {
      */
     @Override
     protected String formatMsg(ParamAssertTrue anno) {
-        return getLocalMessage(anno.anno().message());
+        return getLocalMessage(anno.message());
     }
 
     /** 

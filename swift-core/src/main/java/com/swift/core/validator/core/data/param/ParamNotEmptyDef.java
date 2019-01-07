@@ -40,7 +40,7 @@ public class ParamNotEmptyDef extends ConstraintDef<ParamNotEmpty> {
      */
     @Override
     protected String formatMsg(ParamNotEmpty anno) {
-        return getLocalMessage(anno.anno().message());
+        return getLocalMessage(anno.message());
     }
 
     /** 

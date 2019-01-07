@@ -33,8 +33,8 @@ public class ParamSizeDef extends ConstraintDef<ParamSize> {
     protected boolean checkObj(Object obj, ParamSize anno) {
         if(obj==null) return true;
         int length = TypeUtil.getLength(obj);
-        if(length>anno.anno().max()) return false;
-        if(length<anno.anno().min()) return false;
+        if(length>anno.max()) return false;
+        if(length<anno.min()) return false;
         return true;
     }
 
@@ -43,8 +43,8 @@ public class ParamSizeDef extends ConstraintDef<ParamSize> {
      */
     @Override
     protected String formatMsg(ParamSize anno) {
-        String msg = getLocalMessage(anno.anno().message());
-        return msg.replace("{min}", TypeUtil.toString(anno.anno().min())).replace("{max}", TypeUtil.toString(anno.anno().max()));
+        String msg = getLocalMessage(anno.message());
+        return msg.replace("{min}", TypeUtil.toString(anno.min())).replace("{max}", TypeUtil.toString(anno.max()));
     }
 
     /** 

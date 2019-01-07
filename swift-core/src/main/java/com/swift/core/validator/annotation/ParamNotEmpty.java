@@ -5,8 +5,6 @@
  */
 package com.swift.core.validator.annotation;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 /**
  * 添加说明 
  * @author zhengjiajin
@@ -15,5 +13,5 @@ import org.hibernate.validator.constraints.NotEmpty;
 public @interface ParamNotEmpty {
     String param();
     
-    NotEmpty anno() default @NotEmpty;
+    String message() default "参数错误 ";
 }

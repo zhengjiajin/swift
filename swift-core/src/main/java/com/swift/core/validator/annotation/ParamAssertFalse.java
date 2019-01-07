@@ -5,8 +5,6 @@
  */
 package com.swift.core.validator.annotation;
 
-import javax.validation.constraints.AssertFalse;
-
 /**
  * 添加说明
  * 
@@ -16,5 +14,5 @@ import javax.validation.constraints.AssertFalse;
 public @interface ParamAssertFalse {
     String param();
 
-    AssertFalse anno() default @AssertFalse;
+    String message() default "参数错误 ";
 }

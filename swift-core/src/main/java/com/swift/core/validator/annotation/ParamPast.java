@@ -5,8 +5,6 @@
  */
 package com.swift.core.validator.annotation;
 
-import javax.validation.constraints.Past;
-
 /**
  * 添加说明
  * 
@@ -16,5 +14,5 @@ import javax.validation.constraints.Past;
 public @interface ParamPast {
     String param();
 
-    Past anno() default @Past;
+    String message() default "参数错误 ";
 }

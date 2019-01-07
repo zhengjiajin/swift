@@ -168,12 +168,12 @@ public abstract class WebClientCode {
          *            the uRL to set
          */
         public void setURL(String uRL) {
+            this.URL = uRL;
             try {
                 this.URI = new URI(uRL);
             } catch (URISyntaxException e) {
-                throw new SwiftRuntimeException("url错误:"+uRL);
+                throw new SwiftRuntimeException("url错误:"+uRL,e);
             }
-            this.URL = uRL;
         }
 
         /**

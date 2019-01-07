@@ -33,12 +33,12 @@ public class ParamRangeDef extends ConstraintDef<ParamRange> {
     protected boolean checkObj(Object obj, ParamRange anno) {
         if(obj==null) return true;
         if(TypeUtil.isNumber(obj)) {
-            if(TypeUtil.toNumber(obj).doubleValue()<anno.anno().min()) return false;
-            if(TypeUtil.toNumber(obj).doubleValue()>anno.anno().max()) return false;
+            if(TypeUtil.toNumber(obj).doubleValue()<anno.min()) return false;
+            if(TypeUtil.toNumber(obj).doubleValue()>anno.max()) return false;
         }else {
             int length = TypeUtil.getLength(obj);
-            if(length<anno.anno().min()) return false;
-            if(length>anno.anno().max()) return false;
+            if(length<anno.min()) return false;
+            if(length>anno.max()) return false;
         }
         return true;
     }
@@ -48,8 +48,8 @@ public class ParamRangeDef extends ConstraintDef<ParamRange> {
      */
     @Override
     protected String formatMsg(ParamRange anno) {
-        String msg = getLocalMessage(anno.anno().message());
-        return msg.replace("{min}", TypeUtil.toString(anno.anno().min())).replace("{max}", TypeUtil.toString(anno.anno().max()));
+        String msg = getLocalMessage(anno.message());
+        return msg.replace("{min}", TypeUtil.toString(anno.min())).replace("{max}", TypeUtil.toString(anno.max()));
     }
 
     /** 
