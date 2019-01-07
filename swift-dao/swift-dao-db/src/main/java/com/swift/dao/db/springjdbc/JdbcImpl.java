@@ -17,8 +17,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +25,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.stereotype.Component;
 
 import com.swift.exception.SwiftRuntimeException;
 
@@ -37,11 +34,8 @@ import com.swift.exception.SwiftRuntimeException;
  * @author zhengjiajin
  * @version 1.0 2018年6月6日
  */
-@Component("jdbc")
-public class JdbcMysqlImpl implements Jdbc {
-    private static final Logger log = LoggerFactory.getLogger(JdbcMysqlImpl.class);
-    @Autowired(required=false)
-    private JdbcTemplate jdbcTemplate;
+public class JdbcImpl extends JdbcTemplate implements Jdbc {
+    private static final Logger log = LoggerFactory.getLogger(JdbcImpl.class);
 
     /**
      * @see com.swift.dao.db.springjdbc.Jdbc#exist(java.lang.String)
@@ -52,20 +46,12 @@ public class JdbcMysqlImpl implements Jdbc {
     }
 
     /**
-     * @see com.swift.dao.db.springjdbc.Jdbc#update(java.lang.String)
-     */
-    @Override
-    public int update(String sql) {
-        return jdbcTemplate.update(sql);
-    }
-
-    /**
      * @see com.swift.dao.db.springjdbc.Jdbc#insertForLastId(java.lang.String)
      */
     @Override
     public long insertForLastId(String sql) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(new PreparedStatementCreator() {
+        super.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -73,14 +59,6 @@ public class JdbcMysqlImpl implements Jdbc {
             }
         }, keyHolder);
         return keyHolder.getKey().longValue();
-    }
-
-    /**
-     * @see com.swift.dao.db.springjdbc.Jdbc#batchUpdate(java.lang.String[])
-     */
-    @Override
-    public int[] batchUpdate(String[] sqls) {
-        return jdbcTemplate.batchUpdate(sqls);
     }
 
     /**
@@ -105,24 +83,7 @@ public class JdbcMysqlImpl implements Jdbc {
      */
     @Override
     public <T> T query(String sql, Class<T> elementType) {
-        try {
-            return jdbcTemplate.queryForObject(sql, MarkObject.mark(elementType));
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
-
-    /**
-     * @see com.swift.dao.db.springjdbc.Jdbc#queryForMaps(java.lang.String)
-     */
-    @Override
-    public List<Map<String, Object>> queryForMaps(String sql) {
-        try {
-            List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
-            return list;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return super.queryForObject(sql, MarkObject.mark(elementType));
     }
 
     /**
@@ -130,12 +91,7 @@ public class JdbcMysqlImpl implements Jdbc {
      */
     @Override
     public <T> List<T> queryForList(String sql, Class<T> elementType) {
-        try {
-            List<T> list = jdbcTemplate.query(sql, MarkObject.mark(elementType));
-            return list;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return super.query(sql, MarkObject.mark(elementType));
     }
 
     /**
@@ -146,32 +102,6 @@ public class JdbcMysqlImpl implements Jdbc {
         sql = SqlBuilder.appendLimitSql(sql, start, size);
         return this.queryForList(sql, elementType);
     }
-    
-    /** 
-     * @see com.swift.dao.db.springjdbc.Jdbc#queryForList(java.lang.String, java.lang.Object[])
-     */
-    @Override
-    public List<Map<String, Object>> queryForList(String sql, Object... args) {
-        try {
-            List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args);
-            return list;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
-    
-    /** 
-     * @see com.swift.dao.db.springjdbc.Jdbc#queryForList(java.lang.String, java.lang.Class, java.lang.Object[])
-     */
-    @Override
-    public <T> List<T> queryForList(String sql, Class<T> elementType, Object... args) {
-        try {
-            List<T> list = jdbcTemplate.queryForList(sql, elementType, args);
-            return list;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
 
 
     /**
@@ -179,7 +109,7 @@ public class JdbcMysqlImpl implements Jdbc {
      */
     @Override
     public List<Long> queryForLongs(String sql) {
-        List<Long> list = jdbcTemplate.query(sql, new RowMapper<Long>() {
+        List<Long> list = super.query(sql, new RowMapper<Long>() {
             @Override
             public Long mapRow(ResultSet rs, int index) {
                 try {
@@ -207,7 +137,7 @@ public class JdbcMysqlImpl implements Jdbc {
      */
     @Override
     public List<Integer> queryForInts(String sql) {
-        List<Integer> list = jdbcTemplate.query(sql, new RowMapper<Integer>() {
+        List<Integer> list = super.query(sql, new RowMapper<Integer>() {
             @Override
             public Integer mapRow(ResultSet rs, int index) {
                 try {
@@ -235,7 +165,7 @@ public class JdbcMysqlImpl implements Jdbc {
      */
     @Override
     public List<String> queryForStrings(String sql) {
-        List<String> list = jdbcTemplate.query(sql, new RowMapper<String>() {
+        List<String> list = super.query(sql, new RowMapper<String>() {
             @Override
             public String mapRow(ResultSet rs, int index) {
                 try {
@@ -263,12 +193,7 @@ public class JdbcMysqlImpl implements Jdbc {
      */
     @Override
     public Long queryForLong(String sql) {
-        try {
-            Long result = jdbcTemplate.queryForObject(sql, Long.class);
-            return result;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return super.queryForObject(sql, Long.class);
     }
 
     /**
@@ -276,12 +201,7 @@ public class JdbcMysqlImpl implements Jdbc {
      */
     @Override
     public Integer queryForInt(String sql) {
-        try {
-            Integer result = jdbcTemplate.queryForObject(sql, Integer.class);
-            return result;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return super.queryForObject(sql, Integer.class);
     }
 
     /**
@@ -289,12 +209,7 @@ public class JdbcMysqlImpl implements Jdbc {
      */
     @Override
     public String queryForString(String sql) {
-        try {
-            String result = jdbcTemplate.queryForObject(sql, String.class);
-            return result;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return super.queryForObject(sql, String.class);
     }
 
     /**
@@ -302,12 +217,7 @@ public class JdbcMysqlImpl implements Jdbc {
      */
     @Override
     public Date queryForDate(String sql) {
-        try {
-            Date result = jdbcTemplate.queryForObject(sql, Date.class);
-            return result;
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return super.queryForObject(sql, Date.class);
     }
 
     private void throwException(SQLException e) {
@@ -315,6 +225,12 @@ public class JdbcMysqlImpl implements Jdbc {
         throw new SwiftRuntimeException("数据异常", e);
     }
 
+    /** 
+     * @see com.swift.dao.db.springjdbc.Jdbc#queryForMaps(java.lang.String)
+     */
+    @Override
+    public List<Map<String, Object>> queryForMaps(String sql) {
+        return super.queryForList(sql);
+    }
 
-    
 }

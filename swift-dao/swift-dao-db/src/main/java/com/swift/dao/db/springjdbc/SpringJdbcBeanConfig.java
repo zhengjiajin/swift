@@ -9,7 +9,6 @@ import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * 添加说明 
@@ -20,8 +19,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class SpringJdbcBeanConfig {
 
     @Bean
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-        JdbcTemplate bean = new JdbcTemplate();
+    public JdbcImpl jdbc(DataSource dataSource) {
+        JdbcImpl bean = new JdbcImpl();
         bean.setDataSource(dataSource);
         return bean;
     }
