@@ -67,7 +67,7 @@ public class RandomUtil {
        String ato = String.format("%04d",atomicLong.incrementAndGet()%10000);
        long value = Long.valueOf(time+ato);
        long stvalue = Long.valueOf(ipend+pid);
-       return Long.toHexString(stvalue)+Long.toHexString(value);
+       return Long.toString(stvalue,Character.MAX_RADIX)+Long.toString(value,Character.MAX_RADIX);
     }
     
     /**
@@ -78,4 +78,5 @@ public class RandomUtil {
     public static int createCode(int min,int max) {
         return ThreadLocalRandom.current().nextInt(min, max);
     }
+    
 }

@@ -5,6 +5,8 @@
  */
 package com.swift.core.session;
 
+import java.util.Date;
+
 import com.swift.core.model.data.AbstractBeanDataModel;
 
 /**
@@ -19,7 +21,6 @@ public class AbstractSession extends AbstractBeanDataModel{
      * 验证登录字段
      */
     private String tokenId;
-
     /**
      * 验证登录字段
      */
@@ -32,6 +33,11 @@ public class AbstractSession extends AbstractBeanDataModel{
      * 用户名称
      */
     private String userName;
+    
+    /**
+     * session创建时间
+     */
+    private Date sessionCreateTime;
 
     public String getTokenId() {
         return tokenId;
@@ -64,6 +70,14 @@ public class AbstractSession extends AbstractBeanDataModel{
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    
+
+
+    public Date getSessionCreateTime() {
+        return sessionCreateTime;
+    }
+
+    public void setSessionCreateTime(Date sessionCreateTime) {
+        this.sessionCreateTime = sessionCreateTime;
+    }
     
 }
