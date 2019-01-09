@@ -123,35 +123,5 @@ public class ParserHtml {
         return list;
     }
 
-    /**
-     * 获取knowList图片
-     * 
-     * @param html
-     * @return
-     */
-    public static List<String> getKnowListImgUrlFromHTML(String html) {
-        List<String> list = new ArrayList<String>();
-        String endStr = "!knowList";
-        if (html == null) return list;
-        Pattern PATTERN = Pattern.compile("<img\\s+(?:[^>]*)src\\s*=\\s*([^>]+)", Pattern.CASE_INSENSITIVE
-            | Pattern.MULTILINE);
-        Matcher matcher = PATTERN.matcher(html);
-        while (matcher.find()) {
-            String group = matcher.group(1);
-            if (group == null) {
-                continue;
-            }
-            // 这里可能还需要更复杂的判断,用以处理src="...."内的一些转义符
-            if (group.startsWith("'")) {
-                list.add(group.substring(1, group.indexOf("'", 1)) + endStr);
-            } else if (group.startsWith("\"")) {
-                list.add(group.substring(1, group.indexOf("\"", 1)) + endStr);
-            } else {
-                list.add(group.split("\\s")[0] + endStr);
-            }
-        }
-        return list;
-    }
-
     
 }

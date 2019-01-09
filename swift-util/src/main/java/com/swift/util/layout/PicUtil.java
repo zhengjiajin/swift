@@ -31,7 +31,13 @@ import com.swift.exception.SwiftRuntimeException;
  * @version 1.0 2018年8月1日
  */
 public class PicUtil {
-    
+    /**
+     * 生成验证码
+     * @param width
+     * @param height
+     * @param code
+     * @return
+     */
     public static byte[] createCodePic(int width,int height,String code) {
         BufferedImage image=new BufferedImage(width, height, BufferedImage.TYPE_INT_BGR);
         //相当于得到一支笔
@@ -52,11 +58,24 @@ public class PicUtil {
             throw new SwiftRuntimeException("图片生成失败");
         }
     }
-    
+    /**
+     * 生成二维码
+     * @param width
+     * @param height
+     * @param contents
+     * @return
+     */
     public static byte[] createQrCodePic(int width,int height,String contents) {
         return createQrCodePic(width, height, contents, "png");
     }
-    
+    /**
+     * 生成二维码
+     * @param width
+     * @param height
+     * @param contents
+     * @param format
+     * @return
+     */
     public static byte[] createQrCodePic(int width,int height,String contents,String format) {
         try {
             Map<EncodeHintType,Object> hints = new HashMap<EncodeHintType,Object>();
