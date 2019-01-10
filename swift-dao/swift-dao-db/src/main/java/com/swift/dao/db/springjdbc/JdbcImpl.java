@@ -103,6 +103,10 @@ public class JdbcImpl extends JdbcTemplate implements Jdbc {
         return this.queryForList(sql, elementType);
     }
 
+    @Override
+    public <T> List<T> queryForList(String sql, Class<T> elementType,Object ...obj) {
+        return super.query(sql, MarkObject.mark(elementType), obj);
+    }
 
     /**
      * @see com.swift.dao.db.springjdbc.Jdbc#queryForLongs(java.lang.String)
