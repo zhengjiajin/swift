@@ -165,6 +165,38 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     public static int getYear(Date date) {
         return getCalendar(date).get(Calendar.YEAR);
     }
+    
+    // 返回是哪月
+    public static int getMonth(Date date) {
+        return getCalendar(date).get(Calendar.MONTH) + 1; 
+    }
+    
+    // 返回日
+    public static int getDate(Date date) {
+        return getCalendar(date).get(Calendar.DATE);
+    }
+    
+    // 返回时
+    public static int getHour(Date date) {
+        return getCalendar(date).get(Calendar.HOUR_OF_DAY);
+    }
+    
+    // 返回分
+    public static int getMinute(Date date) {
+        return getCalendar(date).get(Calendar.MINUTE);
+    }
+    
+    // 返回秒
+    public static int getSecond(Date date) {
+        return getCalendar(date).get(Calendar.SECOND);
+    }
+    
+    //相隔天
+    public static int differentDays(Date dateStart,Date dateEnd)
+    {
+        int days = (int) ((dateEnd.getTime() - dateStart.getTime()) / (1000*3600*24));
+        return days;
+    }
 
     // 返回一年中的第几天
     public static int getDayOfYear(Date date) {
@@ -178,6 +210,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
         calendar.setTime(date);
         return calendar;
     }
+    
 
     /**
      * 获取上月第一天

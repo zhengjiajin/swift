@@ -239,7 +239,7 @@ public class TypeUtil {
     } 
     
     public static boolean isMobileNO(String mobile) {
-        Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(17[0,6-8])|(18[0-9])|(14[0-9]))\\d{8}$");
+        Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");
         Matcher m = p.matcher(mobile);
         return m.matches();
     }

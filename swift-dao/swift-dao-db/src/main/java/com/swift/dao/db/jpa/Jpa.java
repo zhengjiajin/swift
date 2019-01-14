@@ -18,4 +18,8 @@ public interface Jpa<T, ID extends Serializable> extends JpaRepository<T, ID> {
    @Override
    @Deprecated
    void deleteAll();
+   
+   @Override
+   @Deprecated
+   T getOne(ID id);
 }
