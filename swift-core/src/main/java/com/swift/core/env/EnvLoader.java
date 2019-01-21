@@ -45,8 +45,10 @@ public class EnvLoader {
                 EnvLoader.NOW=Env.getEnvByPath(env);
             }
         }
-        log.info("未配置环境参数,默认为开发环境,将取根目录资源环境");
-        EnvLoader.NOW=Env.DEV;
+        if(NOW==null) {
+            log.info("未配置环境参数,默认为开发环境,将取根目录资源环境");
+            EnvLoader.NOW=Env.DEV;
+        }
     }
     /**
      * 空为开发环境，test为测试，prod为生产
