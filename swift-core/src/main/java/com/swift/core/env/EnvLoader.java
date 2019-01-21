@@ -8,7 +8,6 @@ package com.swift.core.env;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.swift.exception.SwiftRuntimeException;
 import com.swift.util.type.TypeUtil;
 
 /**
@@ -56,7 +55,10 @@ public class EnvLoader {
      * @return
      */
     public static Env getEnv(){
-        if(EnvLoader.NOW==null) throw new SwiftRuntimeException("环境配置没有初始化,请先初始化环境");
+        if(EnvLoader.NOW==null) {
+            log.info("未配置环境参数,默认为开发环境,将取根目录资源环境");
+            return Env.DEV;
+        }
         return EnvLoader.NOW;
     }
 }
