@@ -37,7 +37,7 @@ public class SpringConfig {
         PropertyPlaceholderConfigurer propertyLoad = new PropertyPlaceholderConfigurer();
         ResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
         try {
-            Resource[] resources = loader.getResources("classpath*:"+EnvLoader.getEnvPath()+"*.properties");
+            Resource[] resources = loader.getResources("classpath*:"+EnvLoader.getEnv().getEnvPath()+"*.properties");
             if(resources!=null) {
                 for(Resource re:resources) {
                     log.info("加载配置文件:"+re.getURL());

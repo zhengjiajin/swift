@@ -40,7 +40,7 @@ public class ZookeeperClient {
     
     @PostConstruct
     private void init() {
-        Properties properties = PropertiesUtil.getProperties(EnvLoader.getEnvPath()+"zookeeper.properties");
+        Properties properties = PropertiesUtil.getProperties(EnvLoader.getEnv().getEnvPath()+"zookeeper.properties");
         if(properties==null) return;
         String servers = properties.getProperty("zookeeper.servers");
         if(TypeUtil.isNull(servers))  throw new SwiftRuntimeException("zookeeper.properties里的zookeeper.servers必须配置");

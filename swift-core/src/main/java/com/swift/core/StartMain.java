@@ -24,8 +24,6 @@ import com.swift.util.type.TypeUtil;
  */
 public class StartMain {
     private final static Logger log = LoggerFactory.getLogger(StartMain.class);
-
-    public static String ENV="";
     /**
      * @param args
      */
@@ -42,8 +40,8 @@ public class StartMain {
                     }
                 }
             }
-            StartMain.ENV=EnvLoader.getEnv(env);
-            log.info("starting...ENV:"+StartMain.ENV);
+            EnvLoader.loadEnv(env);
+            log.info("starting...ENV:"+EnvLoader.getEnv());
             for (String str : Spring.getAllBeanName()) {
                 log.info("spring存在BEAN..." + str);
             }

@@ -35,8 +35,8 @@ public class AliMqConfigurer {
             return properties;
         }
         // 获取配置文件kafka.properties的内容
-        Properties mqproperties = PropertiesUtil.getProperties(EnvLoader.getEnvPath()+"alimq.properties");
-        log.info(EnvLoader.getEnvPath()+"alimq.properties内容:"+mqproperties);
+        Properties mqproperties = PropertiesUtil.getProperties(EnvLoader.getEnv().getEnvPath()+"alimq.properties");
+        log.info(EnvLoader.getEnv().getEnvPath()+"alimq.properties内容:"+mqproperties);
         properties = new Properties();
         if(mqproperties==null) return properties;
         // 您在 MQ 控制台创建的 Producer ID
