@@ -23,7 +23,7 @@ import com.swift.util.type.TypeUtil;
  */
 public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     private static final String[] PARSE_PATTERNS = { "yyyyMM", "yyyy-MM", "yyyy/MM", "yyyyMMdd", "yyyy-MM-dd", "yyyy/MM/dd", "yyyyMMddHHmmss", "yyyy-MM-dd HH:mm:ss",
-        "yyyy/MM/dd HH:mm:ss","MM/dd/yyyy HH:mm:ss" };
+        "yyyy/MM/dd HH:mm:ss"};
 
     public static final String DEF_DATE_TYPE = "yyyy-MM-dd HH:mm:ss";
 
