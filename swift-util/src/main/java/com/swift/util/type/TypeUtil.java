@@ -130,6 +130,9 @@ public class TypeUtil {
         if (obj instanceof String) {
             if (((String) obj).equalsIgnoreCase("null")) return true;
         }
+        if (obj instanceof String) {
+            if (((String) obj).equalsIgnoreCase("undefined")) return true;
+        }
         if (obj instanceof Collection) {
             return ((Collection) obj).isEmpty();
         }
