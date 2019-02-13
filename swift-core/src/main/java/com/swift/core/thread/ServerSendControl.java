@@ -90,7 +90,7 @@ public class ServerSendControl implements Runnable {
             res.setResultCode(ResultCode.SUCCESS);
             res.setReason("");
         } catch (ServiceException ex) {
-            log.error("业务异常", ex);
+            log.warn("业务异常", ex);
             res.setResultCode(ex.getStatusCode());
             res.setReason(ex.getMessage());
         } catch (Throwable ex) {
