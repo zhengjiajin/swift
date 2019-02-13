@@ -71,9 +71,10 @@ public class RandomUtil {
     }
     
     /**
-     * 生成短信6位验证码
-     * 
-     * @return 短信6位验证码
+     * 产生随机int
+     * min 包含
+     * max 不含
+     * @return int
      */
     public static int createCode(int min,int max) {
         return ThreadLocalRandom.current().nextInt(min, max);
