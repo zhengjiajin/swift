@@ -5,7 +5,7 @@
 	
 	<property name="pattern" value="%date→%level→%thread→%class{0}→%line→%message%n" />
 	<property name="fileNamePattern" value="%d{yyyyMMdd}.%i" />
-	<property name="maxHistory" value="365" />
+	<property name="maxHistory" value="30" />
 	<property name="maxFileSize" value="200MB" />
 
 	<appender name="stdout" class="ch.qos.logback.classic.AsyncAppender">
