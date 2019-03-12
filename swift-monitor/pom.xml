@@ -8,4 +8,11 @@
   <artifactId>swift-monitor</artifactId>
   <name>swift-monitor</name>
   <description>swift-monitor</description>
+  <dependencies>
+		<dependency>
+			<groupId>com.github.zhengjiajin</groupId>
+			<artifactId>swift-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+  </dependencies>
 </project>
