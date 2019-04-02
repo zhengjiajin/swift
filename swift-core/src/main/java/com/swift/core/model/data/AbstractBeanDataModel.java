@@ -503,6 +503,10 @@ public abstract class AbstractBeanDataModel implements DataModel {
 				i = Math.max(i, 0);
 				i = Math.min(i, list.size() - 1);
 				remove(path, list.get(i));
+			} else {
+			    for(Object obj:list) {
+			        remove(path, obj);
+			    }
 			}
 		} else {
 			remove(path, value);
