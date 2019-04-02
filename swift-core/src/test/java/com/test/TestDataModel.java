@@ -98,6 +98,8 @@ public class TestDataModel {
         System.out.println("获取多级LIST对象下标1:"+JsonUtil.toJson(data.getObject("acList[1].objTwo")));
         System.out.println(data.getObject("acList[0].objTwo.objTwostrList[0]"));
         System.out.println(data.getObject("acList[1].objTwo.objTwostrList[1]"));
+        data.remove("acObj");
+        System.out.println("输出总数:"+JsonUtil.toJson(data));
     }
     
 }
