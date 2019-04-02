@@ -537,32 +537,43 @@ public class MapDataModel extends LinkedHashMap<String, Object> implements DataM
 			parent.remove(DataModelUtil.normalize(path));
 			return;
 		}
-		String name = DataModelUtil.normalize(path.substring(0, idx));
-		Object value = parent.get(name);
+		String name = path.substring(0, idx);
+		path = path.substring(idx + 1);
+		Object value = parent.get(DataModelUtil.normalize(name));
 		if(value==null) {
-		    parent.remove(name);
+		    parent.remove(DataModelUtil.normalize(name));
 		    return;
 		}
 		if (value instanceof Map) {
-			remove(path.substring(idx + 1), (Map<String, Object>) value);
+			remove(path, (Map<String, Object>) value);
 			if(((Map<String, Object>) value).isEmpty()) {
-			    parent.remove(name);
+			    parent.remove(DataModelUtil.normalize(name));
 	            return;
 			}
 		}
 		if (value instanceof List) {
-		    List mycopy=new ArrayList(Arrays.asList(new Object[((List)value).size()]));
-		    Collections.copy(mycopy, (List)value);
-            for(Object obj:mycopy) {
-                if (obj instanceof Map) {
-                    remove(path.substring(idx + 1), (Map<String, Object>) obj);
-                    if(((Map<String, Object>) obj).isEmpty()) {
-                        ((List)value).remove(obj);
+		    List<Object> list = (List<Object>) value;
+		    int i = DataModelUtil.getIndex(name);
+		    if(i==-1) {
+    		    List mycopy=new ArrayList(Arrays.asList(new Object[list.size()]));
+    		    Collections.copy(mycopy, (List)value);
+                for(Object obj:mycopy) {
+                    if (obj instanceof Map) {
+                        remove(path, (Map<String, Object>) obj);
+                        if(((Map<String, Object>) obj).isEmpty()) {
+                            list.remove(obj);
+                        }
                     }
                 }
-            }
-            if(((List)value).isEmpty()) {
-                parent.remove(name);
+		    }else {
+		        i = Math.max(i, 0);
+                i = Math.min(i, list.size() - 1);
+                if (list.get(i) instanceof Map) {
+                    remove(path, (Map<String, Object>)list.get(i));
+                }
+		    }
+            if(list.isEmpty()) {
+                parent.remove(DataModelUtil.normalize(name));
                 return;
             }
         }

@@ -91,9 +91,13 @@ public class TestDataModel {
         System.out.println("获取LIST对象的某个LIST属性值:"+data.getObject("acList.objTwo.objTwostrList"));
         System.out.println("获取简单LIST对象下标:"+data.getObject("list[1]"));
         System.out.println("获取多级LIST对象下标:"+data.getObject("acList[0].objTwo.objTwostrList[1]"));
-        System.out.println("获取多级LIST对象下标:"+JsonUtil.toJson(data.getObject("acList[0].objTwo")));
+        System.out.println("获取多级LIST对象下标删前0:"+JsonUtil.toJson(data.getObject("acList[0].objTwo")));
+        System.out.println("获取多级LIST对象下标删前1:"+JsonUtil.toJson(data.getObject("acList[1].objTwo")));
         data.remove("acList[0].objTwo.objTwostrList[1]");
-        System.out.println("获取多级LIST对象下标:"+JsonUtil.toJson(data.getObject("acList[0].objTwo")));
+        System.out.println("获取多级LIST对象下标0:"+JsonUtil.toJson(data.getObject("acList[0].objTwo")));
+        System.out.println("获取多级LIST对象下标1:"+JsonUtil.toJson(data.getObject("acList[1].objTwo")));
+        System.out.println(data.getObject("acList[0].objTwo.objTwostrList[0]"));
+        System.out.println(data.getObject("acList[1].objTwo.objTwostrList[1]"));
     }
     
 }
