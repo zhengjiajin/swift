@@ -16,12 +16,11 @@ import java.util.Set;
  * objectName[N]：代表LIST结构的第N位
  * *objectName：代码此值为LIST结构
  * 
- * 树状结构可如：
+ * 树状结构可如：插入只支持一层*级
  * objectName1.objectName2.objectName3
  * objectName1.objectName2.*objectName3
  * objectName1.*objectName2.objectName3
  * *objectName1.objectName2.objectName3
- * *objectName1.*objectName2.objectName3
  * objectName1.objectName2[1].objectName3
  * objectName1[1].objectName2.objectName3[2]
  * 等

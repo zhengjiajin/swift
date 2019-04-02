@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -410,15 +411,15 @@ public class MapDataModel extends LinkedHashMap<String, Object> implements DataM
 		m1.putObject(subPath, value);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Object getObjectInternal(String path, Map<String, Object> parent) {
+	@SuppressWarnings({ "rawtypes" })
+	protected Object getObjectInternal(String path, Object parent) {
 		if (path == null || EMPTY.equals(path)) {
 			throw new RuntimeException("path must not be null");
 		}
 
 		int idx = path.indexOf(DOT);
 		if (idx == -1) {
-			Object v = parent.get(DataModelUtil.normalize(path));
+			Object v = getPropertyValue(path, parent);
 			if (v == null) {
 				return null;
 			}
@@ -434,19 +435,63 @@ public class MapDataModel extends LinkedHashMap<String, Object> implements DataM
 
 		String name = path.substring(0, idx);
 		String subPath = path.substring(idx + 1);
-		Object o = parent.get(DataModelUtil.normalize(name));
+		Object o = getPropertyValue(name, parent);
 		if (o == null) {
 			return null;
 		}
 		if (o instanceof List) {
-			int i = DataModelUtil.getIndex(name);
-			o = ((List) o).get(i < 0 ? 0 : i);
-		}
-		if (o instanceof Map) {
-			return getObjectInternal(subPath, (Map<String, Object>) o);
-		}
-		throw new RuntimeException("Child type " + o.getClass().getName() + " is not a instance of java.util.Map");
+		    int i = DataModelUtil.getIndex(DataModelUtil.stripAsterisk(name));
+		    if(i==-1)
+		        return getObjectFromList(subPath, (List) o);
+		    else
+		        return getObjectInternal(subPath, ((List) o).get(i));
+        }
+        return getObjectInternal(subPath, o);
+		
 	}
+	
+	@SuppressWarnings("rawtypes")
+    private Object getPropertyValue(String propertyName, Object obj) {
+        if (obj == null) {
+            return null;
+        }
+        if (obj instanceof List) {
+            return getObjectFromList(propertyName, (List) obj);
+        }
+        if (obj instanceof Map) {
+            Object value = ((Map) obj).get(DataModelUtil.normalize(propertyName));
+            int i = DataModelUtil.getIndex(DataModelUtil.stripAsterisk(propertyName));
+            if(i==-1) {
+                return value;
+            } else {
+                if(value instanceof List) {
+                    return ((List)value).get(i);
+                }else {
+                    return value;
+                }
+            }
+        }
+        return obj;
+    }
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+    private Object getObjectFromList(String propertyName, List list) {
+        if(list == null) return null;
+        int i = DataModelUtil.getIndex(DataModelUtil.stripAsterisk(propertyName));
+        if (i == -1) {
+            List newList = new LinkedList();
+            for(Object obj:list) {
+                if(obj instanceof Map)
+                    newList.add(getObjectInternal(propertyName, obj));
+                else
+                    newList.add(obj);
+            }
+            return newList;
+        }
+        i = Math.max(i, 0);
+        i = Math.min(i, list.size());
+        return getObjectInternal(propertyName, list.get(i));
+    }
 
 	@SuppressWarnings("unchecked")
 	protected <T> List<T> getListInternal(String path, Class<T> clazz) {

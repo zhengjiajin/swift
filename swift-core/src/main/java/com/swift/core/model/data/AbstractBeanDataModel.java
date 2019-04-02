@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -447,7 +448,11 @@ public abstract class AbstractBeanDataModel implements DataModel {
 			return null;
 		}
 		if (o instanceof List) {
-			o = getObjectFromList(name, (List) o);
+		    int i = DataModelUtil.getIndex(DataModelUtil.stripAsterisk(name));
+            if(i==-1)
+                return getObjectFromList(subPath, (List) o);
+            else
+                return getObjectInternal(subPath, ((List) o).get(i));
 		}
 		return getObjectInternal(subPath, o);
 	}
@@ -617,29 +622,51 @@ public abstract class AbstractBeanDataModel implements DataModel {
 		if (obj instanceof Map) {
 			return ((Map) obj).get(DataModelUtil.normalize(propertyName));
 		}
-
-		Method method = null;
-		try {
-			method = getReadMethod(propertyName, obj);
-		} catch (Throwable ex) {
-			return null;
-		}
-		try {
-			return method.invoke(obj);
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException("An exception occurs during reflective operation", ex);
-		}
+        if(obj instanceof AbstractBeanDataModel) {
+    		Method method = null;
+    		try {
+    			method = getReadMethod(propertyName, obj);
+    		} catch (Throwable ex) {
+    			return null;
+    		}
+    		try {
+    		    Object value = method.invoke(obj);
+    		    int i = DataModelUtil.getIndex(DataModelUtil.stripAsterisk(propertyName));
+    		    if(i==-1) {
+    		        return value;
+    		    } else {
+    		        if(value instanceof List) {
+    		            return ((List)value).get(i);
+    		        }else {
+    		            return value;
+    		        }
+    		    }
+    		        
+    		} catch (ReflectiveOperationException ex) {
+    			throw new RuntimeException("An exception occurs during reflective operation", ex);
+    		}
+        }else {
+            return obj;
+        }
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Object getObjectFromList(String propertyName, List list) {
+	    if(list == null) return null;
 		int i = DataModelUtil.getIndex(DataModelUtil.stripAsterisk(propertyName));
 		if (i == -1) {
-			return list;
+		    List newList = new LinkedList();
+		    for(Object obj:list) {
+		        if(obj instanceof AbstractBeanDataModel)
+		            newList.add(getObjectInternal(propertyName, obj));
+		        else
+		            newList.add(obj);
+		    }
+			return newList;
 		}
 		i = Math.max(i, 0);
 		i = Math.min(i, list.size());
-		return list.get(i);
+		return getObjectInternal(propertyName, list.get(i));
 	}
 
 	private Object getPropertyValue(PropertyDescriptor descriptor, Object obj) {
