@@ -11,6 +11,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -485,17 +486,42 @@ public class MapDataModel extends LinkedHashMap<String, Object> implements DataM
 				int i = DataModelUtil.getIndex(path);
 				if (i > -1 && i < list.size()) {
 					list.remove(i);
+					return;
 				}
-				return;
 			}
 			parent.remove(DataModelUtil.normalize(path));
 			return;
 		}
-		String name = path.substring(0, idx);
+		String name = DataModelUtil.normalize(path.substring(0, idx));
 		Object value = parent.get(name);
-		if (value != null && value instanceof Map) {
-			remove(path.substring(idx + 1), (Map<String, Object>) value);
+		if(value==null) {
+		    parent.remove(name);
+		    return;
 		}
+		if (value instanceof Map) {
+			remove(path.substring(idx + 1), (Map<String, Object>) value);
+			if(((Map<String, Object>) value).isEmpty()) {
+			    parent.remove(name);
+	            return;
+			}
+		}
+		if (value instanceof List) {
+		    List mycopy=new ArrayList(Arrays.asList(new Object[((List)value).size()]));
+		    Collections.copy(mycopy, (List)value);
+            for(Object obj:mycopy) {
+                if (obj instanceof Map) {
+                    remove(path.substring(idx + 1), (Map<String, Object>) obj);
+                    if(((Map<String, Object>) obj).isEmpty()) {
+                        ((List)value).remove(obj);
+                    }
+                }
+            }
+            if(((List)value).isEmpty()) {
+                parent.remove(name);
+                return;
+            }
+        }
+		
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

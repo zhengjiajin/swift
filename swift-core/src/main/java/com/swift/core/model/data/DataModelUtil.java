@@ -62,6 +62,9 @@ public class DataModelUtil {
 			if ("".equals(n)) {
 				return 0;
 			}
+			if (DataModel.ASTERISK.equals(n)) {
+                return -1;
+            }
 			try {
 				return Integer.parseInt(n);
 			} catch (NumberFormatException ex) {

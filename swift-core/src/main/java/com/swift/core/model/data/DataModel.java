@@ -24,6 +24,7 @@ import java.util.Set;
  * *objectName1.*objectName2.objectName3
  * objectName1.objectName2[1].objectName3
  * objectName1[1].objectName2.objectName3[2]
+ * objectName1.objectName2[*].objectName3
  * 等
  * 
  * 
