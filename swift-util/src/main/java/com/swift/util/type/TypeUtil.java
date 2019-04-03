@@ -35,7 +35,7 @@ public class TypeUtil {
         if (String.valueOf(obj).trim().length() <= 0) return "";
         return String.valueOf(obj);
     }
-    
+
     public static String toString(Object obj, String def) {
         if (obj == null) return def;
         if (String.valueOf(obj).trim().length() <= 0) return def;
@@ -110,7 +110,7 @@ public class TypeUtil {
 
     public static Number toNumber(Object obj) {
         if (TypeUtil.isNotNull(obj)) {
-            if(obj instanceof Number) return (Number)obj;
+            if (obj instanceof Number) return (Number) obj;
             synchronized (nf) {
                 try {
                     return nf.parse(String.valueOf(obj));
@@ -141,17 +141,17 @@ public class TypeUtil {
         }
         return String.valueOf(obj).trim().isEmpty();
     }
-    
+
     @SuppressWarnings("rawtypes")
     public static int getLength(Object obj) {
         if (obj == null) {
             return 0;
         }
         if (obj instanceof String) {
-            return ((String)obj).length();
+            return ((String) obj).length();
         }
         if (obj instanceof Collection) {
-            return ((Collection)obj).size();
+            return ((Collection) obj).size();
         }
         if (obj instanceof Map) {
             return ((Map) obj).size();
@@ -191,78 +191,79 @@ public class TypeUtil {
         }
         return array;
     }
-    
-    public static boolean inList(Object[] list,Object obj) {
-        if(list==null || list.length<=0) return false;
-        if(obj==null) return false;
-        for(Object lobj : list) {
-            if(obj.equals(lobj)) return true;
+
+    public static boolean inList(Object[] list, Object obj) {
+        if (list == null || list.length <= 0) return false;
+        if (obj == null) return false;
+        for (Object lobj : list) {
+            if (obj.equals(lobj)) return true;
         }
         return false;
     }
-    
-    public static boolean inList(List<Object> list,Object obj) {
-        if(list==null || list.size()<=0) return false;
-        if(obj==null) return false;
-        for(Object lobj : list) {
-            if(obj.equals(lobj)) return true;
+
+    public static boolean inList(List<Object> list, Object obj) {
+        if (list == null || list.size() <= 0) return false;
+        if (obj == null) return false;
+        for (Object lobj : list) {
+            if (obj.equals(lobj)) return true;
         }
         return false;
     }
-    
+
     public static boolean isNumber(Object obj) {
         if (obj == null || "".equals(obj)) {
             return false;
         }
-        if(obj instanceof Number) return true;
+        if (obj instanceof Number) return true;
         return toString(obj).matches("-?[0-9]+\\.?[0-9]*");
-        //-?[0-9]+\\.?[0-9]*
+        // -?[0-9]+\\.?[0-9]*
     }
-    
+
     public static BigDecimal toBigDecimal(Object obj) {
         if (obj == null) return null;
         BigDecimal ret = null;
-        if( obj instanceof BigDecimal ) {
+        if (obj instanceof BigDecimal) {
             ret = (BigDecimal) obj;
-        } else if( obj instanceof String ) {
-            ret = new BigDecimal( (String) obj );
-        } else if( obj instanceof BigInteger ) {
-            ret = new BigDecimal( (BigInteger) obj );
-        } else if( obj instanceof Number ) {
-            ret = new BigDecimal( ((Number)obj).doubleValue() );
+        } else if (obj instanceof String) {
+            ret = new BigDecimal((String) obj);
+        } else if (obj instanceof BigInteger) {
+            ret = new BigDecimal((BigInteger) obj);
+        } else if (obj instanceof Number) {
+            ret = new BigDecimal(((Number) obj).doubleValue());
         } else {
-            throw new ClassCastException("Not possible to coerce ["+obj+"] from class "+obj.getClass()+" into a BigDecimal.");
+            throw new ClassCastException(
+                "Not possible to coerce [" + obj + "] from class " + obj.getClass() + " into a BigDecimal.");
         }
         return ret;
     }
-    
-    public static boolean isEmail(String email) {     
-        String regex = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";  
-        return Pattern.matches(regex, email);     
-    } 
-    
+
+    public static boolean isEmail(String email) {
+        String regex = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
+        return Pattern.matches(regex, email);
+    }
+
     public static boolean isMobileNO(String mobile) {
         Pattern p = Pattern.compile("^((1[0-9]))\\d{9}$");
         Matcher m = p.matcher(mobile);
         return m.matches();
     }
-    
+
     public static String urlEncode(String str) {
         try {
             return URLEncoder.encode(str, "utf-8");
         } catch (UnsupportedEncodingException e) {
-            throw new SwiftRuntimeException("urlEncode错误:"+str);
+            throw new SwiftRuntimeException("urlEncode错误:" + str);
         }
     }
-    
+
     public static String urlDecode(String str) {
         try {
             return URLDecoder.decode(str, "utf-8");
         } catch (UnsupportedEncodingException e) {
-            throw new SwiftRuntimeException("URLDecoder错误:"+str);
+            throw new SwiftRuntimeException("URLDecoder错误:" + str);
         }
     }
-    
+
     public static byte[] toBytes(long num) {
         byte[] byteNum = new byte[8];
         for (int ix = 0; ix < 8; ++ix) {
@@ -281,10 +282,22 @@ public class TypeUtil {
         return num;
     }
 
-    public static byte[] bytecopy(byte[] bt1, byte[] bt2){
-        byte[] bt3 = new byte[bt1.length+bt2.length];  
+    public static byte[] bytecopy(byte[] bt1, byte[] bt2) {
+        byte[] bt3 = new byte[bt1.length + bt2.length];
         System.arraycopy(bt1, 0, bt3, 0, bt1.length);
-        System.arraycopy(bt2, 0, bt3, bt1.length, bt2.length);  
-        return bt3;  
+        System.arraycopy(bt2, 0, bt3, bt1.length, bt2.length);
+        return bt3;
+    }
+
+    // 首字母转小写
+    public static String toLowerCaseFirstOne(String s) {
+        if (Character.isLowerCase(s.charAt(0))) return s;
+        else return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
+    }
+
+    // 首字母转大写
+    public static String toUpperCaseFirstOne(String s) {
+        if (Character.isUpperCase(s.charAt(0))) return s;
+        else return (new StringBuilder()).append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).toString();
     }
 }
