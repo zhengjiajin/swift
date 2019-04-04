@@ -486,6 +486,7 @@ public class MapDataModel extends LinkedHashMap<String, Object> implements DataM
                 else
                     newList.add(obj);
             }
+            if(newList.size()==1) return newList.get(0);
             return newList;
         }
         i = Math.max(i, 0);
