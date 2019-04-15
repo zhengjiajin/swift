@@ -165,8 +165,7 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
      * @throws IOException
      */
     private void sendResponse(ServiceResponse response, HttpServletRequest servletRequest,HttpServletResponse servletResponse) {
-        String target = servletRequest.getContextPath();
-        //TODO 
+        String target = servletRequest.getRequestURI();
         WebHandlerCode handler = selectHandler(target);
         ResModel resModel = handler.encode(response);
         servletResponse.setContentType(resModel.getContentType());
