@@ -16,6 +16,6 @@ import com.swift.core.model.data.DataModel;
  * @author zhengjiajin
  * @version 1.0 2015年8月5日
  */
-public interface SimpleInterface {
+public interface SimpleInterface extends BaseInterface {
     public DataModel doService(ServiceRequest req);
 }

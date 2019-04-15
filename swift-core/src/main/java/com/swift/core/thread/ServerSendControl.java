@@ -13,14 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.swift.core.filter.EndFilter;
 import com.swift.core.filter.InitFilter;
-import com.swift.core.filter.RequestFilter;
-import com.swift.core.filter.ResponseFilter;
 import com.swift.core.model.ServiceRequest;
 import com.swift.core.model.ServiceResponse;
 import com.swift.core.model.data.DataModel;
 import com.swift.core.model.data.MapDataModel;
+import com.swift.core.service.AsynInterface;
+import com.swift.core.service.BaseInterface;
 import com.swift.core.service.CallBackService;
 import com.swift.core.service.ReqInterfaceFactory;
+import com.swift.core.service.SimpleInterface;
 import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
 
@@ -42,10 +43,6 @@ public class ServerSendControl implements Runnable {
     private List<InitFilter> initFilterList;
     @Autowired(required=false)
     private List<EndFilter> endFilterList;
-    @Autowired(required=false)
-    private List<RequestFilter> requestFilterList;
-    @Autowired(required=false)
-    private List<ResponseFilter> responseFilterList;
 
     /**
      * 优先级权值ms秒
@@ -80,15 +77,19 @@ public class ServerSendControl implements Runnable {
         Thread.currentThread().setName(req.getMethod());
         ServiceResponse res = new ServiceResponse();
         res.setRequest(req);
+        BaseInterface baseInterface = ReqInterfaceFactory.getInterface(req.getMethod(), req.getInterfaceVersion());
         try {
             // 线程开始
             forInitFilter();
-            forRequestFilter(req);
-            DataModel obj = ReqInterfaceFactory.getInterface(req.getMethod(), req.getInterfaceVersion()).doService(req);
-            if (obj == null) obj = new MapDataModel();
-            res.setData(obj);
-            res.setResultCode(ResultCode.SUCCESS);
-            res.setReason("");
+            if(baseInterface instanceof SimpleInterface) {
+                DataModel obj = ((SimpleInterface)baseInterface).doService(req);
+                if (obj == null) obj = new MapDataModel();
+                res.setData(obj);
+                res.setResultCode(ResultCode.SUCCESS);
+                res.setReason("");
+            }else if(baseInterface instanceof AsynInterface) {
+                ((AsynInterface) baseInterface).doService(req);
+            }
         } catch (ServiceException ex) {
             log.warn("业务异常", ex);
             res.setResultCode(ex.getStatusCode());
@@ -106,8 +107,9 @@ public class ServerSendControl implements Runnable {
             if (stTime > 5000) {
                 log.warn("处理请求时间过长:" + msg);
             }
-            this.callback.callback(res);
-            forResponseFilter(res);
+            if(!(baseInterface instanceof AsynInterface) || res.getResultCode()!=0) {
+                this.callback.callback(res);
+            }
             // 线程结束
             forEndFilter();
         } catch (Throwable ex) {
@@ -133,22 +135,4 @@ public class ServerSendControl implements Runnable {
         }
     }
 
-    private void forRequestFilter(ServiceRequest req) {
-        if(requestFilterList==null) return;
-        for(RequestFilter filter:requestFilterList) {
-            filter.doFilter(req);
-        }
-    }
-
-    private void forResponseFilter(ServiceResponse res ) {
-        if(responseFilterList==null) return;
-        for(ResponseFilter filter:responseFilterList) {
-            try {
-                filter.doFilter(res);
-            }catch(Throwable ex) {
-                log.error("forResponseFilter:异常",ex);
-            }
-        }
-    }
-    
 }

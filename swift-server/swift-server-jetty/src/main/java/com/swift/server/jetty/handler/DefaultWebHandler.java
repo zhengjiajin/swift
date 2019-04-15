@@ -50,4 +50,6 @@ public class DefaultWebHandler extends AbstractWebHandler {
     public String getContextPath() {
         return CONTEXT_PATH;
     }
+
+
 }

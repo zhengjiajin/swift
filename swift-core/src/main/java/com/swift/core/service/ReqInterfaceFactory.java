@@ -87,11 +87,11 @@ public class ReqInterfaceFactory {
      * @param version 版本号(必须是浮点型数字，不能出现字母)
      * @return
      */
-    public static SimpleInterface getInterface(String method, String version) {
+    public static BaseInterface getInterface(String method, String version) {
         Set<String> versions = interfaceVersions.get(method);
         if (versions != null) {
             String serviceName = findVersion(method, version, versions);
-            return Spring.getBean(serviceName, SimpleInterface.class);
+            return Spring.getBean(serviceName, BaseInterface.class);
         } else {
             String msg = "服务能力" + method + "找不到";
             log.error(msg);
