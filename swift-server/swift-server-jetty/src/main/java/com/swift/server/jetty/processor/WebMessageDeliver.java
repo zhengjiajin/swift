@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.swift.core.model.ServiceResponse;
 import com.swift.core.service.processor.AbstractMessageDeliver;
 import com.swift.core.service.processor.send.MessageSender;
 
@@ -32,11 +31,4 @@ public class WebMessageDeliver extends AbstractMessageDeliver {
 		return messageSender;
 	}
 
-    /** 
-     * @see com.swift.core.service.processor.MessageDeliver#sendResponse(com.swift.core.model.ServiceResponse)
-     */
-    @Override
-    public void sendResponse(ServiceResponse response) {
-        messageSender.sendResponse(response);
-    }
 }
