@@ -39,4 +39,17 @@ public class SqlBuilder {
         if(sql.toLowerCase().indexOf(" limit ")!=-1) return sql;
         return sql + " LIMIT " + start + "," + size + ";";
     }
+    
+    public static String appendWhere(String sql,String querySql,Object value) {
+        if(value==null) return sql;
+        if(sql.equalsIgnoreCase(" where ")) {
+            return sql+" "+createQuery(querySql, value);
+        }else {
+            return sql + " where "+createQuery(querySql, value);
+        }
+    }
+    
+    public static String createQuery(String querySql,Object value) {
+        return querySql.replace("?", String.valueOf(value));
+    }
 }
