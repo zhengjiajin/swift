@@ -7,6 +7,8 @@ package com.swift.dao.db.springjdbc;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.swift.util.type.TypeUtil;
+
 /**
  * 添加说明 
  * @author zhengjiajin
@@ -41,7 +43,7 @@ public class SqlBuilder {
     }
     
     public static String appendWhere(String sql,String querySql,Object value) {
-        if(value==null) return sql;
+        if(TypeUtil.isNull(value)) return sql;
         if(sql.equalsIgnoreCase(" where ")) {
             return sql+" "+createQuery(querySql, value);
         }else {
