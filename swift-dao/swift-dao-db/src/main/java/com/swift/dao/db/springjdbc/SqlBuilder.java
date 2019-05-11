@@ -44,7 +44,7 @@ public class SqlBuilder {
     
     public static String appendWhere(String sql,String querySql,Object value) {
         if(TypeUtil.isNull(value)) return sql;
-        if(sql.equalsIgnoreCase(" where ")) {
+        if(sql.toLowerCase().indexOf(" where ")!=-1) {
             return sql+" "+createQuery(querySql, value);
         }else {
             return sql + " where "+createQuery(querySql, value);
