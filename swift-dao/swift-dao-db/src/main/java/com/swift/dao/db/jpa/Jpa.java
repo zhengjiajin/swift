@@ -6,6 +6,7 @@
 package com.swift.dao.db.jpa;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -22,4 +23,12 @@ public interface Jpa<T, ID extends Serializable> extends JpaRepository<T, ID> {
    @Override
    @Deprecated
    T getOne(ID id);
+   
+   @Override
+   @Deprecated
+   <S extends T> S save(S entity);
+   
+   @Override
+   @Deprecated
+   <S extends T> List<S> save(Iterable<S> entities);
 }
