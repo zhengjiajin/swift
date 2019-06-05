@@ -13,12 +13,9 @@
 	<description>swift-dao</description>
 	<modules>
 		<module>swift-dao-db</module>
-		<module>swift-dao-kafka</module>
 		<module>swift-dao-redis</module>
 		<module>swift-dao-output</module>
 		<module>swift-dao-util</module>
-		<module>swift-dao-es</module>
-		<module>swift-dao-zookeeper</module>
 	</modules>
 	<dependencies>
 		<dependency>
