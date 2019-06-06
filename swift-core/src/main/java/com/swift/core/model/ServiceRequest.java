@@ -7,6 +7,7 @@ package com.swift.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.swift.core.model.data.AbstractBeanDataModel;
 import com.swift.core.model.data.DataModel;
 import com.swift.core.model.data.DataModelDeserializer;
 import com.swift.core.model.data.MapDataModel;
@@ -59,7 +60,9 @@ public class ServiceRequest {
     private DataModel data = new MapDataModel();
     
     
-
+    public <T extends DataModel> T getValidatorData(Class<T> cls) {
+        return AbstractBeanDataModel.mapToBean(data, cls);
+    }
     
     /**
      * @return the method

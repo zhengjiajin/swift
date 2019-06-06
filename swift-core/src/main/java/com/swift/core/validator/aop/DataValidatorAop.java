@@ -68,12 +68,11 @@ public class DataValidatorAop {
         ServiceRequest req = (ServiceRequest) obj[0];
         if (req.getData() == null) return;
         if (AbstractBeanDataModel.class.isAssignableFrom(dataValidator.value()) && !(req.getData() instanceof AbstractBeanDataModel)) {
-            req.setData(AbstractBeanDataModel.mapToBean(req.getData(), dataValidator.value()));
-        }
-        String str = validator(dataValidator, req.getData());
-        if (TypeUtil.isNotNull(str)) {
-            log.warn(str);
-            throw new ServiceException(ResultCode.ERROR_PARAMETER,str);
+            String str = validator(dataValidator, req.getValidatorData(dataValidator.value()));
+            if (TypeUtil.isNotNull(str)) {
+                log.warn(str);
+                throw new ServiceException(ResultCode.ERROR_PARAMETER,str);
+            }
         }
     }
 
