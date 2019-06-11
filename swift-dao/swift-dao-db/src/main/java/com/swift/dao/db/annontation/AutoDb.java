@@ -11,8 +11,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.swift.dao.db.datasource.DataSource;
-
 /**
  * 添加说明 
  * @author zhengjiajin
@@ -26,11 +24,6 @@ public @interface AutoDb {
      * 系统定义方式
      * @return
      */
-    public DataSource value() default DataSource.master;
-    /**
-     * 自定义方式,此方法优先
-     * @return
-     */
-    public String dbName() default "";
+    public String value() default "master";
     
 }

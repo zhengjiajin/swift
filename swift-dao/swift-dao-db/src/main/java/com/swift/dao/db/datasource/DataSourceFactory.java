@@ -17,6 +17,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.commons.lang.math.RandomUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
@@ -36,6 +38,8 @@ import com.swift.util.type.TypeUtil;
 @Component("dataSource")
 public class DataSourceFactory extends AbstractRoutingDataSource implements EndFilter{
 
+    private final static Logger log = LoggerFactory.getLogger(DataSourceFactory.class);
+    
     private Map<String, List<ComboPooledDataSource>> targetListDataSource = new ConcurrentHashMap<String, List<ComboPooledDataSource>>();
 
     private Map<Object, Object> targetDataSources = new ConcurrentHashMap<Object, Object>();
@@ -54,7 +58,7 @@ public class DataSourceFactory extends AbstractRoutingDataSource implements EndF
     @Value("${classpath*:jdbc.properties}")
     private Resource resource;
 
-    private static final String DEFAULT_DB = DataSource.master.getDbName();
+    private static final String DEFAULT_DB = "master";
 
     private boolean isStart = false;
     
@@ -88,12 +92,54 @@ public class DataSourceFactory extends AbstractRoutingDataSource implements EndF
         String[] userNameSpilt = userNames.split(",");
         String[] passwordSpilt = passwords.split(",");
         for (int i = 0; i < urlSpilt.length; i++) {
+            String url=urlSpilt[i];
+            if (targetListDataSource.get(source) == null) targetListDataSource.put(source, new ArrayList<ComboPooledDataSource>());
+            if(!checkSource(source, url)) {
+                log.warn(source+"已建立连接:"+urls);
+                continue;
+            }
             ComboPooledDataSource sourceBean = createComboPooledDataSource(urlSpilt[i], userNameSpilt[i],
                 passwordSpilt[i]);
-            if (targetListDataSource.get(source) == null)
-                targetListDataSource.put(source, new ArrayList<ComboPooledDataSource>());
             targetListDataSource.get(source).add(sourceBean);
             targetDataSources.put(source + i, sourceBean);
+        }
+        super.afterPropertiesSet();
+    }
+
+    private boolean checkSource(String source, String url) {
+        if(targetListDataSource.get(source)==null) return true;
+        for(ComboPooledDataSource combo:targetListDataSource.get(source)) {
+            if(combo.getJdbcUrl().equals(url)) {
+               return false; 
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * 添加数据源
+     * @param dbName
+     * @param urls 多数据源用,分隔
+     * @param userNames 多数据源用,分隔
+     * @param passwords 多数据源用,分隔
+     */
+    public void addDataSource(String dbName, String urls, String userNames, String passwords) {
+        splitDataSource(dbName, urls, userNames, passwords);
+    }
+    /**
+     * 删除数据源
+     * @param dbName
+     */
+    public void delDataSource(String dbName) {
+        if (targetListDataSource.get(dbName) == null) return;
+        for(Object sourceIndex:targetDataSources.keySet()) {
+            String sourceName = String.valueOf(sourceIndex);
+            if(sourceName.indexOf(dbName)==0 && TypeUtil.isNumber(sourceName.replace(dbName, ""))) {
+                targetDataSources.remove(sourceIndex);
+            }
+        }
+        for(ComboPooledDataSource combo:targetListDataSource.remove(dbName)) {
+            combo.close();
         }
     }
 

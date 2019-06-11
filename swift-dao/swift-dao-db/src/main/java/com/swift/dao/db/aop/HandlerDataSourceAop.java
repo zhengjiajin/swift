@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 import com.swift.dao.db.annontation.AutoDb;
 import com.swift.dao.db.datasource.HandlerDataSource;
 import com.swift.util.bean.AnnotationUtil;
-import com.swift.util.type.TypeUtil;
 
 /**
  * 添加说明
@@ -54,10 +53,7 @@ public class HandlerDataSourceAop {
         Class<?> cla = joinPoint.getTarget().getClass();
         AutoDb autoDb = AnnotationUtil.getAnnotation(cla, method, AutoDb.class);
         if (autoDb != null) {
-            String dataSource = autoDb.dbName();
-            if(TypeUtil.isNull(dataSource)) {
-                dataSource=autoDb.value().getDbName();
-            }
+            String dataSource = autoDb.value();
             if (dataSource != null) HandlerDataSource.putDataSource(dataSource);
             log.info("添加动态切换数据源，className" + cla.getName() + "methodName" + method.getName() + ";dataSourceKey:"
                 + dataSource);
