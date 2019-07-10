@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.swift.core.model.ServiceRequest;
 import com.swift.core.spring.Spring;
+import com.swift.exception.NoWarnException;
 import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
 import com.swift.util.bean.AopTargetUtils;
@@ -95,7 +96,7 @@ public class ReqInterfaceFactory {
         } else {
             String msg = "服务能力" + method + "找不到";
             log.warn(msg);
-            throw new ServiceException(ResultCode.NO_METHOD, msg);
+            throw new NoWarnException(ResultCode.NO_METHOD, msg);
         }
     }
     
