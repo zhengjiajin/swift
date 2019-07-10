@@ -22,6 +22,7 @@ import com.swift.core.service.BaseInterface;
 import com.swift.core.service.CallBackService;
 import com.swift.core.service.ReqInterfaceFactory;
 import com.swift.core.service.SimpleInterface;
+import com.swift.exception.NoWarnException;
 import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
 
@@ -90,8 +91,12 @@ public class ServerSendControl implements Runnable {
             }else if(baseInterface instanceof AsynInterface) {
                 ((AsynInterface) baseInterface).doService(req);
             }
+        } catch (NoWarnException nowarnex) {
+            log.warn("返回异常业务", nowarnex);
+            res.setResultCode(nowarnex.getStatusCode());
+            res.setReason(nowarnex.getMessage());
         } catch (ServiceException ex) {
-            log.warn("业务异常", ex);
+            log.error("业务异常", ex);
             res.setResultCode(ex.getStatusCode());
             res.setReason(ex.getMessage());
         } catch (Throwable ex) {

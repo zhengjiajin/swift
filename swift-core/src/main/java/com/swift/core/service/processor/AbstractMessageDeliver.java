@@ -7,8 +7,6 @@ package com.swift.core.service.processor;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,12 +56,6 @@ public abstract class AbstractMessageDeliver implements MessageDeliver {
                     sendResponse(res);
                 } catch (Throwable ex) {
                     log.error("Error send response: {}", res, ex);
-                    res = new ServiceResponse();
-                    res.setResultCode(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    res.setReason(ex.getMessage());
-                    res.setResponseTime(System.currentTimeMillis());
-                    res.setRequest(request);
-                    sendResponse(res);
                 }
             }
         };

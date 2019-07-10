@@ -30,6 +30,7 @@ import com.swift.core.model.HttpServiceRequest;
 import com.swift.core.model.ServiceRequest;
 import com.swift.core.model.ServiceResponse;
 import com.swift.core.service.processor.send.MessageSender;
+import com.swift.exception.NoWarnException;
 import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
 import com.swift.exception.SwiftRuntimeException;
@@ -104,11 +105,15 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
             rawHttpRequest.setHandled(true);
             webMessageDeliver.requestReceived(req);
 
-        } catch (ServiceException ex) {
-            log.error("请求处理失败", ex);
+        } catch (NoWarnException ex) {
+            log.warn("Neglectable Exception", ex);
             sendHttpError(ex.getStatusCode(), ex.getMessage(), rawHttpRequest, target);
             return;
-        } catch (Exception ex) {
+        } catch (ServiceException ex) {
+            log.error("Service Exception", ex);
+            sendHttpError(ex.getStatusCode(), ex.getMessage(), rawHttpRequest, target);
+            return;
+        } catch (Throwable ex) {
             log.error("Http请求处理失败", ex);
             sendHttpError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage(), rawHttpRequest, target);
             return;
