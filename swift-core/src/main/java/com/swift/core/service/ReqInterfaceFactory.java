@@ -94,7 +94,7 @@ public class ReqInterfaceFactory {
             return Spring.getBean(serviceName, BaseInterface.class);
         } else {
             String msg = "服务能力" + method + "找不到";
-            log.error(msg);
+            log.warn(msg);
             throw new ServiceException(ResultCode.NO_METHOD, msg);
         }
     }
