@@ -175,7 +175,7 @@ public class SimpleBaseCode implements WebHandlerCode {
         res.setResultCode(errorCode);
         res.setReason(errorMsg);
         String json = JsonUtil.toJson(res);
-        log.error("错误返回：" + json);
+        log.info("错误返回：" + json);
         model.setBody(json.getBytes());
         return model;
     }
