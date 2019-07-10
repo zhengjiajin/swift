@@ -24,8 +24,8 @@ import com.swift.core.validator.DataValidator;
 import com.swift.core.validator.core.DataModelValidator;
 import com.swift.core.validator.core.PojoValidator;
 import com.swift.core.validator.core.ValidatorBuilderString;
+import com.swift.exception.NoWarnException;
 import com.swift.exception.ResultCode;
-import com.swift.exception.ServiceException;
 import com.swift.util.bean.AnnotationUtil;
 import com.swift.util.type.TypeUtil;
 
@@ -71,7 +71,7 @@ public class DataValidatorAop {
             String str = validator(dataValidator, req.getValidatorData(dataValidator.value()));
             if (TypeUtil.isNotNull(str)) {
                 log.warn(str);
-                throw new ServiceException(ResultCode.ERROR_PARAMETER,str);
+                throw new NoWarnException(ResultCode.ERROR_PARAMETER,str);
             }
         }
     }
