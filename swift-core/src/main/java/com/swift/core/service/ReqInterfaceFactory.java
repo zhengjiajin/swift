@@ -109,7 +109,7 @@ public class ReqInterfaceFactory {
         try {
             return AopTargetUtils.getTarget(getInterface(method, version));
         } catch (Exception ex) {
-            log.error(ResultCode.NO_METHOD+"",ex);
+            log.warn(ResultCode.NO_METHOD+"",ex);
             throw new NoWarnException(ResultCode.NO_METHOD, "服务能力" + method + "找不到");
         }
     }
