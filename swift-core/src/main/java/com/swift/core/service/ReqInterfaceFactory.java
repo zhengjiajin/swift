@@ -20,7 +20,6 @@ import com.swift.core.model.ServiceRequest;
 import com.swift.core.spring.Spring;
 import com.swift.exception.NoWarnException;
 import com.swift.exception.ResultCode;
-import com.swift.exception.ServiceException;
 import com.swift.util.bean.AopTargetUtils;
 import com.swift.util.type.TypeUtil;
 
@@ -111,7 +110,7 @@ public class ReqInterfaceFactory {
             return AopTargetUtils.getTarget(getInterface(method, version));
         } catch (Exception ex) {
             log.error(ResultCode.NO_METHOD+"",ex);
-            throw new ServiceException(ResultCode.NO_METHOD, "服务能力" + method + "找不到");
+            throw new NoWarnException(ResultCode.NO_METHOD, "服务能力" + method + "找不到");
         }
     }
     
