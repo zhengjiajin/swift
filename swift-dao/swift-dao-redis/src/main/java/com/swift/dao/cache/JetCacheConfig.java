@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,6 +26,7 @@ import com.alicp.jetcache.support.FastjsonKeyConvertor;
 import com.alicp.jetcache.support.KryoValueDecoder;
 import com.alicp.jetcache.support.KryoValueEncoder;
 import com.swift.dao.cache.redis.RedisClientFactory;
+import com.swift.dao.cache.redis.core.JetCacheSysKeyEncode;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.util.Pool;
@@ -38,6 +40,9 @@ import redis.clients.util.Pool;
 @EnableMethodCache(basePackages = {"com.swift","com.hhmk","com.test"})
 @EnableCreateCacheAnnotation
 public class JetCacheConfig {
+    
+    @Value("${sysId}")
+    private String sysId;
     
     @Autowired
     private RedisClientFactory redisClientFactory;
@@ -59,7 +64,7 @@ public class JetCacheConfig {
         localBuilders.put(CacheConsts.DEFAULT_AREA, localBuilder);
         Map<String, CacheBuilder> remoteBuilders = new HashMap<String, CacheBuilder>();
         CacheBuilder remoteCacheBuilder = RedisCacheBuilder.createRedisCacheBuilder()
-                .keyConvertor(FastjsonKeyConvertor.INSTANCE)
+                .keyConvertor(new JetCacheSysKeyEncode(sysId))
                 .valueEncoder(KryoValueEncoder.INSTANCE)
                 .valueDecoder(KryoValueDecoder.INSTANCE)
                 .expireAfterWrite(7, TimeUnit.DAYS)
