@@ -67,19 +67,17 @@ public class DataValidatorAop {
         if (!(obj[0] instanceof ServiceRequest)) return;
         ServiceRequest req = (ServiceRequest) obj[0];
         if (req.getData() == null) return;
-        if (AbstractBeanDataModel.class.isAssignableFrom(dataValidator.value()) && !(req.getData() instanceof AbstractBeanDataModel)) {
-            String str = validator(dataValidator, req.getValidatorData(dataValidator.value()));
-            if (TypeUtil.isNotNull(str)) {
-                log.warn(str);
-                throw new NoWarnException(ResultCode.ERROR_PARAMETER,str);
-            }
+        String str = validator(dataValidator, req.getData());
+        if (TypeUtil.isNotNull(str)) {
+            log.warn(str);
+            throw new NoWarnException(ResultCode.ERROR_PARAMETER,str);
         }
     }
 
     private String validator(DataValidator dataValidator, DataModel data) {
         List<String> list = null;
-        if (data instanceof AbstractBeanDataModel) {
-            list = pojoValidator.validator(data);
+        if (AbstractBeanDataModel.class.isAssignableFrom(dataValidator.value())) {
+            list = pojoValidator.validator(AbstractBeanDataModel.mapToBean(data, dataValidator.value()));
         } else {
             list = dataModelValidator.validator(dataValidator, data);
         }
