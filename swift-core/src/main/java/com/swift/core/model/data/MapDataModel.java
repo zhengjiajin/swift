@@ -74,6 +74,7 @@ public class MapDataModel extends LinkedHashMap<String, Object> implements DataM
 	@Override
 	public <T extends DataModel> T getObject(String objectPath, Class<T> classType) {
 	    Object value = getObjectInternal(objectPath, this);
+	    if(value==null) return null;
 	    if(value.getClass().equals(classType)) {
             return (T)value;
         }else {
