@@ -102,8 +102,9 @@ public abstract class WebClientCode {
             ServiceResponse res = null;
             int status = response.getStatus();
             String rsp = new String(content);
+            log.info("收到Http响应 >> [请求体]：" + request.toString());
+            log.info("收到Http响应 >> "+rsp);
             if (status == 200) {
-                log.info("收到Http响应 >> [请求体]：" + request.toString());
                 // 设cookit
                 HttpFields field = response.getHeaders();
                 for (String name : field.getFieldNamesCollection()) {
@@ -119,8 +120,6 @@ public abstract class WebClientCode {
                 if (field.get("Content-Type") != null && field.get("Content-Type").equals("image/jpeg")) {
                     rsp = Base64.getEncoder().encodeToString(content);
                 }
-
-                log.info("收到Http响应 >> [响应体]：" + rsp);
 
                 try {
                     res = decode(rsp);
