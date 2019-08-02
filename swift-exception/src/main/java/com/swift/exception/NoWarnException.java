@@ -25,4 +25,8 @@ public class NoWarnException extends ServiceException {
     public NoWarnException(int statusCode, String msg) {
         super(statusCode, msg);
     }
+    
+    public NoWarnException(int statusCode, String message, Throwable cause) {
+        super(statusCode, message, cause);
+    }
 }

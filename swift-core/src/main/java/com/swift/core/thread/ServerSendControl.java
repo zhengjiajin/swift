@@ -25,6 +25,7 @@ import com.swift.core.service.SimpleInterface;
 import com.swift.exception.NoWarnException;
 import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
+import com.swift.util.text.JsonUtil;
 
 /**
  * 发送消息线程
@@ -112,7 +113,9 @@ public class ServerSendControl implements Runnable {
             if (stTime > 5000) {
                 log.warn("处理请求时间过长:" + msg);
             }
+            log.info("返回响应："+baseInterface.getClass().getName()+JsonUtil.toJson(res));
             if(!(baseInterface instanceof AsynInterface) || res.getResultCode()!=0) {
+                log.info("返回响应：" + JsonUtil.toJson(res));
                 this.callback.callback(res);
             }
             // 线程结束
