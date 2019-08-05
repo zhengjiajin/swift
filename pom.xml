@@ -60,7 +60,7 @@
 		<mybatis-pagehelper.version>5.0.2</mybatis-pagehelper.version>
 		<mybatis-ehcache.version>1.0.3</mybatis-ehcache.version>
 		<mysql-connector.version>5.1.46</mysql-connector.version>
-		<c3p0.version>0.9.1.2</c3p0.version>
+		<c3p0.version>0.9.5.2</c3p0.version>
 		<ehcache-core.version>2.6.8</ehcache-core.version>
 		<zxing.version>3.2.1</zxing.version>
 		<javax-inject.version>1</javax-inject.version>
