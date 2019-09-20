@@ -33,8 +33,9 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  */
 @Repository("redisClientFactory")
 @Scope("singleton")
+@Deprecated
 public class RedisClientFactory {
-public static final Logger LOG = LoggerFactory.getLogger(RedisClientFactory.class);
+    public static final Logger LOG = LoggerFactory.getLogger(RedisClientFactory.class);
     //切片连接池
     private JedisPool pool;
     private int maxActive=300;
