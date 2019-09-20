@@ -51,17 +51,20 @@ public class RedisDisLock {
             Long sysTime = System.currentTimeMillis();
             String key = key(obj);
             Jedis jedis = redisClientFactory.getJedis();
-            //30秒内不断尝试获得锁
-            while (System.currentTimeMillis() < sysTime + TIME_OUT) {
-                long lockTime = System.currentTimeMillis();
-                 String result = jedis.set(key, TypeUtil.toString(lockTime), SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, LOCK_SEC);
-                 if (LOCK_SUCCESS.equals(result)) {
-                    return lockTime;
-                 }else{
-                    ThreadUtil.sleep(100);
-                 }
+            try {
+                //30秒内不断尝试获得锁
+                while (System.currentTimeMillis() < sysTime + TIME_OUT) {
+                    long lockTime = System.currentTimeMillis();
+                     String result = jedis.set(key, TypeUtil.toString(lockTime), SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, LOCK_SEC);
+                     if (LOCK_SUCCESS.equals(result)) {
+                        return lockTime;
+                     }else{
+                        ThreadUtil.sleep(100);
+                     }
+                }
+            } finally {
+                redisClientFactory.release(jedis);
             }
-            redisClientFactory.release(jedis);
             log.warn("多次尝试获得锁失败，最终放弃，:" + obj );
             throw new SwiftRuntimeException("服务器繁忙，请稍后再试。");
         }
@@ -70,14 +73,17 @@ public class RedisDisLock {
     public void unLock(Object obj,long lockTime){
         String key = key(obj);
         Jedis jedis = redisClientFactory.getJedis();
-        String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
-        Object result = jedis.eval(script, Collections.singletonList(key), Collections.singletonList(TypeUtil.toString(lockTime)));
-        if (RELEASE_SUCCESS.equals(result)) {
-            return;
-        }else {
-            log.info("释放锁失败或者锁已经过期:" + obj + "; lockTime:" + lockTime);
+        try {
+            String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+            Object result = jedis.eval(script, Collections.singletonList(key), Collections.singletonList(TypeUtil.toString(lockTime)));
+            if (RELEASE_SUCCESS.equals(result)) {
+                return;
+            }else {
+                log.info("释放锁失败或者锁已经过期:" + obj + "; lockTime:" + lockTime);
+            }
+        } finally {
+            redisClientFactory.release(jedis);
         }
-        redisClientFactory.release(jedis);
     }
     
     private String key(Object obj){
