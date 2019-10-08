@@ -185,7 +185,7 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
         try {
             servletResponse.getOutputStream().write(resModel.getBody());
         } catch (IOException e) {
-            throw new SwiftRuntimeException("网络异常", e);
+            log.warn("网络异常", e);
         }
     }
 
