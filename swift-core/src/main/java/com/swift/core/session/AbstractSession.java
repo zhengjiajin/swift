@@ -17,6 +17,7 @@ import com.swift.core.model.data.AbstractBeanDataModel;
 public class AbstractSession extends AbstractBeanDataModel{
     public final static String SESSION_NAME = "SESSION_USER";
     
+    private String loginType;
     /**
      * 验证登录字段
      */
@@ -38,6 +39,14 @@ public class AbstractSession extends AbstractBeanDataModel{
      * session创建时间
      */
     private Date sessionCreateTime;
+
+    public String getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(String loginType) {
+        this.loginType = loginType;
+    }
 
     public String getTokenId() {
         return tokenId;
