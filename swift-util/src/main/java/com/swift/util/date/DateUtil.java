@@ -66,6 +66,15 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
         }
     }
     
+    // 返回日期
+    public static Date parseDateByType(String dateStr,String format) {
+        try {
+            return parseDate(dateStr, format);
+        } catch (ParseException e) {
+            throw new RuntimeException("解析日期出错:" + dateStr + e.getMessage());
+        }
+    }
+    
     public static Date getMonthBegin(Date date) {
         if (date != null) {
             return parseDate(formatDate(date, "yyyy-MM") + "-01");
