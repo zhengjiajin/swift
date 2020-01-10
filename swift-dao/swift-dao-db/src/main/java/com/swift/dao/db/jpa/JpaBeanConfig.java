@@ -39,7 +39,7 @@ public class JpaBeanConfig {
         bean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         bean.setJpaDialect(new HibernateJpaDialect());
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-        if (log.isInfoEnabled()) {
+        if (log.isDebugEnabled()) {
             jpaVendorAdapter.setShowSql(true);
         }
         bean.setJpaVendorAdapter(jpaVendorAdapter);
