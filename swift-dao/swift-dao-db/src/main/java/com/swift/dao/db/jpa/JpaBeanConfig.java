@@ -8,8 +8,6 @@ package com.swift.dao.db.jpa;
 import javax.sql.DataSource;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +18,9 @@ import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.stereotype.Repository;
 
+import com.swift.core.env.Env;
+import com.swift.core.env.EnvLoader;
+
 /**
  * 添加说明
  * 
@@ -29,7 +30,7 @@ import org.springframework.stereotype.Repository;
 @Configuration
 @EnableJpaRepositories(value = { "com.swift" }, includeFilters = { @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Repository.class)})
 public class JpaBeanConfig {
-    private static final Logger log = LoggerFactory.getLogger(JpaBeanConfig.class);
+    //private static final Logger log = LoggerFactory.getLogger(JpaBeanConfig.class);
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
@@ -39,7 +40,7 @@ public class JpaBeanConfig {
         bean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         bean.setJpaDialect(new HibernateJpaDialect());
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-        if (log.isDebugEnabled()) {
+        if (!Env.PROD.equals(EnvLoader.getEnv())) {
             jpaVendorAdapter.setShowSql(true);
         }
         bean.setJpaVendorAdapter(jpaVendorAdapter);
