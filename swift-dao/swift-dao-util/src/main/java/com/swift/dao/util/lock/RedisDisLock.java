@@ -6,11 +6,14 @@
 package com.swift.dao.util.lock;
 
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import com.swift.dao.cache.redis.RedisClientFactory;
@@ -41,6 +44,9 @@ public class RedisDisLock {
     
     @Resource
     private RedisClientFactory redisClientFactory;
+    
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
     /**
      * 获得锁
      * @param obj
@@ -50,20 +56,16 @@ public class RedisDisLock {
         synchronized (obj) {
             Long sysTime = System.currentTimeMillis();
             String key = key(obj);
-            Jedis jedis = redisClientFactory.getJedis();
-            try {
-                //30秒内不断尝试获得锁
-                while (System.currentTimeMillis() < sysTime + TIME_OUT) {
-                    long lockTime = System.currentTimeMillis();
-                     String result = jedis.set(key, TypeUtil.toString(lockTime), SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, LOCK_SEC);
-                     if (LOCK_SUCCESS.equals(result)) {
-                        return lockTime;
-                     }else{
-                        ThreadUtil.sleep(100);
-                     }
-                }
-            } finally {
-                redisClientFactory.release(jedis);
+            //30秒内不断尝试获得锁
+            while (System.currentTimeMillis() < sysTime + TIME_OUT) {
+                long lockTime = System.currentTimeMillis();
+                 //String result = jedis.set(key, TypeUtil.toString(lockTime), SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, LOCK_SEC);
+                 Boolean check = redisTemplate.opsForValue().setIfAbsent(key, TypeUtil.toString(lockTime), LOCK_SEC, TimeUnit.SECONDS);
+                 if (check!=null && check) {
+                    return lockTime;
+                 }else{
+                    ThreadUtil.sleep(100);
+                 }
             }
             log.warn("多次尝试获得锁失败，最终放弃，:" + obj );
             throw new SwiftRuntimeException("服务器繁忙，请稍后再试。");
