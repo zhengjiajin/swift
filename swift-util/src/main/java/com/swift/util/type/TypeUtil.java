@@ -85,6 +85,11 @@ public class TypeUtil {
         }
         return Float.valueOf(String.valueOf(obj));
     }
+    
+    public static float toFloat(Object obj, float def) {
+        if (TypeUtil.isNull(obj)) return def;
+        return toFloat(obj);
+    }
 
     public static Double toDouble(Object obj) {
         if (TypeUtil.isNull(obj)) return null;
