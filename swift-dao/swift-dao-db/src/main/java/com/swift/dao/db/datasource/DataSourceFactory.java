@@ -6,26 +6,26 @@
 package com.swift.dao.db.datasource;
 
 import java.beans.PropertyVetoException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.sql.DataSource;
 
-import org.apache.commons.lang.math.RandomUtils;
+import org.apache.shardingsphere.shardingjdbc.jdbc.core.datasource.ShardingDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.stereotype.Component;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import com.swift.core.filter.EndFilter;
+import com.swift.dao.db.datasource.sharding.ShardingConfig;
 import com.swift.exception.UnknownException;
 import com.swift.util.type.TypeUtil;
 
@@ -36,15 +36,11 @@ import com.swift.util.type.TypeUtil;
  * @version 1.0 2018年5月4日
  */
 @Component("dataSource")
-public class DataSourceFactory extends AbstractRoutingDataSource implements EndFilter{
+public class DataSourceFactory extends AbstractRoutingDataSource {
 
     private final static Logger log = LoggerFactory.getLogger(DataSourceFactory.class);
-    
-    private Map<String, List<ComboPooledDataSource>> targetListDataSource = new ConcurrentHashMap<String, List<ComboPooledDataSource>>();
 
     private Map<Object, Object> targetDataSources = new ConcurrentHashMap<Object, Object>();
-    //用于保持同一线程同一连接源
-    private static ThreadLocal<Map<String,Integer>> thredLocalDb = new ThreadLocal<Map<String,Integer>>();
 
     @Value("${jdbc.driverClassName:org.gjt.mm.mysql.Driver}")
     private String driverClassName;
@@ -61,6 +57,9 @@ public class DataSourceFactory extends AbstractRoutingDataSource implements EndF
     private static final String DEFAULT_DB = "master";
 
     private boolean isStart = false;
+    
+    @Autowired
+    private ShardingConfig shardingConfig;
     
     public DataSourceFactory() {
         super.setTargetDataSources(targetDataSources);
@@ -91,30 +90,15 @@ public class DataSourceFactory extends AbstractRoutingDataSource implements EndF
         String[] urlSpilt = urls.split(",");
         String[] userNameSpilt = userNames.split(",");
         String[] passwordSpilt = passwords.split(",");
+        Map<String,DataSource> dataSourceMap = new LinkedHashMap<>();
         for (int i = 0; i < urlSpilt.length; i++) {
-            String url=urlSpilt[i];
-            if (targetListDataSource.get(source) == null) targetListDataSource.put(source, new ArrayList<ComboPooledDataSource>());
-            if(!checkSource(source, url)) {
-                log.warn(source+"已建立连接:"+urls);
-                continue;
-            }
-            ComboPooledDataSource sourceBean = createComboPooledDataSource(urlSpilt[i], userNameSpilt[i],
-                passwordSpilt[i]);
-            targetListDataSource.get(source).add(sourceBean);
-            targetDataSources.put(source + i, sourceBean);
+            ComboPooledDataSource sourceBean = createComboPooledDataSource(urlSpilt[i], userNameSpilt[i],passwordSpilt[i]);
+            dataSourceMap.put(source + i, sourceBean);
         }
+        targetDataSources.put(source, shardingConfig.getShardingDataSource(dataSourceMap));
         super.afterPropertiesSet();
     }
 
-    private boolean checkSource(String source, String url) {
-        if(targetListDataSource.get(source)==null) return true;
-        for(ComboPooledDataSource combo:targetListDataSource.get(source)) {
-            if(combo.getJdbcUrl().equals(url)) {
-               return false; 
-            }
-        }
-        return true;
-    }
     
     /**
      * 添加数据源
@@ -131,27 +115,27 @@ public class DataSourceFactory extends AbstractRoutingDataSource implements EndF
      * @param dbName
      */
     public void delDataSource(String dbName) {
-        if (targetListDataSource.get(dbName) == null) return;
-        for(Object sourceIndex:targetDataSources.keySet()) {
-            String sourceName = String.valueOf(sourceIndex);
-            if(sourceName.indexOf(dbName)==0 && TypeUtil.isNumber(sourceName.replace(dbName, ""))) {
-                targetDataSources.remove(sourceIndex);
-            }
-        }
-        for(ComboPooledDataSource combo:targetListDataSource.remove(dbName)) {
-            combo.close();
+        Object dataSource = targetDataSources.remove(dbName);
+        if(dataSource==null) return;
+        try {
+            ((ShardingDataSource)dataSource).close();
+        } catch (Exception e) {
+            log.error("DataSource Close ERROR",e); 
         }
     }
 
     @PreDestroy
     protected void destory() {
-        if (targetListDataSource != null) {
-            for (List<ComboPooledDataSource> listSource : targetListDataSource.values()) {
-                if (TypeUtil.isNull(listSource)) continue;
-                for (ComboPooledDataSource source : listSource) {
-                    source.close();
+        if (targetDataSources != null) {
+            for (Object dataSource : targetDataSources.values()) {
+                if (TypeUtil.isNull(dataSource)) continue;
+                try {
+                    ((ShardingDataSource)dataSource).close();
+                } catch (Exception e) {
+                    log.error("DataSource Close ERROR",e); 
                 }
             }
+            targetDataSources.clear();
         }
     }
 
@@ -164,20 +148,10 @@ public class DataSourceFactory extends AbstractRoutingDataSource implements EndF
         // applicationContext.getParentBeanFactory();
         String source = HandlerDataSource.getDataSource();
         if (source == null) source= DEFAULT_DB;
-        if (targetListDataSource == null || targetListDataSource.isEmpty()) throw new UnknownException("数据库未配置");
-        List<ComboPooledDataSource> listSource = targetListDataSource.get(source);
-        if (listSource == null || listSource.isEmpty()) throw new UnknownException("数据库未配置");
-        int i=0;
-        if(thredLocalDb.get()==null) {
-            thredLocalDb.set(new HashMap<String,Integer>());
-        }
-        if(thredLocalDb.get().get(source)==null) {
-            i = RandomUtils.nextInt(listSource.size());
-            thredLocalDb.get().put(source, i);
-        }else {
-            i=thredLocalDb.get().get(source);
-        }
-        return source.toString() + i;
+        if (targetDataSources == null || targetDataSources.isEmpty()) throw new UnknownException("数据库未配置");
+        DataSource dataSource = (DataSource)targetDataSources.get(source);
+        if (dataSource == null) throw new UnknownException("数据库未配置");
+        return source.toString();
     }
 
     protected ComboPooledDataSource createComboPooledDataSource(String url, String username, String password) {
@@ -215,14 +189,6 @@ public class DataSourceFactory extends AbstractRoutingDataSource implements EndF
         bean.setTestConnectionOnCheckout(false);
         bean.setAutoCommitOnClose(true);
         return bean;
-    }
-
-    /** 
-     * @see com.swift.core.filter.EndFilter#end()
-     */
-    @Override
-    public void end() {
-        thredLocalDb.remove();
     }
 
     public boolean isStart() {
