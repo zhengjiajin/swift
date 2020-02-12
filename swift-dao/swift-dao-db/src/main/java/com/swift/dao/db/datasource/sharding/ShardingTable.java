@@ -21,6 +21,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ShardingTable {
     /*
+     * 所在的数据标识识，对应的配置名称
+     */
+    public String configDb();
+    /*
      * 逻辑表名
      */
     public String table();
@@ -32,8 +36,5 @@ public @interface ShardingTable {
      * 是否所有分片表，则所有库都存在，更新时会更新所有库
      */
     public boolean isBroadcastTables()  default false;
-    /*
-     * broadcastTable 所在的数据标识识，对应的配置名称
-     */
-    public String broadcastTablesDb() default "";
+    
 }

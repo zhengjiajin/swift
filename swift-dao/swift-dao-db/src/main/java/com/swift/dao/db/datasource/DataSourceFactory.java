@@ -97,7 +97,7 @@ public class DataSourceFactory extends AbstractRoutingDataSource {
         }
         if(TypeUtil.isNull(dataSourceMap)) return;
         if(dataSourceMap.size()>1 || shardingConfig.isShardingDb(source)) {
-            targetDataSources.put(source, shardingConfig.getShardingDataSource(dataSourceMap));
+            targetDataSources.put(source, shardingConfig.getShardingDataSource(source,dataSourceMap));
         }else {
             targetDataSources.put(source, dataSourceMap.values().iterator().next());
         }

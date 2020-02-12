@@ -5,7 +5,6 @@
  */
 package com.swift.dao.db.datasource.sharding;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -38,41 +37,36 @@ import com.swift.util.type.TypeUtil;
 public class ShardingConfig {
 
     private static final String PACKAGE="com.swift";
-    
-    private ShardingRuleConfiguration shardingRuleConfig;
     //所有汲到的数据库描术名
-    private List<String> ruleListRem = new CopyOnWriteArrayList<String>();
+    private List<ShardingTable> shardingTableList = new CopyOnWriteArrayList<ShardingTable>();
     
     public boolean isShardingDb(String source) {
-        for(String rule:ruleListRem) {
-            if(rule.startsWith(source)) return true;
+        for(ShardingTable sharding:shardingTableList) {
+            if(sharding.configDb().equals(source)) return true;
         }
         return false;
     }
     
-    
-    public DataSource getShardingDataSource(Map<String, DataSource> dataSourceMap) {
+    public DataSource getShardingDataSource(String source,Map<String, DataSource> dataSourceMap) {
         try {
             if(TypeUtil.isNull(dataSourceMap)) throw new SwiftRuntimeException("c3p0 DataSource is empty");
-            return ShardingDataSourceFactory.createDataSource(dataSourceMap, createShardingRule(), new Properties());
+            return ShardingDataSourceFactory.createDataSource(dataSourceMap, createShardingRule(source), new Properties());
         } catch (Exception e) {
             throw new SwiftRuntimeException("create ShardingDataSource error",e);
         }
     }
     
-    @PostConstruct
-    private  ShardingRuleConfiguration createShardingRule() {
-        if(shardingRuleConfig!=null) return shardingRuleConfig;
-        shardingRuleConfig = new ShardingRuleConfiguration();
+    
+    private  ShardingRuleConfiguration createShardingRule(String source) {
+        ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
         //shardingRuleConfig.setDefaultDatabaseShardingStrategyConfig(new NoneShardingStrategyConfiguration());
         //shardingRuleConfig.setDefaultTableShardingStrategyConfig(new NoneShardingStrategyConfiguration());
         //shardingRuleConfig.getBindingTableGroups().add(shardingTable.table());
-        List<ShardingTable> shardingTableList = scan();
         if(TypeUtil.isNull(shardingTableList)) return shardingRuleConfig;
         for(ShardingTable shardingTable : shardingTableList) {
+            if(!(shardingTable.configDb().equals(source))) continue;
             if(shardingTable.isBroadcastTables()) {
                 shardingRuleConfig.getBroadcastTables().add(shardingTable.table());
-                ruleListRem.add(shardingTable.broadcastTablesDb());
             }else {
                 TableRuleConfiguration ruleConfig = getTableRuleConfiguration(shardingTable);
                 if(ruleConfig!=null) {
@@ -87,7 +81,6 @@ public class ShardingConfig {
         ShardingRuleInterface rule = newRule(shardingTable.shardingClass());
         if(rule==null) return null;
         TableRuleConfiguration result = new TableRuleConfiguration(shardingTable.table(), rule.rule());
-        ruleListRem.add(rule.rule());
         //result.setKeyGeneratorConfig(getKeyGeneratorConfiguration()); -- 主键生成器
         if(TypeUtil.isNotNull(rule.dbShardingColumn())) {
             if(rule.dbPreciseSharding()!=null) {
@@ -121,23 +114,22 @@ public class ShardingConfig {
     /*
      * 找到所有配置了注解的类
      */
-    private List<ShardingTable> scan(){
+    @PostConstruct
+    private void scan(){
         //找到加了注解的TABLE
         ClassPathScanningCandidateComponentProvider scan = new ClassPathScanningCandidateComponentProvider(false);
         TypeFilter includeFilter = new AnnotationTypeFilter(ShardingTable.class);
         scan.addIncludeFilter(includeFilter);
         Set<BeanDefinition> set = scan.findCandidateComponents(PACKAGE);
-        if(TypeUtil.isNull(set)) return null;
-        List<ShardingTable> list = new ArrayList<>();
+        if(TypeUtil.isNull(set)) return;
         for(BeanDefinition bean : set) {
             String beanClassName = bean.getBeanClassName();
             Class<?> cla = classForName(beanClassName);
             ShardingTable shardingTable = cla.getAnnotation(ShardingTable.class);
-            if(!checkHasTable(list, shardingTable.table())) {
-                list.add(shardingTable);
+            if(!checkHasTable(shardingTableList, shardingTable.table())) {
+                shardingTableList.add(shardingTable);
             }
         }
-        return list;
     }
     /*
      * 去重
