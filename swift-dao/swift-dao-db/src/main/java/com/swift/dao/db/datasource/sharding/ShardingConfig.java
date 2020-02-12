@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.apache.shardingsphere.api.config.sharding.ShardingRuleConfiguration;
@@ -38,6 +40,16 @@ public class ShardingConfig {
     private static final String PACKAGE="com.swift";
     
     private ShardingRuleConfiguration shardingRuleConfig;
+    //所有汲到的数据库描术名
+    private List<String> ruleListRem = new CopyOnWriteArrayList<String>();
+    
+    public boolean isShardingDb(String source) {
+        for(String rule:ruleListRem) {
+            if(rule.startsWith(source)) return true;
+        }
+        return false;
+    }
+    
     
     public DataSource getShardingDataSource(Map<String, DataSource> dataSourceMap) {
         try {
@@ -48,6 +60,7 @@ public class ShardingConfig {
         }
     }
     
+    @PostConstruct
     private  ShardingRuleConfiguration createShardingRule() {
         if(shardingRuleConfig!=null) return shardingRuleConfig;
         shardingRuleConfig = new ShardingRuleConfiguration();
@@ -59,6 +72,7 @@ public class ShardingConfig {
         for(ShardingTable shardingTable : shardingTableList) {
             if(shardingTable.isBroadcastTables()) {
                 shardingRuleConfig.getBroadcastTables().add(shardingTable.table());
+                ruleListRem.add(shardingTable.broadcastTablesDb());
             }else {
                 TableRuleConfiguration ruleConfig = getTableRuleConfiguration(shardingTable);
                 if(ruleConfig!=null) {
@@ -73,6 +87,7 @@ public class ShardingConfig {
         ShardingRuleInterface rule = newRule(shardingTable.shardingClass());
         if(rule==null) return null;
         TableRuleConfiguration result = new TableRuleConfiguration(shardingTable.table(), rule.rule());
+        ruleListRem.add(rule.rule());
         //result.setKeyGeneratorConfig(getKeyGeneratorConfiguration()); -- 主键生成器
         if(TypeUtil.isNotNull(rule.dbShardingColumn())) {
             if(rule.dbPreciseSharding()!=null) {

@@ -95,7 +95,12 @@ public class DataSourceFactory extends AbstractRoutingDataSource {
             ComboPooledDataSource sourceBean = createComboPooledDataSource(urlSpilt[i], userNameSpilt[i],passwordSpilt[i]);
             dataSourceMap.put(source + i, sourceBean);
         }
-        targetDataSources.put(source, shardingConfig.getShardingDataSource(dataSourceMap));
+        if(TypeUtil.isNull(dataSourceMap)) return;
+        if(dataSourceMap.size()>1 || shardingConfig.isShardingDb(source)) {
+            targetDataSources.put(source, shardingConfig.getShardingDataSource(dataSourceMap));
+        }else {
+            targetDataSources.put(source, dataSourceMap.values().iterator().next());
+        }
         super.afterPropertiesSet();
     }
 
@@ -118,7 +123,12 @@ public class DataSourceFactory extends AbstractRoutingDataSource {
         Object dataSource = targetDataSources.remove(dbName);
         if(dataSource==null) return;
         try {
-            ((ShardingDataSource)dataSource).close();
+            if(dataSource instanceof ShardingDataSource) {
+                ((ShardingDataSource)dataSource).close();
+            }
+            if(dataSource instanceof ComboPooledDataSource) {
+                ((ComboPooledDataSource)dataSource).close();
+            }
         } catch (Exception e) {
             log.error("DataSource Close ERROR",e); 
         }
@@ -130,7 +140,12 @@ public class DataSourceFactory extends AbstractRoutingDataSource {
             for (Object dataSource : targetDataSources.values()) {
                 if (TypeUtil.isNull(dataSource)) continue;
                 try {
-                    ((ShardingDataSource)dataSource).close();
+                    if(dataSource instanceof ShardingDataSource) {
+                        ((ShardingDataSource)dataSource).close();
+                    }
+                    if(dataSource instanceof ComboPooledDataSource) {
+                        ((ComboPooledDataSource)dataSource).close();
+                    }
                 } catch (Exception e) {
                     log.error("DataSource Close ERROR",e); 
                 }

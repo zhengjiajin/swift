@@ -32,4 +32,8 @@ public @interface ShardingTable {
      * 是否所有分片表，则所有库都存在，更新时会更新所有库
      */
     public boolean isBroadcastTables()  default false;
+    /*
+     * broadcastTable 所在的数据标识识，对应的配置名称
+     */
+    public String broadcastTablesDb() default "";
 }
