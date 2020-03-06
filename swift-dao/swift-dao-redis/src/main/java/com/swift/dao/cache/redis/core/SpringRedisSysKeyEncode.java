@@ -34,9 +34,9 @@ public class SpringRedisSysKeyEncode implements RedisSerializer<String> {
             return null;
         }
         if (t instanceof String) {
-            resStr= sysId+SYS_SPILT+t;
+            resStr= keySplt()+t;
         }else {
-            resStr= sysId+SYS_SPILT+JSON.toJSONString(t);
+            resStr= keySplt()+JSON.toJSONString(t);
         }
         return resStr.getBytes();
     }
@@ -47,8 +47,15 @@ public class SpringRedisSysKeyEncode implements RedisSerializer<String> {
     @Override
     public String deserialize(byte[] bytes) throws SerializationException {
         if(bytes==null) return null;
-        String t = new String(bytes);
-        return sysId+SYS_SPILT+t;
+        String key = new String(bytes);
+        if(key.startsWith(keySplt())) {
+            return key.substring(keySplt().length());
+        }
+        return key;
     }
 
+    private String keySplt() {
+        return sysId+SYS_SPILT;
+    }
+    
 }

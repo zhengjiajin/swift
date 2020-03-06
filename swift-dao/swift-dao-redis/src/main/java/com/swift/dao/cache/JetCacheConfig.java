@@ -131,10 +131,11 @@ public class JetCacheConfig {
         RedisTemplate<String,String> redisTemplate = new RedisTemplate<String,String>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(new SpringRedisSysKeyEncode(sysId));
+        //redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashValueSerializer(new StringRedisSerializer());
-        redisTemplate.setEnableTransactionSupport(true);
+        //redisTemplate.setEnableTransactionSupport(true);
         return redisTemplate;
     }
 
