@@ -21,13 +21,16 @@ public class EnvDecode {
     public static String decode(String value) {
         String encryptKey = System.getenv(ENV_PASSWORD);
         if (TypeUtil.isNull(encryptKey)) return value;
-        return AESUtil.decrypt(value, encryptKey);
+        try {
+            return AESUtil.decrypt(value, encryptKey);
+        }catch(Throwable ex) {
+            return value;
+        }
     }
 
     public static void main(String[] args) {
-        System.out.println(System.getenv("SWIFT_PASSWORD"));
-        System.out.println(System.getenv().keySet());
-        System.out.println(AESUtil.encrypt("hhmkroot", "sYHN"));
+        String key = "sdfs";
+        System.out.println(AESUtil.encrypt("sdf", key));
     }
 
 }
