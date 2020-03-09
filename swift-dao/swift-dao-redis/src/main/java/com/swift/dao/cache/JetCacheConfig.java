@@ -32,6 +32,7 @@ import com.alicp.jetcache.redis.springdata.RedisSpringDataCacheBuilder;
 import com.alicp.jetcache.support.FastjsonKeyConvertor;
 import com.alicp.jetcache.support.KryoValueDecoder;
 import com.alicp.jetcache.support.KryoValueEncoder;
+import com.swift.core.env.EnvDecode;
 import com.swift.dao.cache.redis.core.JetCacheSysKeyEncode;
 import com.swift.dao.cache.redis.core.SpringRedisSysKeyEncode;
 import com.swift.util.type.IpUtil;
@@ -108,7 +109,7 @@ public class JetCacheConfig {
                     redisConfig.clusterNode(IpUtil.domainToIp(host.split(":")[0]), Integer.valueOf(host.split(":")[1]));
                 }
             }
-            redisConfig.setPassword(password);
+            redisConfig.setPassword(EnvDecode.decode(password));
             return new JedisConnectionFactory(redisConfig,clientConfig);
         } else {
             RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration();
@@ -119,7 +120,7 @@ public class JetCacheConfig {
                 redisConfig.setHostName(IpUtil.domainToIp(hosts.split(":")[0]));
                 redisConfig.setPort(Integer.valueOf(hosts.split(":")[1]));
             }
-            redisConfig.setPassword(password);
+            redisConfig.setPassword(EnvDecode.decode(password));
             redisConfig.setDatabase(Protocol.DEFAULT_DATABASE);
             return new JedisConnectionFactory(redisConfig,clientConfig);
         }
