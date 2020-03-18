@@ -29,9 +29,9 @@ public class EnvDecode {
     }
 
     public static void main(String[] args) {
-        String key = "asdfadsfas";
-        System.out.println(AESUtil.encrypt("asdfasd", key));
-        System.out.println(AESUtil.encrypt("sdfsfd", key));
+        String key = "sdfsd";
+        System.out.println(AESUtil.encrypt("asd", key));
+        System.out.println(AESUtil.encrypt("sdf", key));
     }
 
 }

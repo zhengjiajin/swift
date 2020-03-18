@@ -256,11 +256,11 @@ public class MapDataModel extends LinkedHashMap<String, Object> implements DataM
     						maps.add(o);
     					}
     				}
-    				m.addObject(descriptor.getName(), maps);
+    				if(TypeUtil.isNotNull(descriptor.getName())) m.addObject(descriptor.getName(), maps);
     			} else if (value instanceof AbstractBeanDataModel) {
-    				m.addObject(descriptor.getName(), beanToMap((AbstractBeanDataModel) value));
+    			    if(TypeUtil.isNotNull(descriptor.getName())) m.addObject(descriptor.getName(), beanToMap((AbstractBeanDataModel) value));
     			} else {
-    				m.addObject(descriptor.getName(), value);
+    			    if(TypeUtil.isNotNull(descriptor.getName())) m.addObject(descriptor.getName(), value);
     			}
     		}
 		}catch (Exception e) {
