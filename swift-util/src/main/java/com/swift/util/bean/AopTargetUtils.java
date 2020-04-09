@@ -14,7 +14,7 @@ import org.springframework.aop.support.AopUtils;
 import com.swift.exception.SwiftRuntimeException;
 
 /**
- * 添加说明
+ * 取得类的对应代理类
  * 
  * @author zhengjiajin
  * @version 1.0 2015年9月5日

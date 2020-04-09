@@ -11,7 +11,7 @@ package com.swift.util.layout;
  * @author kyj
  * @version 1.0 2016年06月7日
  */
-public class EscapeUtil {
+public class XmlUtil {
 
     public static String escapeXml(String str) {
         if(str == null) {

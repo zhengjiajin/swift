@@ -15,7 +15,7 @@ import com.swift.util.type.NetworkUtil;
 import com.swift.util.type.TypeUtil;
 
 /**
- * 
+ * 得到随机值方法
  * @author 郑家锦
  * @version 1.0 2017年4月12日
  */
