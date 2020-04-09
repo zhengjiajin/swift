@@ -6,7 +6,7 @@
 package com.swift.exception;
 
 /**
- * 
+ * 未知的异常
  * @author 郑家锦
  * @version 1.0 2018年1月31日
  */

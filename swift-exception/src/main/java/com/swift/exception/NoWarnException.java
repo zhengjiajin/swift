@@ -6,7 +6,7 @@
 package com.swift.exception;
 
 /**
- * 不打印错误异常 
+ * 不打印错误异常,用于输出WARN类型的异常日志 
  * @author zhengjiajin
  * @version 1.0 2019年7月10日
  */

@@ -1,12 +1,12 @@
 /*
- * @(#)StatusCodeException.java   1.0  2018年1月31日
+ * @(#)ServiceException.java   1.0  2018年1月31日
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou YY Technology Company LTD.
  */
 package com.swift.exception;
 
 /**
- * 
+ * 转RuntimeException,但需要定义系统异常错误码
  * @author 郑家锦
  * @version 1.0 2018年1月31日
  */

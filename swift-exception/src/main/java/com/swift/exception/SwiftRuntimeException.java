@@ -6,7 +6,7 @@
 package com.swift.exception;
 
 /**
- * 
+ * 系统错误异常，通用用户框架类的系统错误,如工具类，数据转换等
  * @author 郑家锦
  * @version 1.0 2018年1月31日
  */
