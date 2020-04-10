@@ -14,7 +14,7 @@ import com.swift.util.type.TypeUtil;
  */
 public enum Env {
     
-    DEV(""),TEST("test"),PROD("prod");
+    DEV(""),TEST("test"),DEMO("demo"),PROD("prod");
     //环境目录
     private String path;
     
