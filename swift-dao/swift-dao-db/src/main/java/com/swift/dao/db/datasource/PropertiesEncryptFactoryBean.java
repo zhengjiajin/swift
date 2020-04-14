@@ -10,7 +10,7 @@ import java.util.Properties;
 import org.springframework.beans.factory.FactoryBean;
 
 import com.swift.core.env.EnvDecode;
-import com.swift.util.security.DesUtil;
+import com.swift.util.security.AESUtil;
 
 /**
  * 添加说明 
@@ -64,7 +64,7 @@ public class PropertiesEncryptFactoryBean implements FactoryBean<Properties> {
   
     
     public static void main(String[] args) throws Exception{
-        System.out.println(DesUtil.encrypt("hhmkroot", "sYHN3d2f"));
-        System.out.println(DesUtil.encrypt("hhmkroot@WSX", "sYHN3d2f"));
+        System.out.println(AESUtil.encrypt("", ""));
+        System.out.println(AESUtil.encrypt("", ""));
     }
 }
