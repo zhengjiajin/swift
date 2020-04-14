@@ -66,7 +66,7 @@ public class JdbcImpl extends JdbcTemplate implements Jdbc {
      */
     @Override
     public <T> Page<T> queryForPage(String sql, Class<T> elementType, int pageNo, int pageSize) {
-        Pageable pageable = new PageRequest(pageNo-1, pageSize, null);
+        Pageable pageable =PageRequest.of(pageNo-1, pageSize);
         String countSql = SqlBuilder.toCountSql(sql);
         String limitSql = SqlBuilder.appendLimitSql(sql, pageable.getOffset(), pageable.getPageSize());
         int count = this.queryForInt(countSql);

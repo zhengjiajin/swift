@@ -10,13 +10,15 @@ import java.util.Date;
 import com.swift.core.model.data.AbstractBeanDataModel;
 
 /**
- * 添加说明 
+ * 登录用户身份信息 
  * @author zhengjiajin
  * @version 1.0 2018年6月11日
  */
 public class AbstractSession extends AbstractBeanDataModel{
     public final static String SESSION_NAME = "SESSION_USER";
-    
+    /**
+     * 登录类型
+     */
     private String loginType;
     /**
      * 验证登录字段

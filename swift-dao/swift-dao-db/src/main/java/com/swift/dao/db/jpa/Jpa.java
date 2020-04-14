@@ -18,17 +18,32 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface Jpa<T, ID extends Serializable> extends JpaRepository<T, ID> {
    @Override
    @Deprecated
-   void deleteAll();
+   public void deleteAll();
+   /**
+    * 兼容旧JPA,防止业务代码大量报错
+    * @param id
+    */
+   public <S extends T> List<S> save(Iterable<S> entities);
+   /**
+    * 通过ID返回某固体实到
+    * @param id
+    * @return 查环到返回NULL
+    */
+   public T findOne(ID id);
+   /**
+    * 兼容旧JPA,防止业务代码大量报错
+    * @param id
+    */
+   public boolean exists(ID id);
+   /**
+    * 兼容旧JPA,防止业务代码大量报错
+    * @param id
+    */
+   public void delete(ID id);
+   /**
+    * 兼容旧JPA,防止业务代码大量报错
+    * @param id
+    */
+   public <S extends T> void delete(Iterable<S> entities);
    
-   @Override
-   @Deprecated
-   T getOne(ID id);
-   
-   @Override
-   @Deprecated
-   <S extends T> S save(S entity);
-   
-   @Override
-   @Deprecated
-   <S extends T> List<S> save(Iterable<S> entities);
 }

@@ -37,7 +37,7 @@ public class SqlBuilder {
     }
     
 
-    public static String appendLimitSql(String sql, int start, int size) {
+    public static String appendLimitSql(String sql, long start, int size) {
         if(sql.toLowerCase().indexOf(" limit ")!=-1) return sql;
         return sql + " LIMIT " + start + "," + size + ";";
     }

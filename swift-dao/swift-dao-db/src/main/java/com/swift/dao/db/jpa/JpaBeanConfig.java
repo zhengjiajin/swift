@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 
 import com.swift.core.env.Env;
 import com.swift.core.env.EnvLoader;
+import com.swift.dao.db.jpa.core.JpaBaseImpl;
 
 /**
  * 添加说明
@@ -28,7 +29,7 @@ import com.swift.core.env.EnvLoader;
  * @version 1.0 2018年6月5日
  */
 @Configuration
-@EnableJpaRepositories(value = { "com.swift" }, includeFilters = { @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Repository.class)})
+@EnableJpaRepositories(value = { "com.swift" }, includeFilters = { @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Repository.class)},repositoryBaseClass = JpaBaseImpl.class)
 public class JpaBeanConfig {
     //private static final Logger log = LoggerFactory.getLogger(JpaBeanConfig.class);
 
