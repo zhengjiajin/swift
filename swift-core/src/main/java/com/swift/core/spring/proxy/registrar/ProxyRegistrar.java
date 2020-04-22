@@ -21,11 +21,11 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
 
 import com.swift.core.spring.proxy.ProxyMapper;
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.util.bean.AnnotationUtil;
+import com.swift.util.bean.BeanUtil;
 import com.swift.util.type.TypeUtil;
 
 /**
@@ -50,7 +50,7 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, BeanFactor
         if (annotationAttributes == null || annotationAttributes.isEmpty()) return;
         String[] basePackages = (String[]) annotationAttributes.get("basePackages");
         if (basePackages == null || basePackages.length <= 0) return;
-        TypeFilter swiftMapperFilter = new AnnotationTypeFilter(ProxyMapper.class);
+        TypeFilter swiftMapperFilter = new SwiftAnnotationTypeFilter(ProxyMapper.class);
         // TypeFilter helloServiceFilter2 = new AssignableTypeFilter(IMybatisMapper.class);
         MyClassPathBeanDefinitionScanner scanner = new MyClassPathBeanDefinitionScanner(registry);
         scanner.setResourceLoader(this.applicationContext);
@@ -60,8 +60,8 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, BeanFactor
         for (BeanDefinitionHolder beanDefinition : set) {
             String beanClassName = beanDefinition.getBeanDefinition().getBeanClassName();
             String beanName = TypeUtil.toLowerCaseFirstOne(beanClassName.substring(beanClassName.lastIndexOf(".") + 1));
-            Class<?> cla = classForName(beanClassName);
-            ProxyMapper proxyMapper = cla.getAnnotation(ProxyMapper.class);
+            Class<?> cla = BeanUtil.classForName(beanClassName);
+            ProxyMapper proxyMapper = AnnotationUtil.getAnnotation(cla, ProxyMapper.class);
             if(proxyMapper==null) continue;
             BeanDefinitionRegistry beanDefinitionRegistry = (BeanDefinitionRegistry) beanFactory;
             // 注册bean beanName是代理bean的名字 不是RepositoryFactorySupport的名字
@@ -79,15 +79,6 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, BeanFactor
         // 这里采用的是byType方式注入，类似的还有byName等
         definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
         return definition;
-    }
-
-    private Class<?> classForName(String beanClassName) {
-        try {
-            Class<?> cla = Class.forName(beanClassName);
-            return cla;
-        } catch (ClassNotFoundException e) {
-            throw new SwiftRuntimeException(beanClassName + "创建不了类");
-        }
     }
 
     /**

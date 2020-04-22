@@ -8,6 +8,7 @@ package com.swift.core.spring;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -29,6 +30,7 @@ public class Spring extends DispatcherServlet{
     private static final long serialVersionUID = 7425497776707646548L;
     private static ApplicationContext applicationContext;
 
+    private static Properties properties = new Properties();
     
     protected void initStrategies(ApplicationContext context) {
         super.initStrategies(context);
@@ -99,4 +101,9 @@ public class Spring extends DispatcherServlet{
     public static String[] getAllBeanName(){
         return getApplicationContext().getBeanDefinitionNames();
     }
+
+    public static Properties getProperties() {
+        return properties;
+    }
+    
 }

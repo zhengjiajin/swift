@@ -29,4 +29,22 @@ public class BeanUtil {
             throw new SwiftRuntimeException("bean copy exception",ex);
         }
     }
+    /*
+     * 不执行静态块
+     */
+    public static Class<?> classForName(String className) {
+        try {
+            return ClassLoader.getSystemClassLoader().loadClass(className);
+        } catch (ClassNotFoundException e) {
+            throw new SwiftRuntimeException("ClassNotFoundException",e);
+        }
+    }
+    
+    public static <T> T newInstance(Class<T> cla) {
+        try {
+            return cla.newInstance();
+        } catch (Exception e) {
+            throw new SwiftRuntimeException("类创建异常",e);
+        } 
+    }
 }

@@ -41,6 +41,7 @@ public class SpringConfig {
             if(resources!=null) {
                 for(Resource re:resources) {
                     log.info("加载配置文件:"+re.getURL());
+                    Spring.getProperties().load(re.getInputStream());
                 }
                 propertyLoad.setLocations(resources);
             }

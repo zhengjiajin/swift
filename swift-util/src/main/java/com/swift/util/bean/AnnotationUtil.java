@@ -61,6 +61,10 @@ public class AnnotationUtil {
                 T t = intre.getAnnotation(annotationClass);
                 if (t != null) return t;
             }
+            for(Class<?> intre : claInter) {
+                T t = getAutoDbByInterface(intre, annotationClass);
+                if (t != null) return t;
+            }
         }
         return null;
     }
