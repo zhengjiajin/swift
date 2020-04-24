@@ -1,5 +1,5 @@
 /*
- * @(#)ClientEngine.java   1.0  2015年8月6日
+ * @(#)ClientEngine.java   1.0  2020年4月16日
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
@@ -11,7 +11,7 @@ import com.swift.exception.ServiceException;
  * 客户端请求访问类,统一系统调用API规则 要是输出R非ServiceResponse 异常将以ServiceException输出
  * 
  * @author zhengjiajin
- * @version 1.0 2015年8月6日
+ * @version 1.0 2020年4月16日
  */
 public interface ApiEngine<T, R> {
     /**
