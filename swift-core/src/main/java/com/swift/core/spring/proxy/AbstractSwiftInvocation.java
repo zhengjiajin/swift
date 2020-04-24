@@ -1,5 +1,5 @@
 /*
- * @(#)AbstractSwiftInvocation.java   1.0  2020年1月10日
+ * @(#)AbstractSwiftInvocation.java   1.0   2020年4月15日
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 /**
  * 动态代理处理类必须继承此类 
  * @author zhengjiajin
- * @version 1.0 2020年1月10日
+ * @version 1.0  2020年4月15日
  */
 public abstract class AbstractSwiftInvocation implements InvocationHandler {
 

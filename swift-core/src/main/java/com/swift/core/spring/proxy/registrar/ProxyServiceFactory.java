@@ -1,5 +1,5 @@
 /*
- * @(#)ServiceFactory.java   1.0  2020年1月10日
+ * @(#)ServiceFactory.java   1.0   2020年4月15日
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
@@ -19,7 +19,7 @@ import com.swift.util.bean.AnnotationUtil;
 /**
  * 添加说明 
  * @author zhengjiajin
- * @version 1.0 2020年1月10日
+ * @version 1.0  2020年4月15日
  */
 public class ProxyServiceFactory<T> implements FactoryBean<T> {
     private Class<T> interfaceType;

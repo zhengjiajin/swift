@@ -1,5 +1,5 @@
 /*
- * @(#)MyClassPathBeanDefinitionScanner.java   1.0  2020年1月9日
+ * @(#)MyClassPathBeanDefinitionScanner.java   1.0  2020年4月15日
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 /**
  * 添加说明 
  * @author zhengjiajin
- * @version 1.0 2020年1月9日
+ * @version 1.0 2020年4月15日
  */
 public class MyClassPathBeanDefinitionScanner extends ClassPathBeanDefinitionScanner {
 

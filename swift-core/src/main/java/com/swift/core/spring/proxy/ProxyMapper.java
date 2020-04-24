@@ -1,5 +1,5 @@
 /*
- * @(#)ProxyMapper.java   1.0  2020年1月10日
+ * @(#)ProxyMapper.java   1.0   2020年4月15日
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 /**
  * 动态代理实现注解 
  * @author zhengjiajin
- * @version 1.0 2020年1月10日
+ * @version 1.0  2020年4月15日
  */
 @Documented
 @Inherited
