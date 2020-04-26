@@ -26,7 +26,6 @@ import org.springframework.core.type.filter.TypeFilter;
 import com.swift.core.spring.proxy.ProxyMapper;
 import com.swift.util.bean.AnnotationUtil;
 import com.swift.util.bean.BeanUtil;
-import com.swift.util.type.TypeUtil;
 
 /**
  * 添加说明
@@ -40,8 +39,6 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, BeanFactor
 
     private ApplicationContext applicationContext;
     
-    private static String IMPL_BEAN_NAME="ProxyImpl";
-
     /**
      * @see org.springframework.context.annotation.ImportBeanDefinitionRegistrar#registerBeanDefinitions(org.springframework.core.type.AnnotationMetadata,
      *      org.springframework.beans.factory.support.BeanDefinitionRegistry)
@@ -55,20 +52,20 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, BeanFactor
         TypeFilter swiftMapperFilter = new SwiftAnnotationTypeFilter(ProxyMapper.class);
         // TypeFilter helloServiceFilter2 = new AssignableTypeFilter(IMybatisMapper.class);
         MyClassPathBeanDefinitionScanner scanner = new MyClassPathBeanDefinitionScanner(registry);
+        scanner.setBeanNameGenerator(new ProxyAnnotationBeanNameGenerator());
         scanner.setResourceLoader(this.applicationContext);
         scanner.addIncludeFilter(swiftMapperFilter);
         Set<BeanDefinitionHolder> set = scanner.doScan(basePackages);
         if (set == null) return;
         for (BeanDefinitionHolder beanDefinition : set) {
             String beanClassName = beanDefinition.getBeanDefinition().getBeanClassName();
-            String beanName = TypeUtil.toLowerCaseFirstOne(beanClassName.substring(beanClassName.lastIndexOf(".") + 1));
-            beanName = beanName + IMPL_BEAN_NAME;
+            //String beanName = TypeUtil.toLowerCaseFirstOne(beanClassName.substring(beanClassName.lastIndexOf(".") + 1));
             Class<?> cla = BeanUtil.classForName(beanClassName);
             ProxyMapper proxyMapper = AnnotationUtil.getAnnotation(cla, ProxyMapper.class);
             if(proxyMapper==null) continue;
             BeanDefinitionRegistry beanDefinitionRegistry = (BeanDefinitionRegistry) beanFactory;
             // 注册bean beanName是代理bean的名字 不是RepositoryFactorySupport的名字
-            beanDefinitionRegistry.registerBeanDefinition(beanName, createBean(cla));
+            beanDefinitionRegistry.registerBeanDefinition(beanDefinition.getBeanName(), createBean(cla));
         }
     }
     /*
