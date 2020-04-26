@@ -76,7 +76,7 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, BeanFactor
         GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
         definition.getConstructorArgumentValues().addGenericArgumentValue(cla);
         definition.setBeanClass(ProxyServiceFactory.class);
-        // 这里采用的是byType方式注入，类似的还有byName等
+        // 这里采用的是byType方式注入，类似的还有byName等,使用默认的注解器方式注入
         //definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
         return definition;
     }
