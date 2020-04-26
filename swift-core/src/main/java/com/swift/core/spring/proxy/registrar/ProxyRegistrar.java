@@ -39,6 +39,8 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, BeanFactor
     private BeanFactory beanFactory;
 
     private ApplicationContext applicationContext;
+    
+    private static String IMPL_BEAN_NAME="ProxyImpl";
 
     /**
      * @see org.springframework.context.annotation.ImportBeanDefinitionRegistrar#registerBeanDefinitions(org.springframework.core.type.AnnotationMetadata,
@@ -60,6 +62,7 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, BeanFactor
         for (BeanDefinitionHolder beanDefinition : set) {
             String beanClassName = beanDefinition.getBeanDefinition().getBeanClassName();
             String beanName = TypeUtil.toLowerCaseFirstOne(beanClassName.substring(beanClassName.lastIndexOf(".") + 1));
+            beanName = beanName + IMPL_BEAN_NAME;
             Class<?> cla = BeanUtil.classForName(beanClassName);
             ProxyMapper proxyMapper = AnnotationUtil.getAnnotation(cla, ProxyMapper.class);
             if(proxyMapper==null) continue;
