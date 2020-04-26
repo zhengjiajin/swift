@@ -32,7 +32,14 @@ public class MyClassPathBeanDefinitionScanner extends ClassPathBeanDefinitionSca
        return beanDefinitions;
     }
     
+    @Override
     protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
         return beanDefinition.getMetadata().isInterface() && beanDefinition.getMetadata().isIndependent();
     }
+    
+    @Override
+    protected void registerBeanDefinition(BeanDefinitionHolder definitionHolder, BeanDefinitionRegistry registry) {
+       //BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, registry);
+    }
+    
 }
