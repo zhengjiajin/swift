@@ -29,7 +29,7 @@ public class Spring extends DispatcherServlet{
 
     private static final long serialVersionUID = 7425497776707646548L;
     private static ApplicationContext applicationContext;
-
+    private static boolean isLoading = false;
     private static Properties properties = new Properties();
     
     protected void initStrategies(ApplicationContext context) {
@@ -61,8 +61,11 @@ public class Spring extends DispatcherServlet{
 	    synchronized ("Spring.applicationContext") {
             if (applicationContext == null) {
                 String[] configLocations = {"applicationContext.xml" };
-                applicationContext = new ClassPathXmlApplicationContext(
-                        configLocations);
+                if(!isLoading) {
+                    isLoading=true;
+                    applicationContext = new ClassPathXmlApplicationContext(
+                            configLocations);
+                }
             }
         }
 	    return applicationContext;

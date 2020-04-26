@@ -10,8 +10,6 @@ import java.lang.reflect.Proxy;
 
 import org.springframework.beans.factory.FactoryBean;
 
-import com.swift.core.spring.Spring;
-import com.swift.core.spring.SpringAutowireBeanFactory;
 import com.swift.core.spring.proxy.ProxyMapper;
 import com.swift.exception.SwiftRuntimeException;
 import com.swift.util.bean.AnnotationUtil;
@@ -43,8 +41,6 @@ public class ProxyServiceFactory<T> implements FactoryBean<T> {
     private InvocationHandler newInvocationObject() {
         try {
             InvocationHandler mapperObj = (InvocationHandler) proxyMapper.value().newInstance();
-            SpringAutowireBeanFactory beanFactory = Spring.getBean(SpringAutowireBeanFactory.class);
-            beanFactory.autowire(mapperObj);
             return mapperObj;
         } catch (SwiftRuntimeException ex) {
             throw ex;

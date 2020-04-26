@@ -93,7 +93,7 @@
 		<junit.version>4.12</junit.version>
 		<netty.version>4.1.28.Final</netty.version>
 		<joda-time.version>2.9.5</joda-time.version>
-		<aspectj.version>1.8.1</aspectj.version>
+		<aspectj.version>1.9.2</aspectj.version>
 		<commons-lang3.version>3.7</commons-lang3.version>
 		<commons-compress.version>1.15</commons-compress.version>
 		<commons-math3.version>3.6.1</commons-math3.version>
