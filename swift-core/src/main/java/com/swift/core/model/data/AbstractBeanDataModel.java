@@ -13,6 +13,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -63,6 +64,7 @@ public abstract class AbstractBeanDataModel implements DataModel {
 			add(String.class);
 
 			add(Date.class);
+			add(BigDecimal.class);
 		}
 	};
 
