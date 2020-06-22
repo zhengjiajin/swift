@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -237,4 +238,30 @@ public class ByteUtil {
             }
         }
     }
+
+    public static ByteBuffer stringToByteBuffer(String str) {
+        return ByteBuffer.wrap(str.getBytes());
+    }
+
+    /**
+     * ByteBuffer 转换 String
+     * 
+     * @param buffer
+     * @return
+     */
+    public static String byteBufferToString(ByteBuffer buffer) {
+        Charset charset = null;
+        CharsetDecoder decoder = null;
+        CharBuffer charBuffer = null;
+        try {
+            charset = Charset.forName("UTF-8");
+            decoder = charset.newDecoder();
+            // charBuffer = decoder.decode(buffer);//用这个的话，只能输出来一次结果，第二次显示为空
+            charBuffer = decoder.decode(buffer.asReadOnlyBuffer());
+            return charBuffer.toString();
+        } catch (Exception ex) {
+            throw new SwiftRuntimeException("IO异常",ex);
+        }
+    }
+
 }
