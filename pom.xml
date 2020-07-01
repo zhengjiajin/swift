@@ -115,11 +115,7 @@
 	<modules>
 		<module>swift-util</module>
 		<module>swift-exception</module>
-		<module>swift-server</module>
 		<module>swift-core</module>
-		<module>swift-dao</module>
-		<module>swift-test</module>
-		<module>swift-monitor</module>
 	</modules>
 	<dependencies>
 		<dependency>
