@@ -3,7 +3,7 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou YY Technology Company LTD.
  */
-package com.swift.util.io;
+package com.swift.util.type;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

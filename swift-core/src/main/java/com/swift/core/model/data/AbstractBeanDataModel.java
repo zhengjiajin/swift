@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.swift.util.text.JsonUtil;
+import com.swift.util.type.JsonUtil;
 import com.swift.util.type.TypeUtil;
 
 /**

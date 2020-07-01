@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.swift.util.text.JsonUtil;
+import com.swift.util.type.JsonUtil;
 
 /**
  * 数据表基类，公用处理方法

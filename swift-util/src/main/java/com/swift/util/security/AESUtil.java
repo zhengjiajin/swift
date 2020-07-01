@@ -8,7 +8,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import com.swift.exception.UnknownException;
-import com.swift.util.io.ByteUtil;
+import com.swift.util.type.ByteUtil;
 import com.swift.util.type.TypeUtil;
 
 /**

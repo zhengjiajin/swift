@@ -25,7 +25,7 @@ import com.swift.core.service.SimpleInterface;
 import com.swift.exception.NoWarnException;
 import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
-import com.swift.util.text.JsonUtil;
+import com.swift.util.type.JsonUtil;
 
 /**
  * 发送消息线程

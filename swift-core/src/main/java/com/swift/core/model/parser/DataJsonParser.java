@@ -10,7 +10,7 @@ import java.util.Map;
 
 import com.swift.core.model.data.DataModel;
 import com.swift.core.model.data.MapDataModel;
-import com.swift.util.text.JsonUtil;
+import com.swift.util.type.JsonUtil;
 
 /**
  * JSON处再加一层转码，让其支持DataModel

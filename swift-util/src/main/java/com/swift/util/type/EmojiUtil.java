@@ -3,7 +3,7 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
-package com.swift.util.layout;
+package com.swift.util.type;
 
 
 /**
@@ -11,7 +11,7 @@ package com.swift.util.layout;
  * @author zhengjiajin
  * @version 1.0 2015年8月29日
  */
-public class EmojiCleanUtil {
+public class EmojiUtil {
     /**
      * Emoji String
      * @param source
@@ -44,9 +44,9 @@ public class EmojiCleanUtil {
     
 
     /**
-     * 取出表情符
+     * 取出表情符--所有
      * @param source
-     * @return
+     * @return 返回所有表情符
      */
     public static String filterEmoji(String source) {
         if (!isEmojiString(source)) {
@@ -68,7 +68,7 @@ public class EmojiCleanUtil {
     }
     
     /**
-     * 取出表情符
+     * 清除表情符
      * @param source
      * @return
      */

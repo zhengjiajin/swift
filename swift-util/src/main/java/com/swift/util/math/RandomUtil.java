@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.swift.util.type.NetworkUtil;
+import com.swift.util.type.IpUtil;
 import com.swift.util.type.TypeUtil;
 
 /**
@@ -53,7 +53,7 @@ public class RandomUtil {
         return rate>=value;
     }
     
-    private static String IP = NetworkUtil.getHostAddress(); 
+    private static String IP = IpUtil.getHostAddress(); 
     
     private static String ipend = String.format("%03d", TypeUtil.toInt(IP.substring(IP.lastIndexOf(".")+1)));
     

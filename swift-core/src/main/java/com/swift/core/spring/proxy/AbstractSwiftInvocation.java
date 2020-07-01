@@ -16,7 +16,7 @@ import com.swift.core.model.data.DataModel;
 import com.swift.core.model.parser.DataJsonParser;
 import com.swift.exception.SwiftRuntimeException;
 import com.swift.util.bean.BeanUtil;
-import com.swift.util.text.JsonUtil;
+import com.swift.util.type.JsonUtil;
 import com.swift.util.type.TypeUtil;
 
 /**

@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.swift.util.io.ByteUtil;
+import com.swift.util.type.ByteUtil;
 
 public class MD5Utils {
     private static final Logger log = LoggerFactory.getLogger(MD5Utils.class);

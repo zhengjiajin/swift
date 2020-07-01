@@ -13,7 +13,7 @@ import com.swift.core.model.data.DataModelDeserializer;
 import com.swift.core.model.data.MapDataModel;
 import com.swift.core.session.AbstractSession;
 import com.swift.util.math.RandomUtil;
-import com.swift.util.text.JsonUtil;
+import com.swift.util.type.JsonUtil;
 
 /**
  * 公用服务请求输入

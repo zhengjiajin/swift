@@ -6,12 +6,18 @@
 package com.swift.util.security;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.IvParameterSpec;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -104,5 +110,53 @@ public class DesUtil {
         cipher.init(Cipher.DECRYPT_MODE, securekey, sr);
  
         return cipher.doFinal(data);
+    }
+    
+    /**
+     * 生成DES加密算法的密钥
+     * 
+     * @return 密钥的二进制流
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws InvalidKeySpecException
+     */
+    public static Key genDesKey(String password) throws Exception {
+        DESKeySpec dks = new DESKeySpec(password.getBytes());
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+        return keyFactory.generateSecret(dks);
+    }
+
+    /**
+     * 执行DES算法加密（CBC/PKCS5Padding模式）。
+     * 
+     * @param plainBytes
+     *            待加密的明文
+     * @param key
+     *            密钥
+     * @return 加密后的密文
+     * @throws GeneralSecurityException
+     */
+    public static byte[] encryptDes(byte[] plainBytes, Key key, IvParameterSpec iv) throws Exception {
+        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+        return cipher.doFinal(plainBytes);
+    }
+
+    /**
+     * 执行DES算法解密（CBC/PKCS5Padding模式）。
+     * 
+     * @param cipherBytes
+     *            待解密的密文
+     * @param key
+     *            密钥
+     * @param iv
+     *            初始化向量
+     * @return 解密后的明文
+     * @throws GeneralSecurityException
+     */
+    public static byte[] decryptDes(byte[] cipherBytes, Key key, IvParameterSpec iv) throws Exception {
+        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, key, iv);
+        return cipher.doFinal(cipherBytes);
     }
 }

@@ -1,17 +1,23 @@
 package com.swift.util.type;
 
+import java.io.IOException;
+import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class IpUtil {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(IpUtil.class);
 	/** 
-	 * @Title: getIpAddr  
-	 * @author kaka  www.zuidaima.com 
-	 * @Description: 获取客户端IP地址   
-	 * @param @return     
+	 * 获取客户端IP地址   
+	 * @param 
 	 * @return String    
 	 * @throws 
 	 */  
@@ -45,7 +51,11 @@ public class IpUtil {
 	       return ip;   
 	}  
 	
-
+	/**
+	 * 获取域名对应IP
+	 * @param domain
+	 * @return
+	 */
     public static String domainToIp(String domain) {
         try {
             InetAddress address = InetAddress.getByName(domain);
@@ -53,5 +63,68 @@ public class IpUtil {
         } catch (UnknownHostException e) {
             return null;
         }
+    }
+    
+    /**
+	 * 得到本机局域网IP
+	 * @return
+	 */
+	public static String getHostAddress() {
+		return getHostAddress(getLocalAddress());
+	}
+
+	public static String getHostAddress(byte[] addr) {
+		try {
+			return InetAddress.getByAddress(addr).getHostAddress();
+		} catch (UnknownHostException ex) {
+			LOGGER.error("Unexpected exception: ", ex);
+		}
+		return InetAddress.getLoopbackAddress().getHostAddress();
+	}
+
+	public static byte[] getLocalAddress() {
+		try {
+			for (Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces(); interfaces
+					.hasMoreElements();) {
+				NetworkInterface networkInterface = interfaces.nextElement();
+				if (networkInterface.isLoopback() || networkInterface.isVirtual() || !networkInterface.isUp()
+						|| networkInterface.isPointToPoint()) {
+					continue;
+				}
+				Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
+				while (addresses.hasMoreElements()) {
+					InetAddress addr = addresses.nextElement();
+					if (addr instanceof Inet6Address) {
+						continue;
+					}
+					return addr.getAddress();
+				}
+			}
+		} catch (IOException ex) {
+			LOGGER.error("Unexpected exception: ", ex);
+		}
+		return InetAddress.getLoopbackAddress().getAddress();
+	}
+
+	/**
+	 * Given a string representation of a host, return its ip address in textual
+	 * presentation.
+	 * 
+	 * @param name
+	 *            a string representation of a host: either a textual
+	 *            representation its IP address or its host name
+	 * @return its IP address in the string format
+	 */
+	public static String normalizeHostName(String name) {
+		try {
+			return InetAddress.getByName(name).getHostAddress();
+		} catch (UnknownHostException ex) {
+			LOGGER.error("Unexpected exception: ", ex);
+			return name;
+		}
+	}
+	
+	public static void main(String[] args) {
+	    System.out.println(getHostAddress());
     }
 }

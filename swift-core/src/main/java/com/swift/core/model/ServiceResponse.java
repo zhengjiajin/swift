@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.swift.core.model.data.DataModel;
 import com.swift.core.model.data.DataModelDeserializer;
 import com.swift.core.model.data.MapDataModel;
-import com.swift.util.text.JsonUtil;
+import com.swift.util.type.JsonUtil;
 
 /**
  * 业务响应。
