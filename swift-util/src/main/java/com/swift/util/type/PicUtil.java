@@ -3,7 +3,7 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
-package com.swift.util.layout;
+package com.swift.util.type;
 
 import java.awt.Color;
 import java.awt.Font;

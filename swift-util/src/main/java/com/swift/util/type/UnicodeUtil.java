@@ -3,9 +3,7 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
-package com.swift.util.io;
-
-import com.swift.util.type.TypeUtil;
+package com.swift.util.type;
 
 /**
  * 添加说明 

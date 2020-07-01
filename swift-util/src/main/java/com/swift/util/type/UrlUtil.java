@@ -3,9 +3,10 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou YY Technology Company LTD.
  */
-package com.swift.util.layout;
+package com.swift.util.type;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.swift.util.type.TypeUtil;
+import com.swift.exception.SwiftRuntimeException;
 
 /**
  * 
@@ -24,18 +25,27 @@ import com.swift.util.type.TypeUtil;
  */
 public class UrlUtil {
     
+
+    public static String urlEncode(String str) {
+        try {
+            return URLEncoder.encode(str, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new SwiftRuntimeException("urlEncode错误:" + str);
+        }
+    }
+
+    public static String urlDecode(String str) {
+        try {
+            return URLDecoder.decode(str, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new SwiftRuntimeException("URLDecoder错误:" + str);
+        }
+    }
+	
     public static final String QUESTION_MARK = "?";
     public static final String EQUALS = "=";
     public static final String AMPERSAND = "&";
     public static final String EMPTY_STRING = "";
-    
-    public static String encode(Object value){
-        try {
-            return URLEncoder.encode(TypeUtil.toString(value,""),"utf-8");
-        } catch (Exception ex) {
-            return "";
-        }
-    }
     
     /**
      * 将Map中的数据转换成URL的查询字符串
