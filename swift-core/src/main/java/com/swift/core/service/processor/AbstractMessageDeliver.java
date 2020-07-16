@@ -70,8 +70,8 @@ public abstract class AbstractMessageDeliver implements MessageDeliver {
 	 */
 	@Override
 	public void sendResponse(ServiceResponse response) {
-	    getMessageSender().sendResponse(response);
 	    forResponseFilter(response);
+	    getMessageSender().sendResponse(response);
 	}
 
 
