@@ -19,9 +19,9 @@ import com.swift.core.model.data.DataModel;
 import com.swift.core.model.data.MapDataModel;
 import com.swift.core.service.AsynInterface;
 import com.swift.core.service.BaseInterface;
-import com.swift.core.service.CallBackService;
-import com.swift.core.service.ReqInterfaceFactory;
-import com.swift.core.service.SimpleInterface;
+import com.swift.core.service.SynInterface;
+import com.swift.core.service.processor.CallBackService;
+import com.swift.core.service.processor.ReqInterfaceFactory;
 import com.swift.exception.NoWarnException;
 import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
@@ -83,8 +83,8 @@ public class ServerSendControl implements Runnable {
         try {
             // 线程开始
             forInitFilter();
-            if(baseInterface instanceof SimpleInterface) {
-                DataModel obj = ((SimpleInterface)baseInterface).doService(req);
+            if(baseInterface instanceof SynInterface) {
+                DataModel obj = ((SynInterface)baseInterface).doService(req);
                 if (obj == null) obj = new MapDataModel();
                 res.setData(obj);
                 res.setResultCode(ResultCode.SUCCESS);

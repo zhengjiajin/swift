@@ -3,7 +3,7 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangDong Eshore Technology Company LTD.
  */
-package com.swift.core.service;
+package com.swift.core.service.processor;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -17,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.swift.core.model.ServiceRequest;
+import com.swift.core.service.BaseInterface;
+import com.swift.core.service.SynInterface;
 import com.swift.core.spring.Spring;
 import com.swift.exception.ResultCode;
 import com.swift.exception.extend.ProtocolException;
@@ -125,7 +127,7 @@ public class ReqInterfaceFactory {
 		Set<String> versions = interfaceVersions.get(method);
 		if (versions != null) {
 			String serviceName = findVersion(method, version, versions);
-			SimpleInterface bean = Spring.getBean(serviceName, SimpleInterface.class);
+			SynInterface bean = Spring.getBean(serviceName, SynInterface.class);
 			try {
 				return AopTargetUtils.getTarget(bean);
 			} catch (Exception ex) {

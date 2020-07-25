@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.swift.core.filter.RequestFilter;
 import com.swift.core.filter.annotation.NoSqlVal;
 import com.swift.core.model.ServiceRequest;
-import com.swift.core.service.ReqInterfaceFactory;
+import com.swift.core.service.processor.ReqInterfaceFactory;
 import com.swift.exception.ResultCode;
 import com.swift.exception.ServiceException;
 import com.swift.util.bean.AnnotationUtil;

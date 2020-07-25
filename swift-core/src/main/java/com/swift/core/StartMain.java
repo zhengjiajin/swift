@@ -63,10 +63,10 @@ public class StartMain {
                             log.info("结束停止服务:" + s);
                         }
                     }
-                    ThreadUtil.sleep(30000);
+                    //TODO 等待业务线程执行完毕
                 }  
             });  
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             log.error("主进程启动失败", ex);
             ThreadUtil.sleep(1000);
             System.exit(1);

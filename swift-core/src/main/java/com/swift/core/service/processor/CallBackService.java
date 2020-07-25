@@ -3,12 +3,12 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangDong Eshore Technology Company LTD.
  */
-package com.swift.core.service;
+package com.swift.core.service.processor;
 
 import com.swift.core.model.ServiceResponse;
 
 /**
- * 添加说明 
+ * 异步请求返回响应接口 
  * @author jiajin
  * @version 1.0 2014-5-16
  */

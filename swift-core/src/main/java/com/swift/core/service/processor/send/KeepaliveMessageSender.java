@@ -8,7 +8,7 @@ package com.swift.core.service.processor.send;
 import com.swift.core.model.ServiceRequest;
 
 /**
- * 添加说明 
+ * 长连接服务发送请求接口 
  * @author zhengjiajin
  * @version 1.0 2019年4月12日
  */

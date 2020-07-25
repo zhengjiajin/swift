@@ -15,7 +15,6 @@ import com.swift.core.filter.RequestFilter;
 import com.swift.core.filter.ResponseFilter;
 import com.swift.core.model.ServiceRequest;
 import com.swift.core.model.ServiceResponse;
-import com.swift.core.service.CallBackService;
 import com.swift.core.service.processor.send.MessageSender;
 import com.swift.core.spring.Spring;
 import com.swift.core.thread.ServerSendControl;
@@ -70,8 +69,8 @@ public abstract class AbstractMessageDeliver implements MessageDeliver {
 	 */
 	@Override
 	public void sendResponse(ServiceResponse response) {
-	    getMessageSender().sendResponse(response);
 	    forResponseFilter(response);
+	    getMessageSender().sendResponse(response);
 	}
 
 
