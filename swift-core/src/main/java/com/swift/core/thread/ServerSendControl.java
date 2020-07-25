@@ -75,7 +75,7 @@ public class ServerSendControl implements Runnable {
      */
     @Override
     public void run() {
-        log.info("准备处理HTTP请求：" + req.getReqId() + ";" + req.toString());
+        log.info("准备处理请求：" + req.getReqId() + ";" + req.toString());
         Thread.currentThread().setName(req.getMethod());
         ServiceResponse res = new ServiceResponse();
         res.setRequest(req);
@@ -109,13 +109,12 @@ public class ServerSendControl implements Runnable {
         try {
             long stTime = res.getResponseTime() - req.getRequestTime();
             String msg = req.getReqId() + ";" + req.getMethod() + ";占用时间:" + stTime;
-            log.info("处理HTTP请求完毕：" + msg);
+            log.info("处理请求完毕：" + msg);
             if (stTime > 5000) {
                 log.warn("处理请求时间过长:" + msg);
             }
             log.info("返回响应："+baseInterface.getClass().getName()+JsonUtil.toJson(res));
             if(!(baseInterface instanceof AsynInterface) || res.getResultCode()!=0) {
-                log.info("返回响应：" + JsonUtil.toJson(res));
                 this.callback.callback(res);
             }
             // 线程结束

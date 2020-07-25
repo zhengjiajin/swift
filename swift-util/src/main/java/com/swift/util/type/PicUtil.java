@@ -23,7 +23,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.exception.extend.SystemException;
 
 /**
  * 添加说明 
@@ -55,7 +55,7 @@ public class PicUtil {
             ImageIO.write(image,"png",outputString);
             return outputString.toByteArray();
         } catch (IOException e) {
-            throw new SwiftRuntimeException("图片生成失败");
+            throw new SystemException("图片生成失败");
         }
     }
     /**
@@ -87,7 +87,7 @@ public class PicUtil {
             MatrixToImageWriter.writeToStream(bm, format, outputString);
             return outputString.toByteArray();
         } catch (Exception e) {
-            throw new SwiftRuntimeException("二维码生成失败");
+            throw new SystemException("二维码生成失败");
         }
     }
     

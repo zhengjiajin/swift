@@ -11,7 +11,7 @@ import java.lang.reflect.Proxy;
 import org.springframework.beans.factory.FactoryBean;
 
 import com.swift.core.spring.proxy.ProxyMapper;
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.exception.extend.SystemException;
 import com.swift.util.bean.AnnotationUtil;
 
 /**
@@ -26,9 +26,9 @@ public class ProxyServiceFactory<T> implements FactoryBean<T> {
     
     public ProxyServiceFactory(Class<T> interfaceType) {
         this.interfaceType = interfaceType;
-        if(this.interfaceType==null) throw new SwiftRuntimeException("interfaceType不能为空");
+        if(this.interfaceType==null) throw new SystemException("interfaceType不能为空");
         this.proxyMapper = AnnotationUtil.getAnnotation(interfaceType, ProxyMapper.class);
-        if(this.proxyMapper==null) throw new SwiftRuntimeException("需要代理的接口必须包含ProxyMapper注解");
+        if(this.proxyMapper==null) throw new SystemException("需要代理的接口必须包含ProxyMapper注解");
     }
  
     @SuppressWarnings("unchecked")
@@ -42,10 +42,10 @@ public class ProxyServiceFactory<T> implements FactoryBean<T> {
         try {
             InvocationHandler mapperObj = (InvocationHandler) proxyMapper.value().newInstance();
             return mapperObj;
-        } catch (SwiftRuntimeException ex) {
+        } catch (SystemException ex) {
             throw ex;
         } catch (Exception e) {
-            throw new SwiftRuntimeException(interfaceType + "创建不了类", e);
+            throw new SystemException(interfaceType + "创建不了类", e);
         }
     }
     

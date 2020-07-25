@@ -22,7 +22,7 @@ import com.ctc.wstx.stax.WstxInputFactory;
 import com.swift.core.model.data.DataModel;
 import com.swift.core.model.data.MapDataModel;
 import com.swift.exception.ServiceException;
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.exception.extend.SystemException;
 
 /**
  * 添加说明
@@ -74,7 +74,7 @@ public class DataXmlParser {
             parseXml(r, data);
             return data;
         } catch (XMLStreamException ex) {
-            throw new SwiftRuntimeException("字段格式错误", ex);
+            throw new SystemException("字段格式错误", ex);
         } finally {
             try {
                 r.close();
@@ -213,7 +213,7 @@ public class DataXmlParser {
                 return;
             }
         }
-        throw new SwiftRuntimeException("XML不包含任何标签");
+        throw new SystemException("XML不包含任何标签");
     }
     
     public static void main(String[] args) throws Exception{

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.exception.extend.SystemException;
 
 /**
  * 
@@ -30,7 +30,7 @@ public class UrlUtil {
         try {
             return URLEncoder.encode(str, "utf-8");
         } catch (UnsupportedEncodingException e) {
-            throw new SwiftRuntimeException("urlEncode错误:" + str);
+            throw new SystemException("urlEncode错误:" + str);
         }
     }
 
@@ -38,7 +38,7 @@ public class UrlUtil {
         try {
             return URLDecoder.decode(str, "utf-8");
         } catch (UnsupportedEncodingException e) {
-            throw new SwiftRuntimeException("URLDecoder错误:" + str);
+            throw new SystemException("URLDecoder错误:" + str);
         }
     }
 	

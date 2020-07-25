@@ -7,18 +7,18 @@ package com.swift.core.spring;
 
 import java.io.IOException;
 
-import org.apache.logging.log4j.core.config.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 import com.swift.core.env.EnvLoader;
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.exception.extend.SystemException;
 
 /**
  * 添加说明
@@ -46,7 +46,7 @@ public class SpringConfig {
                 propertyLoad.setLocations(resources);
             }
         } catch (IOException e) {
-            throw new SwiftRuntimeException("加载配置文件失败", e);
+            throw new SystemException("加载配置文件失败", e);
         }
         propertyLoad.setIgnoreResourceNotFound(true);
         propertyLoad.setIgnoreUnresolvablePlaceholders(true);

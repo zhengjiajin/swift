@@ -31,7 +31,7 @@ public class AbstractSession extends AbstractBeanDataModel{
     /**
      * 用户ID
      */
-    private Integer userId;
+    private Object userId;
     /**
      * 用户名称
      */
@@ -66,11 +66,11 @@ public class AbstractSession extends AbstractBeanDataModel{
         this.unionTokenId = unionTokenId;
     }
 
-    public Integer getUserId() {
+    public Object getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Object userId) {
         this.userId = userId;
     }
 

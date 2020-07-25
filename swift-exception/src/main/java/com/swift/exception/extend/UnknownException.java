@@ -3,7 +3,10 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou YY Technology Company LTD.
  */
-package com.swift.exception;
+package com.swift.exception.extend;
+
+import com.swift.exception.ResultCode;
+import com.swift.exception.ServiceException;
 
 /**
  * 未知的异常

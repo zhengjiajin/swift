@@ -5,7 +5,10 @@
  */
 package com.swift.core.model.data;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.swift.util.type.TypeUtil;
@@ -214,5 +217,35 @@ public interface DataModel {
 
     public default double getDouble(String objectPath, double def) {
         return TypeUtil.toDouble(getDouble(objectPath), def);
+    }
+    
+    /*
+     * 按字典序排序
+     */
+    public default DataModel collection() {
+        return DataModel.collection(this);
+    }
+    
+    /**
+     * 把data字典序排序
+     * 
+     * @param data
+     * @return
+     */
+    public static DataModel collection(DataModel data) {
+        if (data == null) return null;
+        DataModel res = new MapDataModel();
+        Set<String> keyset = data.keySet();
+        List<String> list = new ArrayList<String>(keyset);
+        Collections.sort(list);
+        for(String key:list) {
+            Object value = data.getObject(key);
+            if(value instanceof Map || value instanceof AbstractBeanDataModel) {
+                res.addObject(key, collection(data.getDataModel(key)));
+            } else {
+                res.addObject(key, value);
+            }
+        }
+        return res;
     }
 }

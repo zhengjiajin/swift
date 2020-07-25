@@ -5,7 +5,7 @@
  */
 package com.swift.util.exec;
 
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.exception.extend.SystemException;
 
 /**
  * 线程处理类库
@@ -18,7 +18,7 @@ public class ThreadUtil {
         try {
             Thread.sleep(millis);
         } catch (Exception ex) {
-            new SwiftRuntimeException("系统忙",ex);
+            new SystemException("系统忙",ex);
         }
     }
 }

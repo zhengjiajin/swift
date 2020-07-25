@@ -15,5 +15,8 @@ package com.swift.core.server;
 public interface LifeCycle {
 
 	public void start(int port);
+	
+	public boolean isStarted();
+	
 	public void stop();
 }

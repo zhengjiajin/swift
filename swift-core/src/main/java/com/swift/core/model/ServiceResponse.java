@@ -8,8 +8,8 @@ package com.swift.core.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.swift.core.model.data.DataModel;
-import com.swift.core.model.data.DataModelDeserializer;
 import com.swift.core.model.data.MapDataModel;
+import com.swift.core.model.data.core.DataModelDeserializer;
 import com.swift.util.type.JsonUtil;
 
 /**

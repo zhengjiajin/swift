@@ -11,7 +11,7 @@ import org.springframework.aop.framework.AdvisedSupport;
 import org.springframework.aop.framework.AopProxy;
 import org.springframework.aop.support.AopUtils;
 
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.exception.extend.SystemException;
 
 /**
  * 取得类的对应代理类
@@ -28,7 +28,7 @@ public class AopTargetUtils {
      * @return
      * @throws Exception
      */
-    public static Object getTarget(Object proxy) throws SwiftRuntimeException {
+    public static Object getTarget(Object proxy) throws SystemException {
         try {
             if (!AopUtils.isAopProxy(proxy)) {
                 return proxy;// 不是代理对象
@@ -39,7 +39,7 @@ public class AopTargetUtils {
                 return getCglibProxyTargetObject(proxy);
             }
         } catch (Exception ex) {
-            throw new SwiftRuntimeException(ex);
+            throw new SystemException(ex);
         }
     }
 

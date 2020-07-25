@@ -7,6 +7,8 @@ package com.swift.core.model;
 
 import java.util.List;
 
+import com.swift.core.model.data.FileDefinition;
+
 /**
  * 添加说明 
  * @author zhengjiajin

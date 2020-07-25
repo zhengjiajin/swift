@@ -3,7 +3,9 @@
  *  
  * Copyright (c) 2015-2016 GuangZhou hhmk Technology Company LTD.  All rights reserved. 
  */
-package com.swift.core.model.data;
+package com.swift.core.model.data.core;
+
+import com.swift.core.model.data.DataModel;
 
 /**
  * TODO Purpose/description of class

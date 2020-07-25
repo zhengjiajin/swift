@@ -17,7 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.core.model.data.core.DataModelUtil;
+import com.swift.exception.extend.SystemException;
 import com.swift.util.type.JsonUtil;
 import com.swift.util.type.TypeUtil;
 
@@ -264,7 +265,7 @@ public class MapDataModel extends LinkedHashMap<String, Object> implements DataM
     			}
     		}
 		}catch (Exception e) {
-           throw new SwiftRuntimeException("change obj error",e);
+           throw new SystemException("change obj error",e);
         }
 		return m;
 	}

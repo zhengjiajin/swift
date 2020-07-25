@@ -3,13 +3,12 @@
  *  
  * Copyright (c) 2001-2016 GuangDong Eshore Techonlogy Co. Ltd.  All rights reserved. 
  */
-package com.swift.core.model;
+package com.swift.core.model.data;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.swift.core.model.data.AbstractBeanDataModel;
 
 /**
  * 上传的文件描述

@@ -9,7 +9,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.exception.extend.SystemException;
 
 
 /**
@@ -26,7 +26,7 @@ public class BeanUtil {
             ConvertUtils.register(new DateConverter(null), java.util.Date.class);  
             BeanUtils.copyProperties(dest, orig);
         } catch (Exception ex) {
-            throw new SwiftRuntimeException("bean copy exception",ex);
+            throw new SystemException("bean copy exception",ex);
         }
     }
     /*
@@ -36,7 +36,7 @@ public class BeanUtil {
         try {
             return ClassLoader.getSystemClassLoader().loadClass(className);
         } catch (ClassNotFoundException e) {
-            throw new SwiftRuntimeException("ClassNotFoundException",e);
+            throw new SystemException("ClassNotFoundException",e);
         }
     }
     
@@ -44,7 +44,7 @@ public class BeanUtil {
         try {
             return cla.newInstance();
         } catch (Exception e) {
-            throw new SwiftRuntimeException("类创建异常",e);
+            throw new SystemException("类创建异常",e);
         } 
     }
 }

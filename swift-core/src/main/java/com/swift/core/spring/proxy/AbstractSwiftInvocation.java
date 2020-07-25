@@ -14,7 +14,7 @@ import java.util.Map;
 
 import com.swift.core.model.data.DataModel;
 import com.swift.core.model.parser.DataJsonParser;
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.exception.extend.SystemException;
 import com.swift.util.bean.BeanUtil;
 import com.swift.util.type.JsonUtil;
 import com.swift.util.type.TypeUtil;
@@ -38,8 +38,8 @@ public abstract class AbstractSwiftInvocation implements InvocationHandler {
     }
     //得到参数的最终实现接口
     protected Class<?> getInvokeClass(Object[] args){
-        if(args==null || args.length<1) throw new SwiftRuntimeException("输入参数数量不正错");
-        if(!(args[0] instanceof Class)) throw new SwiftRuntimeException("输入参数格式不正错");
+        if(args==null || args.length<1) throw new SystemException("输入参数数量不正错");
+        if(!(args[0] instanceof Class)) throw new SystemException("输入参数格式不正错");
         Class<?> cla = (Class<?>)args[0];
         return cla;
     }
@@ -65,7 +65,7 @@ public abstract class AbstractSwiftInvocation implements InvocationHandler {
                 }
                 
             }
-            throw new SwiftRuntimeException("不支持的数据输出格式");
+            throw new SystemException("不支持的数据输出格式");
             
         }else {
             if(DataModel.class.getTypeName().equals(type.getTypeName())) {

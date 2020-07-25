@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.exception.extend.SystemException;
 
 
 /**
@@ -115,7 +115,7 @@ public class ThreadPoolExecutorImpl {
         public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
             boolean queueCheck = queue.offer((ThreadPoolChannel)r);
             if(queueCheck) log.warn("线程池已满，请注意现队列长度为："+queue.size()+";内容为:"+getRunThread());
-            if(!queueCheck) throw new SwiftRuntimeException("系统忙，请稍后再试!");
+            if(!queueCheck) throw new SystemException("系统忙，请稍后再试!");
         }
         
     }

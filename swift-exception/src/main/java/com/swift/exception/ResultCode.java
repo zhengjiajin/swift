@@ -16,6 +16,8 @@ public class ResultCode {
     public final static int SUCCESS = 0;
     // 未定义异常
     public final static int UNKNOWN = -1;
+    //不告警的业务异常
+    public final static int NOWARN = 200; 
     // 服务能力不存在
     public final static int NO_METHOD = 300;
     // 校验码不正确
@@ -32,4 +34,6 @@ public class ResultCode {
     public final static int AUTH_ERROR =  402;
     //外部系统异常
     public final static int OTHER_SYS_ERROR =  500;
+    
+    
 }

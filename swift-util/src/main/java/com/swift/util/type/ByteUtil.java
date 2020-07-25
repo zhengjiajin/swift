@@ -23,7 +23,7 @@ import java.util.zip.GZIPOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.exception.extend.SystemException;
 
 /**
  * 
@@ -114,7 +114,7 @@ public class ByteUtil {
             return out.toByteArray();
         } catch (IOException ex) {
             log.error("IO异常", ex);
-            throw new SwiftRuntimeException("IO异常");
+            throw new SystemException("IO异常");
         }
     }
 
@@ -133,7 +133,7 @@ public class ByteUtil {
             return out.toByteArray();
         } catch (IOException ex) {
             log.error("IO异常", ex);
-            throw new SwiftRuntimeException("IO异常");
+            throw new SystemException("IO异常");
         }
     }
 
@@ -149,7 +149,7 @@ public class ByteUtil {
             return out.toByteArray();
         } catch (IOException ex) {
             log.error("IO异常", ex);
-            throw new SwiftRuntimeException("IO异常");
+            throw new SystemException("IO异常");
         }
     }
 
@@ -174,7 +174,7 @@ public class ByteUtil {
             return sb.toString();
         } catch (IOException ex) {
             log.error("IO异常", ex);
-            throw new SwiftRuntimeException("IO异常");
+            throw new SystemException("IO异常");
         }
     }
     // byte转char
@@ -204,7 +204,7 @@ public class ByteUtil {
             return in2b;
         } catch (IOException ex) {
             log.error("IO异常", ex);
-            throw new SwiftRuntimeException("IO异常");
+            throw new SystemException("IO异常");
         }
     }
 
@@ -212,7 +212,7 @@ public class ByteUtil {
 
         File f = new File(filename);
         if (!f.exists()) {
-            throw new SwiftRuntimeException(filename + "文件不存在");
+            throw new SystemException(filename + "文件不存在");
         }
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream((int) f.length());
@@ -228,7 +228,7 @@ public class ByteUtil {
             return bos.toByteArray();
         } catch (IOException ex) {
             log.error("IO异常", ex);
-            throw new SwiftRuntimeException("IO异常");
+            throw new SystemException("IO异常");
         } finally {
             try {
                 in.close();
@@ -260,7 +260,7 @@ public class ByteUtil {
             charBuffer = decoder.decode(buffer.asReadOnlyBuffer());
             return charBuffer.toString();
         } catch (Exception ex) {
-            throw new SwiftRuntimeException("IO异常",ex);
+            throw new SystemException("IO异常",ex);
         }
     }
 

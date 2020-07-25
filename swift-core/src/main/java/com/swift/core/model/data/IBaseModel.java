@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.swift.util.type.JsonUtil;
+import com.swift.util.type.TypeUtil;
 
 /**
  * 数据表基类，公用处理方法
@@ -32,9 +33,6 @@ public abstract class IBaseModel extends AbstractBeanDataModel {
 
 	@JsonIgnore
 	public boolean isNull() {
-		String json = toString();
-		if (json == null || json.length() <= 2)
-			return true;
-		return false;
+	    return TypeUtil.isNull(this.keySet());
 	}
 }

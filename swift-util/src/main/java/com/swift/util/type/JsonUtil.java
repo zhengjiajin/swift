@@ -16,7 +16,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.swift.exception.SwiftRuntimeException;
+import com.swift.exception.extend.SystemException;
 
 /**
  * Json格式转换类库
@@ -44,7 +44,7 @@ public class JsonUtil {
             return getObjectMapper().writeValueAsString(obj);
         }catch(Exception ex){
             log.error("转JSON异常",ex);
-            throw new SwiftRuntimeException(ex);
+            throw new SystemException(ex);
         }
     }
 
@@ -54,7 +54,7 @@ public class JsonUtil {
             return getObjectMapper().readValue(json, cla);
         }catch(Exception ex){
             log.error("转JSON异常",ex);
-            throw new SwiftRuntimeException(ex);
+            throw new SystemException(ex);
         }
     }
 
@@ -66,7 +66,7 @@ public class JsonUtil {
             return getObjectMapper().readValue(bytes, cla);
         } catch(Exception ex){
             log.error("转JSON异常",ex);
-            throw new SwiftRuntimeException(ex);
+            throw new SystemException(ex);
         }
     }
     
@@ -78,7 +78,7 @@ public class JsonUtil {
             JavaType javaType = getCollectionType(ArrayList.class, valueType); 
             return getObjectMapper().readValue(content,javaType);
         }catch (Exception e) {
-            throw new SwiftRuntimeException(e.getMessage(), e);
+            throw new SystemException(e.getMessage(), e);
         }
     }
     
