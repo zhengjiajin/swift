@@ -18,7 +18,7 @@ import com.swift.util.queue.LimitQueue;
 import com.swift.util.type.TypeUtil;
 
 /**
- * 添加说明 
+ * TODO 需要抽象线程池接口。但默认粉CORE系统的 
  * @author zhengjiajin
  * @version 1.0 2018年6月14日
  */
