@@ -97,10 +97,7 @@
 		<module>swift-core</module>
 	</modules>
 	<dependencies>
-	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
+		<dependency>
 				<groupId>commons-logging</groupId>
 				<artifactId>commons-logging</artifactId>
 				<version>${commons-logging.version}</version>
@@ -130,6 +127,10 @@
 				<artifactId>logback-classic</artifactId>
 				<version>${logback.version}</version>
 			</dependency>
+	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			
 			<dependency>
 				<groupId>commons-codec</groupId>
 				<artifactId>commons-codec</artifactId>
