@@ -248,4 +248,13 @@ public interface DataModel {
         }
         return res;
     }
+    
+    default public void cloneNull(DataModel cloneObj) {
+        Set<String> keys = this.keySet();
+        for(String key:keys) {
+            if(this.getObject(key)==null) {
+                this.putObject(key, cloneObj.getObject(key));
+            }
+        }
+    }
 }
