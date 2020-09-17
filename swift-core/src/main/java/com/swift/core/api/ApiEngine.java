@@ -5,6 +5,8 @@
  */
 package com.swift.core.api;
 
+import java.util.concurrent.Future;
+
 import com.swift.exception.ServiceException;
 
 /**
@@ -28,10 +30,8 @@ public interface ApiEngine<T, R> {
     /**
      * 发送请求。本类将根据请求的method寻路并发送出去。
      * 
-     * @param cla
-     *            本接口类,得到上下文
-     * @param req
-     *            要发送的请求，其它属性不需要填写。
+     * @param cla 本接口类,得到上下文
+     * @param req 要发送的请求，其它属性不需要填写。
      */
     public void sendRequest(Class<? extends ApiEngine<T, R>> cla, T req, CallBackApiEngine callBack);
 
@@ -46,6 +46,14 @@ public interface ApiEngine<T, R> {
      */
     public R sendRequest(Class<? extends ApiEngine<T, R>> cla, T req);
 
+    /**
+     * 通过Future异步返回结果集
+     * @param cla 本接口类,得到上下文
+     * @param req
+     * @return
+     */
+    public Future<R> sendAsynRequest(Class<? extends ApiEngine<T, R>> cla,T req);
+    
     /**
      * 异步返回的回调接口
      * 
