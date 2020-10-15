@@ -8,6 +8,7 @@ package com.swift.util.bean;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
+import org.springframework.core.ResolvableType;
 
 import com.swift.exception.extend.SystemException;
 
@@ -46,5 +47,15 @@ public class BeanUtil {
         } catch (Exception e) {
             throw new SystemException("类创建异常",e);
         } 
+    }
+    /**
+     * 得到类的泛型类
+     * @param cla
+     * @return
+     */
+    public static ResolvableType[] getTonClass(Class<?> cla){
+        ResolvableType resolvableType = ResolvableType.forClass(cla).getSuperType();
+        ResolvableType[] types = resolvableType.getSuperType().getGenerics();
+        return types;
     }
 }
