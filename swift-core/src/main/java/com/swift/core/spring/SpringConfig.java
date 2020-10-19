@@ -9,9 +9,9 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -33,8 +33,8 @@ public class SpringConfig {
     private static final Logger log = LoggerFactory.getLogger(SpringConfig.class);
     
     @Bean
-    public PropertyPlaceholderConfigurer propertyConfigurer() {
-        PropertyPlaceholderConfigurer propertyLoad = new PropertyPlaceholderConfigurer();
+    public PropertySourcesPlaceholderConfigurer propertyConfigurer() {
+        PropertySourcesPlaceholderConfigurer propertyLoad = new PropertySourcesPlaceholderConfigurer();
         ResourcePatternResolver loader = new PathMatchingResourcePatternResolver();
         try {
             Resource[] resources = loader.getResources("classpath*:"+EnvLoader.getEnv().getEnvPath()+"*.properties");
