@@ -101,6 +101,7 @@
 		<module>swift-exception</module>
 		<module>swift-core</module>
 		<module>swift-test</module>
+		<module>swift-stream</module>
 	</modules>
 	<dependencies>
 		<dependency>
