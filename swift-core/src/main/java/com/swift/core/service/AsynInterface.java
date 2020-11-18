@@ -6,6 +6,8 @@
 package com.swift.core.service;
 
 import com.swift.core.model.ServiceRequest;
+import com.swift.core.model.data.DataModel;
+import com.swift.exception.ServiceException;
 
 /**
  * 主服务接口,异步返回接口
@@ -16,6 +18,21 @@ import com.swift.core.model.ServiceRequest;
  */
 public interface AsynInterface extends BaseInterface {
 
-    public void doService(ServiceRequest req);
+    public void doService(ServiceRequest req,AsynCallBack callBack);
+    /**
+     * 返回时调用
+     * @author DELL
+     * @version 1.0 2020年11月18日
+     */
+    public interface AsynCallBack {
+        /*
+         * 正常返回
+         */
+        public void send(DataModel dataModel);
+        /*
+         * 异常时返回
+         */
+        public void sendError(ServiceException serviceException);
+    }
     
 }

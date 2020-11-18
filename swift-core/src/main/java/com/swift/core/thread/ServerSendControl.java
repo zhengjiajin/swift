@@ -18,6 +18,7 @@ import com.swift.core.model.ServiceResponse;
 import com.swift.core.model.data.DataModel;
 import com.swift.core.model.data.MapDataModel;
 import com.swift.core.service.AsynInterface;
+import com.swift.core.service.AsynInterface.AsynCallBack;
 import com.swift.core.service.BaseInterface;
 import com.swift.core.service.SynInterface;
 import com.swift.core.service.processor.CallBackService;
@@ -41,16 +42,16 @@ public class ServerSendControl implements Runnable {
 
     private CallBackService callback;
 
-    @Autowired(required=false)
+    @Autowired(required = false)
     private List<InitFilter> initFilterList;
-    @Autowired(required=false)
+    @Autowired(required = false)
     private List<EndFilter> endFilterList;
 
     /**
      * 优先级权值ms秒
      */
     // private final int levelWeight = 50;
-   
+
     public CallBackService getCallback() {
         return callback;
     }
@@ -77,67 +78,90 @@ public class ServerSendControl implements Runnable {
     public void run() {
         log.info("准备处理请求：" + req.getReqId() + ";" + req.toString());
         Thread.currentThread().setName(req.getMethod());
+        forInitFilter();
         ServiceResponse res = new ServiceResponse();
         res.setRequest(req);
-        BaseInterface baseInterface = ReqInterfaceFactory.getInterface(req.getMethod(), req.getInterfaceVersion());
         try {
+            BaseInterface baseInterface = ReqInterfaceFactory.getInterface(req.getMethod(), req.getInterfaceVersion());
             // 线程开始
-            forInitFilter();
-            if(baseInterface instanceof SynInterface) {
-                DataModel obj = ((SynInterface)baseInterface).doService(req);
+            if (baseInterface instanceof SynInterface) {
+                DataModel obj = ((SynInterface) baseInterface).doService(req);
                 if (obj == null) obj = new MapDataModel();
                 res.setData(obj);
                 res.setResultCode(ResultCode.SUCCESS);
                 res.setReason("");
-            }else if(baseInterface instanceof AsynInterface) {
-                ((AsynInterface) baseInterface).doService(req);
+                sendResponse(res);
+            } else if (baseInterface instanceof AsynInterface) {
+                ((AsynInterface) baseInterface).doService(req, new AsynCallBack() {
+
+                    @Override
+                    public void send(DataModel dataModel) {
+                        if (dataModel == null) dataModel = new MapDataModel();
+                        res.setData(dataModel);
+                        res.setResultCode(ResultCode.SUCCESS);
+                        res.setReason("");
+                        sendResponse(res);
+                    }
+
+                    @Override
+                    public void sendError(ServiceException serviceException) {
+                        res.setResultCode(serviceException.getStatusCode());
+                        res.setReason(serviceException.getMessage());
+                        sendResponse(res);
+                    }
+
+                });
             }
         } catch (NoWarnException nowarnex) {
             log.warn("返回异常业务", nowarnex);
             res.setResultCode(nowarnex.getStatusCode());
             res.setReason(nowarnex.getMessage());
+            sendResponse(res);
         } catch (ServiceException ex) {
             log.error("业务异常", ex);
             res.setResultCode(ex.getStatusCode());
             res.setReason(ex.getMessage());
+            sendResponse(res);
         } catch (Throwable ex) {
             log.error("系统异常", ex);
             res.setResultCode(ResultCode.UNKNOWN);
             res.setReason("系统好像暂时不给力，请稍后再试。");
+            sendResponse(res);
         }
-        res.setResponseTime(System.currentTimeMillis());
+        // 线程结束
+        forEndFilter();
+    }
+
+    private void sendResponse(ServiceResponse res) {
         try {
+            res.setResponseTime(System.currentTimeMillis());
             long stTime = res.getResponseTime() - req.getRequestTime();
             String msg = req.getReqId() + ";" + req.getMethod() + ";占用时间:" + stTime;
             log.info("处理请求完毕：" + msg);
             if (stTime > 5000) {
                 log.warn("处理请求时间过长:" + msg);
             }
-            log.info("返回响应："+baseInterface.getClass().getName()+JsonUtil.toJson(res));
-            if(!(baseInterface instanceof AsynInterface) || res.getResultCode()!=0) {
-                this.callback.callback(res);
-            }
-            // 线程结束
-            forEndFilter();
+            log.info("返回响应：" + res.getRequest().getMethod() + JsonUtil.toJson(res));
+            this.callback.callback(res);
         } catch (Throwable ex) {
             log.error("处理异常", ex);
         }
     }
 
     private void forInitFilter() {
-        if(initFilterList==null) return;
-        for(InitFilter filter:initFilterList) {
+        if (initFilterList == null) return;
+        for (InitFilter filter : initFilterList) {
             filter.init();
         }
     }
 
     private void forEndFilter() {
-        if(endFilterList==null) return;
-        for(EndFilter filter:endFilterList) {
+        if (endFilterList == null) return;
+        for (EndFilter filter : endFilterList) {
             try {
                 filter.end();
-            }catch(Throwable ex) {
-                log.error("forEndFilter:异常",ex);
+            } catch (Throwable ex) {
+                log.error("forEndFilter:异常", ex);
             }
         }
     }
