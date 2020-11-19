@@ -12,4 +12,16 @@
   <modules>
   	<module>swift-stream-zk</module>
   </modules>
+  <dependencies>
+		<dependency>
+			<groupId>com.github.zhengjiajin</groupId>
+			<artifactId>swift-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.zhengjiajin</groupId>
+			<artifactId>swift-test</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 </project>
