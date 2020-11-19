@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.github.zhengjiajin</groupId>
     <artifactId>swift</artifactId>
-    <version>1.0-bate</version>
+    <version>1.1-bate</version>
   </parent>
   <artifactId>swift-stream</artifactId>
   <packaging>pom</packaging>
@@ -11,6 +11,7 @@
   <description>swift-stream</description>
   <modules>
   	<module>swift-stream-zk</module>
+  	<module>swift-stream-rocketmq</module>
   </modules>
   <dependencies>
 		<dependency>

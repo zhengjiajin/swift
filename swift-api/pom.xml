@@ -5,7 +5,12 @@
     <artifactId>swift</artifactId>
     <version>1.1-bate</version>
   </parent>
-  <artifactId>swift-exception</artifactId>
-  <name>swift-exception</name>
-  <description>swift-exception</description>
+  <artifactId>swift-api</artifactId>
+  <packaging>pom</packaging>
+  <name>swift-api</name>
+  <description>swift-api</description>
+  <modules>
+  	<module>swift-api-httpproxy</module>
+  	<module>swift-api-sspproxy</module>
+  </modules>
 </project>
