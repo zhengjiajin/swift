@@ -7,13 +7,15 @@
 		<artifactId>swift</artifactId>
 		<version>1.1-bate</version>
 	</parent>
-	<artifactId>swift-server</artifactId>
+	<artifactId>swift-dao</artifactId>
 	<packaging>pom</packaging>
-	<name>swift-server</name>
-	<description>swift-server</description>
+	<name>swift-dao</name>
+	<description>swift-dao</description>
 	<modules>
-		<module>swift-server-jetty</module>
-		<module>swift-server-netty</module>
+		<module>swift-dao-db</module>
+		<module>swift-dao-mongo</module>
+		<module>swift-dao-redis</module>
+		<module>swift-dao-es</module>
 	</modules>
 	<dependencies>
 		<dependency>
