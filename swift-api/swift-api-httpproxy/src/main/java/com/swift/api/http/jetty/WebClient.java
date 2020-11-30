@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.eclipse.jetty.util.ssl.SslContextFactory.Client;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +61,7 @@ public class WebClient {
      */
     @PostConstruct
     public void init() throws Exception {
-        httpClient = new HttpClient(new SslContextFactory());
+        httpClient = new HttpClient(new Client());
         httpClient.setExecutor(new QueuedThreadPool(300));
         httpClient.setConnectTimeout(connectTimeout);
         httpClient.start();
