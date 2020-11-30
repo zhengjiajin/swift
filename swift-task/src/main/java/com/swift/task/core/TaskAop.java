@@ -3,7 +3,7 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
-package com.swift.dao.redis.redis;
+package com.swift.task.core;
 
 import java.lang.reflect.Method;
 import java.util.Date;

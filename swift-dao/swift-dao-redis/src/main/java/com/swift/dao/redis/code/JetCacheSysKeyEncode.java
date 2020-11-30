@@ -1,9 +1,9 @@
 /*
- * @(#)JetCacheKeyEncode.java   1.0  2019年7月12日
+ * @(#)JetCacheSysKeyEncode.java   1.0  2020年11月30日
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
-package com.swift.dao.redis.redis.core;
+package com.swift.dao.redis.code;
 
 import java.util.function.Function;
 
@@ -12,11 +12,11 @@ import com.alibaba.fastjson.JSON;
 /**
  * 添加说明 
  * @author zhengjiajin
- * @version 1.0 2019年7月12日
+ * @version 1.0 2020年11月30日
  */
 public class JetCacheSysKeyEncode implements Function<Object, Object> {
 
-    private final static String SYS_SPILT="_.";
+    private final static String SYS_SPILT="_";
     
     private String sysId="";
     

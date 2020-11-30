@@ -3,7 +3,7 @@
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
-package com.swift.dao.redis.redis;
+package com.swift.dao.redis.core;
 
 import java.util.Collections;
 
@@ -36,8 +36,8 @@ public class RedisDisLock {
     private static final int TIME_OUT = 30 * 1000;
 
     private static final String LOCK_SUCCESS = "OK";
-    private static final String SET_IF_NOT_EXIST = "NX";
-    private static final String SET_WITH_EXPIRE_TIME = "EX";// EX seconds, PX milliseconds
+    //private static final String SET_IF_NOT_EXIST = "NX";
+    //private static final String SET_WITH_EXPIRE_TIME = "EX";// EX seconds, PX milliseconds
     private static final Long RELEASE_SUCCESS = 1L;
 
     @Resource
@@ -54,21 +54,20 @@ public class RedisDisLock {
             Long sysTime = System.currentTimeMillis();
             String key = key(obj);
             // 30秒内不断尝试获得锁
-            while (System.currentTimeMillis() < sysTime + TIME_OUT) {
-                long lockTime = System.currentTimeMillis();
+            try {
                 Jedis jedis = redisClientFactory.getJedis();
-                String result = "";
-                try {
-                    result = jedis.set(key, TypeUtil.toString(lockTime),   SetParams.setParams().nx().ex(LOCK_SEC));
-                } finally {
-                    redisClientFactory.release(jedis);
+                while (System.currentTimeMillis() < sysTime + TIME_OUT) {
+                    long lockTime = System.currentTimeMillis();
+                    String result =  jedis.set(key, TypeUtil.toString(lockTime),   SetParams.setParams().nx().ex(LOCK_SEC));
+                    if (LOCK_SUCCESS.equals(result)) {
+                        return lockTime;
+                    } else {
+                        ThreadUtil.sleep(100);
+                    }
                 }
-                if (LOCK_SUCCESS.equals(result)) {
-                    return lockTime;
-                } else {
-                    ThreadUtil.sleep(100);
-                }
-            }
+            } finally {
+                redisClientFactory.release();
+             }
             log.warn("多次尝试获得锁失败，最终放弃，:" + obj);
             throw new SystemException("服务器繁忙，请稍后再试。");
         }

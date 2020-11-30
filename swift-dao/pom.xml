@@ -20,7 +20,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.github.zhengjiajin</groupId>
-			<artifactId>swift-core</artifactId>
+			<artifactId>swift-test</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
