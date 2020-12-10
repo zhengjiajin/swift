@@ -22,6 +22,9 @@ public class PathUtil {
         if(filePath.startsWith("/")) {
             filePath=filePath.substring(1);
         }
+        if(classpath.startsWith("/")) {
+            classpath=classpath.substring(1);
+        }
         return onPath(classpath, filePath);
     }
     

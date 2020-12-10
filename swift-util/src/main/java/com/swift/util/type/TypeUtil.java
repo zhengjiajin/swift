@@ -286,5 +286,19 @@ public class TypeUtil {
         else return (new StringBuilder()).append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).toString();
     }
     
+    public static String subStr(String str,String start,String end) {
+        if(TypeUtil.isNull(str)) return str;
+        int s = 0;
+        int e=str.length();
+        if(str.indexOf(start)!=-1) {
+            s=str.indexOf(start)+start.length();
+        }
+        if(str.indexOf(end)!=-1) {
+            e=str.lastIndexOf(end);
+        }
+        if(s>=e) return str;
+        
+        return str.substring(s, e);
+    }
 
 }
