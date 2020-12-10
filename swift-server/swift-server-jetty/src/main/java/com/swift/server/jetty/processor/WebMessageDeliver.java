@@ -23,7 +23,7 @@ import com.swift.core.service.processor.send.MessageSender;
 public class WebMessageDeliver extends AbstractMessageDeliver {
 
 	@Autowired
-	@Qualifier("defaultWebHandler")
+	@Qualifier("applicationJsonHandler")
 	private MessageSender messageSender;
 
 	@Override

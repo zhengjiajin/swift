@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import com.swift.core.server.LifeCycle;
 import com.swift.exception.extend.UnknownException;
 import com.swift.server.jetty.handler.WebHandler;
-import com.swift.server.jetty.util.WebContextPathUtil;
+import com.swift.server.jetty.handler.impl.rest.WebContextPathUtil;
 
 /**
  * web http服务

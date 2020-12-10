@@ -6,6 +6,7 @@
 package com.swift.util.exec;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 import com.swift.util.type.TypeUtil;
 
@@ -22,8 +23,11 @@ public class PathUtil {
         if(filePath.startsWith("/")) {
             filePath=filePath.substring(1);
         }
-        if(classpath.startsWith("/")) {
-            classpath=classpath.substring(1);
+        String osName = System.getProperty("os.name");
+        if (Pattern.matches("Windows.*", osName)) {
+            if(classpath.startsWith("/")) {
+                classpath=classpath.substring(1);
+            }
         }
         return onPath(classpath, filePath);
     }
