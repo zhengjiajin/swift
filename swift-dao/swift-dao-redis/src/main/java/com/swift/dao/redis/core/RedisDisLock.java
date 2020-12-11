@@ -7,10 +7,9 @@ package com.swift.dao.redis.core;
 
 import java.util.Collections;
 
-import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.swift.exception.extend.SystemException;
@@ -40,7 +39,7 @@ public class RedisDisLock {
     //private static final String SET_WITH_EXPIRE_TIME = "EX";// EX seconds, PX milliseconds
     private static final Long RELEASE_SUCCESS = 1L;
 
-    @Resource
+    @Autowired(required=false)
     private RedisClientFactory redisClientFactory;
 
     /**

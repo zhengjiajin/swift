@@ -20,13 +20,14 @@ import com.swift.core.filter.EndFilter;
 @Order(Integer.MAX_VALUE)
 public class RedisReleaseFilter implements EndFilter {
 
-    @Autowired
+    @Autowired(required=false)
     private RedisClientFactory redisClientFactory;
     /** 
      * @see com.swift.core.filter.EndFilter#end()
      */
     @Override
     public void end() {
+        if(redisClientFactory==null) return;
         redisClientFactory.release();
     }
 

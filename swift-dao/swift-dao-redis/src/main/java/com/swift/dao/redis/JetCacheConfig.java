@@ -69,8 +69,14 @@ public class JetCacheConfig {
     @Value("${redis.password}")
     private String password="";
 
+    private boolean isConfig() {
+        if(TypeUtil.isNull(hosts)) return false;
+        return true;
+    }
+    
     @Bean
     public RedisClientFactory redisClientFactory() {
+        if(!isConfig()) return null;
         JedisPoolConfig poolConfig = new JedisPoolConfig();
         poolConfig.setMaxTotal(maxActive);
         poolConfig.setMaxIdle(maxIdle);
@@ -137,10 +143,11 @@ public class JetCacheConfig {
     
     @Bean
     public RedisTemplate<String,String> redisTemplate(RedisClientFactory redisClientFactory) {
+        if(!isConfig()) return null;
         RedisTemplate<String,String> redisTemplate = new RedisTemplate<String,String>();
         redisTemplate.setConnectionFactory(redisClientFactory);
-        //redisTemplate.setKeySerializer(new SpringRedisSysKeyEncode(sysId));
-        //redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashValueSerializer(new StringRedisSerializer());
@@ -149,7 +156,8 @@ public class JetCacheConfig {
     }
     
     @Bean
-    public SpringConfigProvider springConfigProvider() {
+    public SpringConfigProvider springConfigProvider(RedisClientFactory redisClientFactory) {
+        if(!isConfig()) return null;
         return new SpringConfigProvider();
     }
     
@@ -160,6 +168,7 @@ public class JetCacheConfig {
      */
     @Bean
     public GlobalCacheConfig config(RedisClientFactory redisClientFactory) {
+        if(!isConfig()) return null;
         Map<String, CacheBuilder> localBuilders = new HashMap<String, CacheBuilder>();
         CacheBuilder localBuilder = LinkedHashMapCacheBuilder.createLinkedHashMapCacheBuilder().keyConvertor(FastjsonKeyConvertor.INSTANCE);
         localBuilders.put(CacheConsts.DEFAULT_AREA, localBuilder);

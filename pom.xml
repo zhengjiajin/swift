@@ -106,6 +106,7 @@
 		<module>swift-server</module>
 		<module>swift-dao</module>
 		<module>swift-task</module>
+		<module>swift-monitor</module>
 	</modules>
 	<dependencies>
 		<dependency>

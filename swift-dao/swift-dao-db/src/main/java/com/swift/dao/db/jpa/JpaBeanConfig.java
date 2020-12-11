@@ -5,8 +5,6 @@
  */
 package com.swift.dao.db.jpa;
 
-import javax.sql.DataSource;
-
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -20,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import com.swift.core.env.Env;
 import com.swift.core.env.EnvLoader;
+import com.swift.dao.db.datasource.DataSourceFactory;
 import com.swift.dao.db.jpa.core.JpaBaseImpl;
 
 /**
@@ -34,7 +33,8 @@ public class JpaBeanConfig {
     //private static final Logger log = LoggerFactory.getLogger(JpaBeanConfig.class);
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSourceFactory dataSource) {
+        if(!dataSource.isStart()) return null;
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
         bean.setDataSource(dataSource);
         bean.setPackagesToScan("com.swift");

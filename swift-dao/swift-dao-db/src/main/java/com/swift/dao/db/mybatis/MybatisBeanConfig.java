@@ -5,8 +5,6 @@
  */
 package com.swift.dao.db.mybatis;
 
-import javax.sql.DataSource;
-
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
@@ -14,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+
+import com.swift.dao.db.datasource.DataSourceFactory;
 
 /**
  * 添加说明 
@@ -23,7 +23,7 @@ import org.springframework.core.io.Resource;
 @Configuration
 public class MybatisBeanConfig {
     @Bean
-    public SqlSessionFactoryBean sqlSessionFactory(DataSource dataSource,
+    public SqlSessionFactoryBean sqlSessionFactory(DataSourceFactory dataSource,
         @Value("classpath*:mybatis/**/*.xml") Resource[] mapperLocations,
         @Value("classpath:mybatis-config.xml") Resource configLocation) {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
@@ -41,7 +41,7 @@ public class MybatisBeanConfig {
     }
     
     @Bean
-    public MapperScannerConfigurer mapperScannerConfigurer() {
+    public MapperScannerConfigurer mapperScannerConfigurer(DataSourceFactory dataSource) {
         MapperScannerConfigurer bean = new MapperScannerConfigurer();
         bean.setAnnotationClass(MybatisMapper.class);
         bean.setBasePackage("com.swift");

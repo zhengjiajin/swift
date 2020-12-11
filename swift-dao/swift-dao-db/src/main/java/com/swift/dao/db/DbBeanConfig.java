@@ -5,13 +5,13 @@
  */
 package com.swift.dao.db;
 
-import javax.sql.DataSource;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.support.ResourceTransactionManager;
+
+import com.swift.dao.db.datasource.DataSourceFactory;
 
 /**
  * 添加说明
@@ -25,7 +25,8 @@ import org.springframework.transaction.support.ResourceTransactionManager;
 public class DbBeanConfig {
 
     @Bean
-    public ResourceTransactionManager transactionManager(DataSource dataSource) {
+    public ResourceTransactionManager transactionManager(DataSourceFactory dataSource) {
+        if(!dataSource.isStart()) return null;
         JpaTransactionManager bean = new JpaTransactionManager();
         bean.setDataSource(dataSource);
         return bean;

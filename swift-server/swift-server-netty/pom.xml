@@ -8,4 +8,16 @@
   <artifactId>swift-server-netty</artifactId>
   <name>swift-server-netty</name>
   <description>swift-server-netty</description>
+  <dependencies>
+        <dependency>
+            <groupId>com.github.zhengjiajin</groupId>
+            <artifactId>swift-stream-zk</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.28.Final</version>
+        </dependency>
+    </dependencies>
 </project>

@@ -50,5 +50,11 @@ public interface ClientEngine<T,R> {
          * 接收响应，通讯协议层收到响应后直接把消息移交给引擎做业务处理。
          */
         public void receiveResponse(R rsp);
+        
+        /**
+         * 异常状态返回
+         * @param ex
+         */
+        public void failed(Throwable ex);
     }
 }

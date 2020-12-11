@@ -29,10 +29,10 @@ public class ServiceRequest {
      */
     private String reqId = RandomUtil.createReqId();
     /**
-     * 客户端IP地址
+     * 客户端IP地址/请求对方的地址域名/系统名称等
      */
     @JsonIgnore
-    private String ip;
+    private String domain;
     /**
      * 要请求的业务能力给你请求接口
      */
@@ -147,20 +147,19 @@ public class ServiceRequest {
     }
 
     /**
-     * @return the ip
+     * @return the domain
      */
-    public String getIp() {
-        return ip;
+    public String getDomain() {
+        return domain;
     }
 
     /**
-     * @param ip the ip to set
+     * @param domain the domain to set
      */
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 
-    
     public AbstractSession getSessionUser() {
         return sessionUser;
     }
