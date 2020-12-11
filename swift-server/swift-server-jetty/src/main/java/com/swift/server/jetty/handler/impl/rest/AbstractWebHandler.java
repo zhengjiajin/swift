@@ -154,12 +154,16 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
 
         HttpServletRequest servletRequest = ((HttpServiceRequest)serviceRequest).getRequest();
         HttpServletResponse servletResponse = ((HttpServiceRequest)serviceRequest).getResponse();
-        if (response.getData() != null && response.getData() instanceof FileDefinition) {
-            sendFileResponse(response, servletRequest, servletResponse);
-        } else {
-            sendResponse(response, servletRequest, servletResponse);
+        try {
+            if (response.getData() != null && response.getData() instanceof FileDefinition) {
+                sendFileResponse(response, servletRequest, servletResponse);
+            } else {
+                sendResponse(response, servletRequest, servletResponse);
+            }
+        } finally {
+            servletRequest.getAsyncContext().complete();
         }
-        servletRequest.getAsyncContext().complete();
+       
     }
 
     /**
@@ -296,9 +300,10 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
                 rawHttpResponse.setStatus(status);
                 rawHttpResponse.getOutputStream().write(msg.getBytes());
             }
-            rawHttpRequest.getAsyncContext().complete();
         } catch (Exception ex) {
             log.error("系统异常", ex);
+        }finally {
+            rawHttpRequest.getAsyncContext().complete();
         }
     }
 
