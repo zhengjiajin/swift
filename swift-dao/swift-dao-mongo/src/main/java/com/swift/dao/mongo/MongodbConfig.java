@@ -57,6 +57,7 @@ public class MongodbConfig {
 
     @Bean
     public MongoDatabase database(MongoClient mongoClient) {
+        if(mongoClient==null) return null;
         MongoDatabase database = mongoClient.getDatabase(mongoDatabase);
         if (database == null) throw new SystemException(mongoDatabase + "库末创建");
         return database;
@@ -69,6 +70,7 @@ public class MongodbConfig {
      */
     @Bean
     public MongoTemplate mongoTemplate(MongoClient mongoClient) {
+        if(mongoClient==null) return null;
         MongoTemplate mongoTemplate = new MongoTemplate(mongoClient, mongoDatabase);
         return mongoTemplate;
     }
