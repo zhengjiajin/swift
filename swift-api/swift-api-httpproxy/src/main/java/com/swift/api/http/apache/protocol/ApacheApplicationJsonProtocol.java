@@ -5,6 +5,8 @@
  */
 package com.swift.api.http.apache.protocol;
 
+import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.http.Header;
@@ -15,18 +17,19 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.swift.api.http.util.ContentTypeUtil;
 import com.swift.api.http.util.HttpDomainUtil;
 import com.swift.core.api.protocol.ClientProtocol;
 import com.swift.core.model.ServiceRequest;
 import com.swift.core.model.ServiceResponse;
 import com.swift.core.model.data.DataModel;
 import com.swift.core.model.data.FileDefinition;
-import com.swift.core.model.parser.DataJsonParser;
 import com.swift.core.session.AbstractSession;
 import com.swift.core.session.SessionCrypt;
 import com.swift.exception.ResultCode;
@@ -43,7 +46,6 @@ import com.swift.util.type.TypeUtil;
 @Component
 public class ApacheApplicationJsonProtocol implements ClientProtocol<HttpUriRequest,HttpResponse> {
     
-    private static final String CONTENT_TYPE="Content-Type";
     
     @Autowired(required=false)
     private SessionCrypt sessionCrypt;
@@ -60,17 +62,20 @@ public class ApacheApplicationJsonProtocol implements ClientProtocol<HttpUriRequ
         }
         Map<String,FileDefinition> fileList = findFile(req.getData());
         if(TypeUtil.isNull(fileList)) {
-            post.setHeader(CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType());
+            post.setHeader(ContentTypeUtil.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString());
             post.setEntity(new StringEntity(JsonUtil.toJson(req.getData()), ContentType.APPLICATION_JSON));
         } else {
-            post.setHeader(CONTENT_TYPE, ContentType.MULTIPART_FORM_DATA.getMimeType());
+            String boundary = "---------"+RandomUtil.createReqId();
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.setCharset(Charset.forName("UTF-8"));
+            builder.setBoundary(boundary);
+            builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
             addFileParm(fileList, builder);
             addParm(req, fileList, builder);
             HttpEntity entity = builder.build();
             post.setEntity(entity);
         }
-        return null;
+        return post;
     }
 
     /**
@@ -103,7 +108,7 @@ public class ApacheApplicationJsonProtocol implements ClientProtocol<HttpUriRequ
             String fileName = file.getFileName();
             if(TypeUtil.isNotNull(file.getContentType())) {
                 try {
-                    contentType=ContentType.create(file.getContentType());
+                    contentType = ContentType.create(file.getContentType());
                }catch(Exception e) {
                    
                }
@@ -116,8 +121,15 @@ public class ApacheApplicationJsonProtocol implements ClientProtocol<HttpUriRequ
     }
     
     private Map<String,FileDefinition> findFile(DataModel data){
-        
-        return null;
+        if(TypeUtil.isNull(data)) return null;
+        Map<String,FileDefinition> fileMap = new HashMap<>();
+        for(String key : data.keySet()) {
+            if(data.getObject(key) instanceof FileDefinition) {
+                fileMap.put(key, (FileDefinition)data.getObject(key));
+            }
+        }
+        if(TypeUtil.isNull(fileMap)) return null;
+        return fileMap;
     }
 
     /** 
@@ -127,16 +139,14 @@ public class ApacheApplicationJsonProtocol implements ClientProtocol<HttpUriRequ
     public ServiceResponse toResponse(ServiceRequest req,HttpResponse r) {
         if(r.getEntity()==null) throw new SystemException("接收消息异常");
         ServiceResponse response = new ServiceResponse();
-        response.setRequest(req);
-        response.setResponseTime(System.currentTimeMillis());
         try {
-            String contentType = getHeader(r, "Content-Type");
-            if(contentType.equals(ContentType.APPLICATION_JSON.getMimeType())) {
+            String contentType = getHeader(r, ContentTypeUtil.CONTENT_TYPE);
+            if(ContentTypeUtil.isJsonText(contentType)) {
                 String json = EntityUtils.toString(r.getEntity());
-                response.setData(DataJsonParser.jsonToObject(json));
+                response = JsonUtil.toObj(json, ServiceResponse.class);
             }
             
-            if(contentType.equals(ContentType.APPLICATION_OCTET_STREAM.getMimeType())) {
+            if(ContentTypeUtil.isFileData(contentType)) {
                 String fileDis = getHeader(r, "Content-Disposition");
                 FileDefinition file = new FileDefinition();
                 if(r.getEntity().getContentType()!=null) {
@@ -146,6 +156,7 @@ public class ApacheApplicationJsonProtocol implements ClientProtocol<HttpUriRequ
                
                 file.setInputStream(r.getEntity().getContent());
                 file.setSize(r.getEntity().getContentLength());
+                response.setData(file);
             }
             //"application/octet-stream";
             
@@ -155,9 +166,11 @@ public class ApacheApplicationJsonProtocol implements ClientProtocol<HttpUriRequ
             response.setResultCode(ResultCode.SYS_ERROR);
             response.setReason(e.getMessage());
         }
+        response.setRequest(req);
+        response.setResponseTime(System.currentTimeMillis());
         return response;
     }
-
+    
     private String getHeader(HttpMessage mess,String name) {
         Header header = mess.getFirstHeader(name);
         if(header==null) return ContentType.APPLICATION_JSON.getMimeType();

@@ -16,7 +16,7 @@ import com.swift.core.model.data.AbstractBeanDataModel;
  * @version 1.0 2018年6月11日
  */
 public class AbstractSession extends AbstractBeanDataModel{
-    public final static String SESSION_NAME = "SESSION_USER";
+    public final static String SESSION_NAME = "sessionUser";
     /**
      * 登录类型,以什么方式登录等
      */

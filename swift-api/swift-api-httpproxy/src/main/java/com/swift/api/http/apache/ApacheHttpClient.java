@@ -9,6 +9,7 @@ import java.util.concurrent.Future;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -25,8 +26,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.swift.api.http.util.ContentTypeUtil;
 import com.swift.core.api.rpc.ClientEngine;
 import com.swift.exception.extend.SystemException;
+import com.swift.util.type.TypeUtil;
 
 /**
  * 添加说明
@@ -95,6 +98,7 @@ public class ApacheHttpClient implements ClientEngine<HttpUriRequest, HttpRespon
      */
     @Override
     public void sendRequestNoReturn(HttpUriRequest req) {
+        checkAsyn(req);
         getAsynClient().execute(req, new LogHttpResponse(req));
     }
 
@@ -104,6 +108,7 @@ public class ApacheHttpClient implements ClientEngine<HttpUriRequest, HttpRespon
      */
     @Override
     public void sendRequest(HttpUriRequest req, CallBackEngine<HttpResponse> callBack) {
+        checkAsyn(req);
         getAsynClient().execute(req, new CallBackEngineFuture(callBack));
     }
 
@@ -112,6 +117,7 @@ public class ApacheHttpClient implements ClientEngine<HttpUriRequest, HttpRespon
      */
     @Override
     public Future<HttpResponse> sendAsynRequest(HttpUriRequest req) {
+        checkAsyn(req);
         return getAsynClient().execute(req, new LogHttpResponse(req));
     }
 
@@ -126,7 +132,20 @@ public class ApacheHttpClient implements ClientEngine<HttpUriRequest, HttpRespon
             throw new SystemException("http请求异常", e);
         }
     }
+    
+    private void checkAsyn(HttpUriRequest req) {
+        if(allowAsyn(req)) return;
+        throw new SystemException("禁止使用异步上传文件");
+    }
 
+    private boolean allowAsyn(HttpUriRequest req) {
+        Header contentType = req.getFirstHeader(ContentTypeUtil.CONTENT_TYPE);
+        if(TypeUtil.isNull(contentType)) return false;
+        if(ContentTypeUtil.isFileData(contentType.getValue())) return false;
+        return true;
+    }
+    
+    
     private class LogHttpResponse implements FutureCallback<HttpResponse> {
 
         private HttpUriRequest req;
