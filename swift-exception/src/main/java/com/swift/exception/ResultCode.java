@@ -34,6 +34,8 @@ public class ResultCode {
     public final static int AUTH_ERROR =  402;
     //外部系统异常
     public final static int OTHER_SYS_ERROR =  500;
+    //超时
+    public static final int TIMEOUT = 502;
     
     
 }
