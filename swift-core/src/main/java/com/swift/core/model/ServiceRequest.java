@@ -29,7 +29,7 @@ public class ServiceRequest {
      */
     private String reqId = RandomUtil.createReqId();
     /**
-     * 客户端IP地址/请求对方的地址域名/系统名称等
+     * 客户端IP地址/请求对方的地址域名
      */
     @JsonIgnore
     private String domain;
@@ -51,6 +51,11 @@ public class ServiceRequest {
      */
     @JsonIgnore
     private AbstractSession sessionUser;
+    /**
+     * 通过验证后的对端系统ID
+     */
+    @JsonIgnore
+    private String sysId;
     /**
      * 请求业务字段
      * SimpleDataModel extends HashMap
@@ -167,9 +172,19 @@ public class ServiceRequest {
     public void setSessionUser(AbstractSession sessionUser) {
         this.sessionUser = sessionUser;
     }
-
-    public static void main(String[] args) throws Exception {
-        String a = " {\"appId\":\"adfds\",\"appType\":2,\"channelId\":\"\", \"method\":\"appGetOfficeList\",\"tokenId\":\"\",\"data\":{} } ";
-        System.out.println(JsonUtil.toObj(a, ServiceRequest.class));
+    
+    /**
+     * @return the sysId
+     */
+    public String getSysId() {
+        return sysId;
     }
+
+    /**
+     * @param sysId the sysId to set
+     */
+    public void setSysId(String sysId) {
+        this.sysId = sysId;
+    }
+
 }
