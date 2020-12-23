@@ -9,7 +9,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import com.swift.core.model.ServiceRequest;
-import com.swift.core.spring.Spring;
 import com.swift.exception.extend.ParameterException;
 import com.swift.exception.extend.SystemException;
 import com.swift.util.type.JsonUtil;
@@ -24,11 +23,10 @@ public class HttpDomainUtil {
 
     public static String toStringDamain(ServiceRequest req) {
         String domain = req.getDomain();
+        String sysId = req.getSysId();
         if(TypeUtil.isNull(domain)) throw new ParameterException("请输入请求DOMAIN");
-        if(domain.indexOf(".")==-1) {
-            String sysDomain = Spring.getProperties().getProperty("domain");
-            if(TypeUtil.isNull(sysDomain)) throw new ParameterException("只输入系统ID但未配置domain属性");
-            domain=domain+"."+sysDomain;
+        if(TypeUtil.isNotNull(sysId) && !domain.startsWith(sysId)) {
+            domain=sysId+"."+domain;
         }
         if(!domain.startsWith("http")) {
             domain="http://"+domain;
