@@ -1,0 +1,80 @@
+/*
+ * @(#)NettyServer.java   1.0  2018年8月22日
+ * 
+ * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
+ */
+package com.swift.server.netty.hsp;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.swift.server.netty.NettyServer;
+import com.swift.server.netty.ServerConfig;
+import com.swift.server.netty.ServerLiftCycleListener;
+import com.swift.server.netty.hsp.handler.HspInitializer;
+import com.swift.util.type.IpUtil;
+
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.socket.SocketChannel;
+
+/**
+ * 添加说明
+ * 
+ * @author zhengjiajin
+ * @version 1.0 2018年8月22日
+ */
+@Component
+public class HspServer extends NettyServer {
+
+    @Autowired
+    private ServerConfig serverConfig;
+    @Autowired(required = false)
+    private ServerLiftCycleListener serverLiftCycleListener;
+    @Autowired
+    private HspInitializer hspInitializer;
+
+    private boolean isStarted = false;
+    /**
+     * @see com.swift.hhmk.gateway.protocol.keepalive.NettyServer#channelInitializer()
+     */
+    @Override
+    protected ChannelInitializer<SocketChannel> channelInitializer() {
+        return hspInitializer;
+    }
+
+    @Override
+    public void start(int port) {
+        setBacklog(serverConfig.getHspServerBacklog());
+        setKeepalive(serverConfig.isHspServerKeepalive());
+        setReuseAddress(serverConfig.isHspServerReuseAddress());
+        setTcpNoDelay(serverConfig.isHspServerTcpNoDelay());
+        super.start(serverConfig.getHspServerPort());
+        isStarted=true;
+        if (serverLiftCycleListener != null) {
+            serverLiftCycleListener.serverStart(IpUtil.getHostAddress(),
+                serverConfig.getHspServerPort());
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.swift.hhmk.gateway.protocol.keepalive.NettyServer#stop()
+     */
+    @Override
+    public void stop() {
+        super.stop();
+        isStarted=false;
+        if (serverLiftCycleListener != null) {
+            serverLiftCycleListener.serverStop();
+        }
+    }
+
+    /** 
+     * @see com.swift.core.server.LifeCycle#isStarted()
+     */
+    @Override
+    public boolean isStarted() {
+        return isStarted;
+    }
+}

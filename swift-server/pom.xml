@@ -14,7 +14,6 @@
 	<modules>
 		<module>swift-server-jetty</module>
 		<module>swift-server-netty</module>
-		<module>swift-server-websocket</module>
 	</modules>
 	<dependencies>
 		<dependency>
