@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 
@@ -61,6 +62,16 @@ public class IpUtil {
             InetAddress address = InetAddress.getByName(domain);
             return address.getHostAddress().toString();
         } catch (UnknownHostException e) {
+            return null;
+        }
+    }
+    
+
+    public static String urlToIp(String url) {
+        try {
+            URL u = new URL(url);
+            return IpUtil.domainToIp(u.getHost());
+        }catch(Exception ex) {
             return null;
         }
     }

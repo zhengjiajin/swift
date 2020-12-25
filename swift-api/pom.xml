@@ -15,6 +15,7 @@
 		<module>swift-api-httpproxy</module>
 		<module>swift-api-sspproxy</module>
 		<module>swift-api-simple</module>
+		<module>swift-api-protocol</module>
 	</modules>
 	<dependencies>
 		<dependency>

@@ -8,14 +8,14 @@ package com.swift.server.netty.auth.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.swift.api.protocol.auth.AuthClient;
+import com.swift.api.protocol.auth.ClientInfo;
+import com.swift.api.protocol.auth.client.UserClient;
+import com.swift.api.protocol.message.CLR;
+import com.swift.api.protocol.message.handler.MessageHandlerContext;
 import com.swift.core.session.AbstractSession;
 import com.swift.core.session.SessionCrypt;
-import com.swift.server.netty.auth.AuthClient;
 import com.swift.server.netty.auth.AuthInterface;
-import com.swift.server.netty.auth.ClientInfo;
-import com.swift.server.netty.auth.client.UserClient;
-import com.swift.server.netty.message.CLR;
-import com.swift.server.netty.message.handler.MessageHandlerContext;
 import com.swift.util.type.TypeUtil;
 
 /**

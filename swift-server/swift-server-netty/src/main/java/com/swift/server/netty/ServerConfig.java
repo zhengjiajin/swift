@@ -17,32 +17,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ServerConfig {
 
-    /**
-     * 最长空闲时间（秒）
-     */
-    @Value("${server.maxIdleTime:60}")
-    private int maxIdleTime;
-    /**
-     * 连接建立后，等待CLR的最长时间（秒），客户端超过该时间没有发送CLR，则断连。
-     */
-    @Value("${server.auth.maxWaitTime:60}")
-    private int authMaxWaitTime;
-    /**
-     * 连续解码异常的最大次数，超过该次数，则断连。
-     */
-    @Value("${server.decode.maxFailureTimes:3}")
-    private int maxDecodeFailureTimes;
-    /**
-     * 连续发送DWR的次数，客户端超过该次数没有回DWA，则断连。
-     */
-    @Value("${server.dwr.times:3}")
-    private int maxDwrTimes;
-    //连接超时
-    @Value("${service.connectTimeout:10000}")
-    private int serviceConnectTimeout;
-    //消息超时
-    @Value("${service.readTimeout:30000}")
-    private int serviceReadTimeout;
     
     /**
      * HSP监听端口号
@@ -80,45 +54,12 @@ public class ServerConfig {
     @Value("${websocket.server.keepalive:true}")
     private boolean websocketServerKeepalive;
     
-    @Value("${websocket.server.path:/}")
-    private String websocketPath;
-    
-    @Value("${websocket.server.maxContentLength:65535}")
-    private int websocketMaxContentLength;
-
     /**
      * Construct a new <code>GatewayConfig</code> instance.
      */
     public ServerConfig() {
     }
  
-    /**
-     * @return the maxIdleTime
-     */
-    public int getMaxIdleTime() {
-        return maxIdleTime;
-    }
-
-    /**
-     * @return the authMaxWaitTime
-     */
-    public int getAuthMaxWaitTime() {
-        return authMaxWaitTime;
-    }
-
-    /**
-     * @return the maxDecodeFailureTimes
-     */
-    public int getMaxDecodeFailureTimes() {
-        return maxDecodeFailureTimes;
-    }
-
-    /**
-     * @return the maxDwrTimes
-     */
-    public int getMaxDwrTimes() {
-        return maxDwrTimes;
-    }
 
     /**
      * @return the hspServerPort
@@ -188,50 +129,6 @@ public class ServerConfig {
      */
     public boolean isWebsocketServerKeepalive() {
         return websocketServerKeepalive;
-    }
-
-    /**
-     * @return the websocketPath
-     */
-    public String getWebsocketPath() {
-        return websocketPath;
-    }
-
-    /**
-     * @return the websocketMaxContentLength
-     */
-    public int getWebsocketMaxContentLength() {
-        return websocketMaxContentLength;
-    }
-
-    /**
-     * @return the serviceConnectTimeout
-     */
-    public int getServiceConnectTimeout() {
-        return serviceConnectTimeout;
-    }
-
-    /**
-     * @param serviceConnectTimeout
-     *            the serviceConnectTimeout to set
-     */
-    public void setServiceConnectTimeout(int serviceConnectTimeout) {
-        this.serviceConnectTimeout = serviceConnectTimeout;
-    }
-
-    /**
-     * @return the serviceReadTimeout
-     */
-    public int getServiceReadTimeout() {
-        return serviceReadTimeout;
-    }
-
-    /**
-     * @param serviceReadTimeout
-     *            the serviceReadTimeout to set
-     */
-    public void setServiceReadTimeout(int serviceReadTimeout) {
-        this.serviceReadTimeout = serviceReadTimeout;
     }
 
 }

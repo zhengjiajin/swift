@@ -8,9 +8,9 @@ package com.swift.server.netty.websocket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.swift.api.protocol.websocket.WebSocketInitializer;
 import com.swift.server.netty.NettyServer;
 import com.swift.server.netty.ServerConfig;
-import com.swift.server.netty.websocket.handler.WebSocketInitializer;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;

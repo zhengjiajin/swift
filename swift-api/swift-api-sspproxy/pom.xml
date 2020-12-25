@@ -8,4 +8,11 @@
   <artifactId>swift-api-sspproxy</artifactId>
   <name>swift-api-sspproxy</name>
   <description>swift-api-sspproxy</description>
+  <dependencies>
+  		<dependency>
+			<groupId>com.github.zhengjiajin</groupId>
+			<artifactId>swift-api-protocol</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+  </dependencies>
 </project>

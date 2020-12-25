@@ -5,8 +5,9 @@
  */
 package com.swift.server.netty.auth;
 
-import com.swift.server.netty.message.CLR;
-import com.swift.server.netty.message.handler.MessageHandlerContext;
+import com.swift.api.protocol.auth.AuthClient;
+import com.swift.api.protocol.message.CLR;
+import com.swift.api.protocol.message.handler.MessageHandlerContext;
 
 /**
  * 连接认证接口服务类

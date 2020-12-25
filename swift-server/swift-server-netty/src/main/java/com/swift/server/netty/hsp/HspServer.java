@@ -8,10 +8,10 @@ package com.swift.server.netty.hsp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.swift.api.protocol.hsp.HspInitializer;
 import com.swift.server.netty.NettyServer;
 import com.swift.server.netty.ServerConfig;
 import com.swift.server.netty.ServerLiftCycleListener;
-import com.swift.server.netty.hsp.handler.HspInitializer;
 import com.swift.util.type.IpUtil;
 
 import io.netty.channel.ChannelInitializer;

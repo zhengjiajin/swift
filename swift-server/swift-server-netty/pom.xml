@@ -9,15 +9,11 @@
   <name>swift-server-netty</name>
   <description>swift-server-netty</description>
   <dependencies>
-        <dependency>
-            <groupId>com.github.zhengjiajin</groupId>
-            <artifactId>swift-stream-zk</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>4.1.42.Final</version>
-        </dependency>
+  		<dependency>
+			<groupId>com.github.zhengjiajin</groupId>
+			<artifactId>swift-api-protocol</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+        
     </dependencies>
 </project>

@@ -10,19 +10,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.swift.api.protocol.auth.AuthClient;
+import com.swift.api.protocol.auth.client.SysClient;
+import com.swift.api.protocol.auth.client.UserClient;
+import com.swift.api.protocol.core.ChannelManagerFactory;
+import com.swift.api.protocol.listener.ChannelEventListener.Event;
+import com.swift.api.protocol.message.CLA;
+import com.swift.api.protocol.message.CLR;
+import com.swift.api.protocol.message.MessageType;
+import com.swift.api.protocol.message.handler.AbstractMessageHandler;
+import com.swift.api.protocol.message.handler.MessageHandlerContext;
 import com.swift.exception.ResultCode;
 import com.swift.exception.extend.AuthException;
-import com.swift.server.netty.auth.AuthClient;
 import com.swift.server.netty.auth.AuthInterface;
-import com.swift.server.netty.auth.client.SysClient;
-import com.swift.server.netty.auth.client.UserClient;
-import com.swift.server.netty.core.ChannelManagerFactory;
-import com.swift.server.netty.listener.ChannelEventListener.Event;
-import com.swift.server.netty.message.CLA;
-import com.swift.server.netty.message.CLR;
-import com.swift.server.netty.message.MessageType;
-import com.swift.server.netty.message.handler.AbstractMessageHandler;
-import com.swift.server.netty.message.handler.MessageHandlerContext;
 
 /**
  * CLR消息处理器。

@@ -7,10 +7,10 @@ package com.swift.server.netty.message.handler.impl;
 
 import org.springframework.stereotype.Component;
 
-import com.swift.server.netty.message.CLA;
-import com.swift.server.netty.message.MessageType;
-import com.swift.server.netty.message.handler.AbstractMessageHandler;
-import com.swift.server.netty.message.handler.MessageHandlerContext;
+import com.swift.api.protocol.message.CLA;
+import com.swift.api.protocol.message.MessageType;
+import com.swift.api.protocol.message.handler.AbstractMessageHandler;
+import com.swift.api.protocol.message.handler.MessageHandlerContext;
 
 /**
  * CLA消息处理器。

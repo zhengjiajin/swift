@@ -9,6 +9,7 @@
   <name>swift-server-jetty</name>
   <description>swift-server-jetty</description>
    <dependencies>
+   		
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
