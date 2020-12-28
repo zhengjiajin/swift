@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 import com.swift.api.protocol.hsp.HspInitializer;
 import com.swift.server.netty.NettyServer;
 import com.swift.server.netty.ServerConfig;
-import com.swift.server.netty.ServerLiftCycleListener;
-import com.swift.util.type.IpUtil;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
@@ -28,8 +26,7 @@ public class HspServer extends NettyServer {
 
     @Autowired
     private ServerConfig serverConfig;
-    @Autowired(required = false)
-    private ServerLiftCycleListener serverLiftCycleListener;
+  
     @Autowired
     private HspInitializer hspInitializer;
 
@@ -50,10 +47,6 @@ public class HspServer extends NettyServer {
         setTcpNoDelay(serverConfig.isHspServerTcpNoDelay());
         super.start(serverConfig.getHspServerPort());
         isStarted=true;
-        if (serverLiftCycleListener != null) {
-            serverLiftCycleListener.serverStart(IpUtil.getHostAddress(),
-                serverConfig.getHspServerPort());
-        }
     }
 
     /*
@@ -65,9 +58,7 @@ public class HspServer extends NettyServer {
     public void stop() {
         super.stop();
         isStarted=false;
-        if (serverLiftCycleListener != null) {
-            serverLiftCycleListener.serverStop();
-        }
+        
     }
 
     /** 

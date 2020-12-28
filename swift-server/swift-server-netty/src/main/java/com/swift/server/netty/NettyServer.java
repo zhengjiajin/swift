@@ -6,15 +6,16 @@
 package com.swift.server.netty;
 
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.swift.core.server.LifeCycle;
 import com.swift.util.type.IpUtil;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -43,7 +44,14 @@ public abstract class NettyServer implements LifeCycle {
     private boolean reuseAddress = DEFAULT_REUSEADDR;
     private boolean keepalive = DEFAULT_KEEPALIVE;
 
+    @Autowired(required = false)
+    private ServerLiftCycleListener serverLiftCycleListener;
+    
     private Thread launcher;
+    
+    private ChannelFuture future;
+    
+    private InetSocketAddress addr;
 
     protected abstract ChannelInitializer<SocketChannel> channelInitializer();
 
@@ -62,9 +70,12 @@ public abstract class NettyServer implements LifeCycle {
                     b.option(ChannelOption.SO_KEEPALIVE, keepalive);
                     b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
                             .handler(new LoggingHandler(LogLevel.INFO)).childHandler(channelInitializer());
-                    SocketAddress addr = new InetSocketAddress(IpUtil.getHostAddress(), port);
-                    b.bind(addr).sync().channel().closeFuture().sync();
+                    addr = new InetSocketAddress(IpUtil.getHostAddress(), port);
+                    future = b.bind(addr).sync().channel().closeFuture().sync();
                     logger.info("启动长连接服务:" + port + "结束");
+                    if (serverLiftCycleListener != null) {
+                        serverLiftCycleListener.serverStart(IpUtil.getHostAddress(),port);
+                    }
                 } catch (Throwable ex) {
                     String msg = "An exception occurred: ";
                     logger.error(msg, ex);
@@ -88,6 +99,12 @@ public abstract class NettyServer implements LifeCycle {
                 launcher.join();
             } catch (InterruptedException e) {
             }
+        }
+        if(future!=null && future.isSuccess() && future.channel()!=null) {
+            future.channel().close();
+        }
+        if (serverLiftCycleListener != null) {
+            serverLiftCycleListener.serverStop(addr.getHostName(),addr.getPort());
         }
     }
 

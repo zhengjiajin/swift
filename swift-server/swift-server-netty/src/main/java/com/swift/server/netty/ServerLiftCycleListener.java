@@ -25,5 +25,5 @@ public interface ServerLiftCycleListener {
     /**
      * 服务结束后触发。
      */
-    void serverStop();
+    void serverStop(String serverAddress, int port);
 }
