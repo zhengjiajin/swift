@@ -10,11 +10,9 @@ package com.swift.core.auth;
  * @author zhengjiajin
  * @version 1.0 2020年12月22日
  */
-public interface Auth2Crypt {
+public interface Auth2Crypt extends SysAuth2 {
     //返回accessToken
     public String accessToken(String sysId,String secret);
-    //返回系统ID
-    public String decrypt(String accessToken);
     //返回accessToken
     public String refresh(String accessToken);
 }

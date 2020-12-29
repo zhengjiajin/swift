@@ -10,17 +10,10 @@ package com.swift.core.session;
  * @author zhengjiajin
  * @version 1.0 2020年12月9日
  */
-public interface SessionCrypt {
+public interface SessionCrypt extends SessionAuth {
     /*
      * 加密得到用户加密验证串
      */
     public String encrypt(AbstractSession sessionUser);
-    /*
-     * 通过验证串得到用户身份
-     */
-    public AbstractSession decrypt(String sessionUser);
-    /*
-     * 通过授权码得到用户身份
-     */
-    public AbstractSession code(String code);
+    
 }

@@ -20,6 +20,7 @@ import com.swift.api.protocol.message.CLR;
 import com.swift.api.protocol.message.MessageType;
 import com.swift.api.protocol.message.handler.AbstractMessageHandler;
 import com.swift.api.protocol.message.handler.MessageHandlerContext;
+import com.swift.api.protocol.util.NettyChannel;
 import com.swift.exception.ResultCode;
 import com.swift.exception.extend.AuthException;
 import com.swift.server.netty.auth.AuthInterface;
@@ -38,7 +39,7 @@ public class CLRMessageHandler extends AbstractMessageHandler<CLR> {
     private List<AuthInterface> authInterfaces;
     @Autowired
     private ChannelManagerFactory channelManagerFactory;
-
+    
     /**
      * Construct a new <code>CLRMessageHandler</code> instance.
      */
@@ -54,23 +55,25 @@ public class CLRMessageHandler extends AbstractMessageHandler<CLR> {
             AuthClient authClient = authInterface.authChannel(message, context);
             if(authClient!=null) {
                 context.setAuthClient(authClient);
-                super.fireChannelEvent(Event.AUTH, context);
                 break;
             }
         }
-        if(!isAuth(context.getAuthClient())) throw new AuthException("连接认证未通过");
+        if(context.getAuthClient()==null) throw new AuthException("连接认证未通过");
+        //等待共享授权
+        if(context.getAuthClient().isAuthenticated()==false) return;
+        
         //清除断连定时器
-        cancelScheduledFuture(context);
+        NettyChannel.cancelScheduledFuture(context);
         if(context.getAuthClient() instanceof UserClient) {
-            UserClient sysClient = (UserClient)context.getAuthClient();
-            channelManagerFactory.registerChannel(sysClient.getAbstractSession().getUserId(),sysClient.getClientInfo(), context);
+            UserClient userClient = (UserClient)context.getAuthClient();
+            channelManagerFactory.registerChannel(userClient.getAbstractSession().getUserId(),userClient.getClientInfo(), context);
         }
         
         if(context.getAuthClient() instanceof SysClient) {
             SysClient sysClient = (SysClient)context.getAuthClient();
             channelManagerFactory.registerChannel(sysClient.getSysId(), context);
         }
-       
+        super.fireChannelEvent(Event.AUTH, context);
         CLA cla = new CLA(message);
         cla.setResponseTime(System.currentTimeMillis());
         cla.setResultCode(ResultCode.SUCCESS);
@@ -78,16 +81,4 @@ public class CLRMessageHandler extends AbstractMessageHandler<CLR> {
         context.write(cla);
     }
 
-    
-    private void cancelScheduledFuture(MessageHandlerContext context) {
-        if (context.getScheduledFuture() != null) {
-            context.getScheduledFuture().cancel(true);
-            context.setScheduledFuture(null);
-        }
-    }
-    
-    private boolean isAuth(AuthClient authClient) {
-        if(authClient==null) return false;
-        return authClient.isAuthenticated();
-    }
 }

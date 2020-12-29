@@ -7,14 +7,13 @@ package com.swift.api.protocol.message.handler;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.swift.api.protocol.listener.ChannelEventListener;
 import com.swift.api.protocol.listener.ChannelEventListener.Event;
 import com.swift.api.protocol.message.Message;
 import com.swift.api.protocol.message.MessageType;
+import com.swift.api.protocol.util.NettyChannel;
 
 /**
  * Abstract message handler
@@ -23,8 +22,6 @@ import com.swift.api.protocol.message.MessageType;
  */
 public abstract class AbstractMessageHandler<T extends Message> implements MessageHandler<T> {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractMessageHandler.class);
-    
     private MessageType type;
 
     @Autowired(required = false)
@@ -46,17 +43,6 @@ public abstract class AbstractMessageHandler<T extends Message> implements Messa
     }
     
     protected void fireChannelEvent(Event event, MessageHandlerContext context) {
-        if (channelEventListeners == null || channelEventListeners.isEmpty()) {
-            return;
-        }
-
-        for (ChannelEventListener listener : channelEventListeners) {
-            try {
-                listener.channelEvent(event, context);
-            } catch (Throwable ex) {
-                logger.error("Unexpected exception while fire channel event: {} on listener: {}", event,
-                        listener.getClass().getName(), ex);
-            }
-        }
+        NettyChannel.fireChannelEvent(channelEventListeners, event, context);
     }
 }

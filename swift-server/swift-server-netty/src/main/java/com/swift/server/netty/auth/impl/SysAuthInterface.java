@@ -13,7 +13,8 @@ import com.swift.api.protocol.auth.ClientInfo;
 import com.swift.api.protocol.auth.client.SysClient;
 import com.swift.api.protocol.message.CLR;
 import com.swift.api.protocol.message.handler.MessageHandlerContext;
-import com.swift.core.auth.Auth2Crypt;
+import com.swift.core.auth.SysAuth;
+import com.swift.core.auth.SysAuth2;
 import com.swift.server.netty.auth.AuthInterface;
 import com.swift.util.type.TypeUtil;
 
@@ -26,16 +27,25 @@ import com.swift.util.type.TypeUtil;
 public class SysAuthInterface implements AuthInterface {
 
     @Autowired(required=false)
-    private Auth2Crypt auth2Crypt;
+    private SysAuth2 sysAuth2;
+    
+    @Autowired(required=false)
+    private SysAuth sysAuth;
     /** 
      * @see com.swift.server.netty.auth.AuthInterface#authChannel(com.swift.server.netty.message.CLR, com.swift.server.netty.message.handler.MessageHandlerContext)
      */
     @Override
     public AuthClient authChannel(CLR clr, MessageHandlerContext context) {
-        if(auth2Crypt==null) return null;
+        if(sysAuth==null && sysAuth2==null) return null;
         if(clr.getClientInfo()==null) return null;
         if(!clr.getClientInfo().equals(ClientInfo.SERVER)) return null;
-        String sysId = auth2Crypt.decrypt(clr.getSecSocketAccept());
+        String sysId = null;
+        if(sysAuth!=null && sysId==null) {
+            sysId = sysAuth.decrypt(clr.getClientObject(), clr.getSecSocketAccept());
+        }
+        if(sysAuth2!=null && sysId==null) {
+            sysId = sysAuth2.decrypt(clr.getSecSocketAccept());
+        }
         if(TypeUtil.isNull(sysId)) return null;
         SysClient client = new SysClient();
         client.setClientInfo(ClientInfo.SERVER);

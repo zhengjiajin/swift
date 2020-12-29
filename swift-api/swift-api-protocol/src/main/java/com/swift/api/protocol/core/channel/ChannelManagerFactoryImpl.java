@@ -38,14 +38,6 @@ public class ChannelManagerFactoryImpl implements ChannelManagerFactory {
     private final static Map<Object, Object> LOCK_MAP = new ConcurrentHashMap<>();
 
     
-    private boolean isActivity(MessageHandlerContext channel) {
-        if (channel == null) return false;
-        if (channel.getChannelHandlerContext() == null) return false;
-        if (channel.getChannelHandlerContext().channel() == null) return false;
-        if (!channel.getChannelHandlerContext().channel().isActive()) return false;
-        return true;
-    }
-
     // 此处线程不安全但问题不大
     private Object getLock(Object obj) {
         if (!LOCK_MAP.containsKey(obj)) {
@@ -154,7 +146,7 @@ public class ChannelManagerFactoryImpl implements ChannelManagerFactory {
             int ranId = RandomUtil.createCode(0, channelsKey.size() - 1);
             String ip = (String) channelsKey.toArray()[ranId];
             MessageHandlerContext context = sysChannels.get(sysId).get(ip);
-            if (!isActivity(context)) {
+            if (!NettyChannel.isActivity(context)) {
                 sysChannels.get(sysId).remove(ip);
                 if (sysChannels.get(sysId).isEmpty()) {
                     sysChannels.remove(sysId);
@@ -180,7 +172,7 @@ public class ChannelManagerFactoryImpl implements ChannelManagerFactory {
                 return null;
             }
             MessageHandlerContext channel = map.get(clientInfo);
-            if (!isActivity(channel)) {
+            if (!NettyChannel.isActivity(channel)) {
                 map.remove(clientInfo);
                 if (map.isEmpty()) {
                     userChannels.remove(userId);
@@ -202,7 +194,7 @@ public class ChannelManagerFactoryImpl implements ChannelManagerFactory {
 
             Map<ClientInfo, MessageHandlerContext> value = userChannels.get(userId);
             for (Entry<ClientInfo, MessageHandlerContext> entry : value.entrySet()) {
-                if (!isActivity(entry.getValue())) {
+                if (!NettyChannel.isActivity(entry.getValue())) {
                     value.remove(entry.getKey());
                 }
             }

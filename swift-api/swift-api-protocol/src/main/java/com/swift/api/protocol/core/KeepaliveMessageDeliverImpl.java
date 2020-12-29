@@ -248,9 +248,9 @@ public class KeepaliveMessageDeliverImpl extends AbstractMessageDeliver implemen
         if(request==null) throw new SystemException("此响应未关联请求");
         PendingRequest pendingRequest = pendingRequestManager.deregister(request.getReqId());
         if(pendingRequest==null) return;
-        if(pendingRequest.getScr()==null) return;
+        if(pendingRequest.getMessageRequest()==null) return;
         if(pendingRequest.getMessageHandlerContext()==null) return;
-        SCA sca = new SCA(pendingRequest.getScr());
+        SCA sca = new SCA((SCR)pendingRequest.getMessageRequest());
         sca.setData(response.getData());
         sca.setReason(response.getReason());
         sca.setResponseTime(System.currentTimeMillis());
