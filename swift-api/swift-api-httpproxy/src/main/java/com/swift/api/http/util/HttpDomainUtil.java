@@ -9,10 +9,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import com.swift.core.model.ServiceRequest;
-import com.swift.exception.extend.ParameterException;
+import com.swift.core.spring.Spring;
 import com.swift.exception.extend.SystemException;
 import com.swift.util.type.JsonUtil;
 import com.swift.util.type.TypeUtil;
+import com.swift.util.type.UrlUtil;
 
 /**
  * 处理地址连接工具类
@@ -24,11 +25,15 @@ public class HttpDomainUtil {
     public static String toStringDamain(ServiceRequest req) {
         String domain = req.getDomain();
         String sysId = req.getSysId();
-        if(TypeUtil.isNull(domain)) throw new ParameterException("请输入请求DOMAIN");
-        if(TypeUtil.isNotNull(sysId) && !domain.startsWith(sysId)) {
+        if(TypeUtil.isNull(domain)) {
+            domain=Spring.getProperties().getProperty("domain");
+        }
+        
+        if(TypeUtil.isNotNull(sysId) && !domain.startsWith(sysId) && !UrlUtil.isUrl(domain)) {
             domain=sysId+"."+domain;
         }
-        if(!domain.startsWith("http")) {
+        
+        if(!UrlUtil.isUrl(domain)) {
             domain="http://"+domain;
         }
         

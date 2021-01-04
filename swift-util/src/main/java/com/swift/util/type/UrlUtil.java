@@ -25,6 +25,12 @@ import com.swift.exception.extend.SystemException;
  */
 public class UrlUtil {
     
+    public static boolean isUrl(String str) {
+        if(TypeUtil.isNull(str)) return false;
+        if(str.toLowerCase().startsWith("http://")) return true;
+        if(str.toLowerCase().startsWith("https://")) return true;
+        return false;
+    }
 
     public static String urlEncode(String str) {
         try {
