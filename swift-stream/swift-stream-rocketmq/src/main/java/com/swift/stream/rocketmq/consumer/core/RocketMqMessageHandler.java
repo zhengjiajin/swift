@@ -78,8 +78,8 @@ public class RocketMqMessageHandler implements MessageListenerConcurrently {
                         Topic topic = AnnotationUtil.getAnnotation(AopTargetUtils.getTarget(listener).getClass(), Topic.class);
                         if (topic == null) continue;
                         if(!checkInTopic(topic, message.getTopic())) continue;
-                        if(!checkTag(topic, message.getTags())) continue;
                         MqRequest req = listener.changeRequest(message);
+                        if(!checkTag(topic, req.getTag())) continue;
                         listener.handle(req); 
                     }
                 }catch(Throwable ex) {
