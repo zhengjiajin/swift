@@ -42,7 +42,7 @@ public class HttpDomainUtil {
                 domain=domain+"/V"+req.getInterfaceVersion();
             }
         }
-        if(!domain.endsWith(req.getMethod())) {
+        if(TypeUtil.isNotNull(req.getMethod()) && !domain.endsWith(req.getMethod())) {
             domain=domain+"/"+req.getMethod();
         }
         
