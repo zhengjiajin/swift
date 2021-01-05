@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.github.zhengjiajin</groupId>
     <artifactId>swift-api</artifactId>
-    <version>1.1-bate</version>
+    <version>1.1-SNAPSHOT</version>
   </parent>
   <artifactId>swift-api-httpproxy</artifactId>
   <name>swift-api-httpproxy</name>

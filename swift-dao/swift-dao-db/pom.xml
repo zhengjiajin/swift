@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.github.zhengjiajin</groupId>
     <artifactId>swift-dao</artifactId>
-    <version>1.1-bate</version>
+    <version>1.1-SNAPSHOT</version>
   </parent>
   <artifactId>swift-dao-db</artifactId>
   <name>swift-dao-db</name>

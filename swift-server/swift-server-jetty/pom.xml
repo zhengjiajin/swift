@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.github.zhengjiajin</groupId>
     <artifactId>swift-server</artifactId>
-    <version>1.1-bate</version>
+    <version>1.1-SNAPSHOT</version>
   </parent>
   <artifactId>swift-server-jetty</artifactId>
   <name>swift-server-jetty</name>
