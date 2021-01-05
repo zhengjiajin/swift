@@ -310,6 +310,7 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
     private boolean isFavicon(String target) {
         if (TypeUtil.isNull(target)) return true;
         if (target.indexOf("favicon.ico") != -1) return true;
+        if (target.indexOf("/undefined") != -1) return true;
         return false;
     }
 
