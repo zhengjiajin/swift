@@ -42,7 +42,7 @@ public class DataSourceFactory extends AbstractRoutingDataSource {
 
     private Map<Object, Object> targetDataSources = new ConcurrentHashMap<Object, Object>();
 
-    @Value("${jdbc.driverClassName:com.mysql.jdbc.Driver}")
+    @Value("${jdbc.driverClassName:com.mysql.cj.jdbc.Driver}")
     private String driverClassName;
     
     @Value("${jdbc.minPoolSize:5}")
