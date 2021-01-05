@@ -41,7 +41,7 @@ public class MybatisBeanConfig {
     }
     
     @Bean
-    public MapperScannerConfigurer mapperScannerConfigurer(DataSourceFactory dataSource) {
+    public MapperScannerConfigurer mapperScannerConfigurer() {
         MapperScannerConfigurer bean = new MapperScannerConfigurer();
         bean.setAnnotationClass(MybatisMapper.class);
         bean.setBasePackage("com.swift");
