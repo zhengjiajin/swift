@@ -57,6 +57,7 @@ public class RocketMqMessageHandler implements MessageListenerConcurrently {
                      }
                      
                      for(String tag:topic.tag()) {
+                         if(msl.requestAll())tag="*";
                          if(!subscribeTag.get(t).contains(tag)) {
                              subscribeTag.get(t).add(tag);
                          }
