@@ -19,6 +19,10 @@ public class NoWarnException extends ServiceException {
         super(statusCode);
     }
     
+    public NoWarnException(String msg) {
+        super(ResultCode.UNKNOWN, msg);
+    }
+    
     public NoWarnException(int statusCode, String msg) {
         super(statusCode, msg);
     }
