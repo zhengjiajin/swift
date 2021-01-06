@@ -5,6 +5,8 @@
  */
 package com.swift.server.jetty.handler.impl;
 
+import java.io.File;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.eclipse.jetty.server.handler.ResourceHandler;
@@ -36,6 +38,8 @@ public class ResourceWebHandler extends ResourceHandler implements WebHandler{
         ///E:/workspace470/hhmk-crm/target/test-classes/
         String webpath = PathUtil.findOnClassPath("webapp");
         if(TypeUtil.isNull(webpath)) webpath= defWebapp(classpath);
+        if(TypeUtil.isNull(webpath)) return;
+        if(!new File(webpath).exists()) return;
         super.setDirectoriesListed(true);
         super.setResourceBase(webpath);
         super.setStylesheet("");
