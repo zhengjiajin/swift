@@ -153,7 +153,7 @@ public class ApplicationJsonProtocol implements JettyWebProtocol {
     public ResModel encode(ServiceResponse res) {
         try {
             ResModel model = new ResModel();
-            model.setContentType("text/json;charset=UTF-8");
+            model.setContentType(CONTENT_TYPE_JSON+";charset=UTF-8");
             model.setStatus(200);
             String json = JsonUtil.toJson(res);
             model.setBody(json.getBytes());
@@ -170,7 +170,7 @@ public class ApplicationJsonProtocol implements JettyWebProtocol {
     @Override
     public ResModel error(int errorCode, String errorMsg) {
         ResModel model = new ResModel();
-        model.setContentType("text/json;charset=UTF-8");
+        model.setContentType(CONTENT_TYPE_JSON+";charset=UTF-8");
         model.setStatus(200);
         ServiceResponse res = new ServiceResponse();
         res.setResultCode(errorCode);

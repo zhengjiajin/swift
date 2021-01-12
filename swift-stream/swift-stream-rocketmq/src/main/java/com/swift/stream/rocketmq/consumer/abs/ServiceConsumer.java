@@ -10,6 +10,8 @@ import org.apache.rocketmq.common.message.MessageExt;
 import com.swift.core.model.parser.DataJsonParser;
 import com.swift.stream.rocketmq.consumer.RocketMqMessageListener;
 import com.swift.stream.rocketmq.pojo.MqRequest;
+import com.swift.util.type.JsonUtil;
+import com.swift.util.type.TypeUtil;
 
 /**
  * 添加说明 
@@ -24,10 +26,12 @@ public abstract class ServiceConsumer implements RocketMqMessageListener {
     
     
     public MqRequest changeRequest(MessageExt message) {
-        MqRequest req = new MqRequest();
-        req.setMsgId(message.getKeys());
-        req.setTag(message.getTags());
-        req.setData(DataJsonParser.jsonToObject(new String(message.getBody())));
+        MqRequest req = JsonUtil.toObj(message.getBody(), MqRequest.class);
+        if(TypeUtil.isNull(req.getMsgId())) req.setMsgId(message.getKeys());
+        if(TypeUtil.isNull(req.getTag())) req.setTag(message.getTags());
+        if(TypeUtil.isNull(req.getMethod())) req.setMethod(message.getTags());
+        if(TypeUtil.isNull(req.getData())) req.setData(DataJsonParser.jsonToObject(new String(message.getBody())));
+        
         return req;
     }
     

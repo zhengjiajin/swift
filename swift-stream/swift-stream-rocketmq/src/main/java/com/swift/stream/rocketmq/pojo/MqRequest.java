@@ -26,6 +26,11 @@ public class MqRequest {
      */
     private String tag;
     /**
+     * 名称method ,兼容修系统
+     */
+    @Deprecated
+    private String method;
+    /**
      * 请求业务字段 SimpleDataModel extends HashMap data里可以嵌套String,List,Map等数据结构,也支持Map里再嵌套多层Map或List
      * 接口固定参数：Request，Session，Response
      */
@@ -68,6 +73,22 @@ public class MqRequest {
      */
     public void setData(DataModel data) {
         this.data = data;
+    }
+    
+    /**
+     * @return the method
+     */
+    @Deprecated
+    public String getMethod() {
+        return method;
+    }
+
+    /**
+     * @param method the method to set
+     */
+    @Deprecated
+    public void setMethod(String method) {
+        this.method = method;
     }
 
     /**
