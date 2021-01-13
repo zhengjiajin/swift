@@ -27,6 +27,7 @@ public abstract class BinlogConsumer implements RocketMqMessageListener {
         MqRequest req = new MqRequest();
         DataModel data = DataJsonParser.jsonToObject(new String(message.getBody()));
         req.setTag(data.getString("database")+"."+data.getString("table"));
+        req.setMethod(req.getTag());
         req.setData(data);
         return req;
     }
