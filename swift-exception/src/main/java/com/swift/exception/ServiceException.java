@@ -30,6 +30,11 @@ public class ServiceException extends RuntimeException {
         super(msg);
         this.statusCode = statusCode;
     }
+    
+    public ServiceException(String message, Throwable cause) {
+        super(message, cause);
+        this.statusCode = ResultCode.UNKNOWN;
+    }
 
     public ServiceException(int statusCode, String message, Throwable cause) {
         super(message, cause);
