@@ -32,92 +32,96 @@ import com.swift.util.type.TypeUtil;
 
 /**
  * 收到消息时的处理类
+ * 
  * @author zhengjiajin
  * @version 1.0 2020年11月26日
  */
 @Component
 public class RocketMqMessageHandler implements MessageListenerConcurrently {
-        
-        private static final Logger log = LoggerFactory.getLogger(RocketMqConsumer.class);
-        @Autowired
-        private RocketMqConfig rocketMqConfig;
-        @Autowired(required = false)
-        private List<RocketMqMessageListener> listener;
-        //TAG
-        private final ConcurrentHashMap<String, List<String>> subscribeTag = new ConcurrentHashMap<>();
-        @PostConstruct
-        private void init() {
-             if(TypeUtil.isNull(listener)) return;
-             for(RocketMqMessageListener msl:listener) {
-                 Topic topic = AnnotationUtil.getAnnotation(AopTargetUtils.getTarget(msl).getClass(), Topic.class);
-                 if (topic == null) continue;
-                 for(String t:topic.value()) {
-                     if(!subscribeTag.containsKey(t)) {
-                         subscribeTag.put(t, new ArrayList<>());
-                     }
-                     
-                     for(String tag:topic.tag()) {
-                         if(msl.requestAll())tag="*";
-                         if(!subscribeTag.get(t).contains(tag)) {
-                             subscribeTag.get(t).add(tag);
-                         }
-                     }
-                 }
-             }
-        }
-        /** 
-         * @see org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently#consumeMessage(java.util.List, org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext)
-         */
-        @Override
-        public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
-            if(TypeUtil.isNull(msgs)) return ConsumeConcurrentlyStatus.RECONSUME_LATER;
-            for(MessageExt message:msgs) {
-                try {
-                    log.info("收到MQ消息:"+message.getTopic()+";"+message.getMsgId()+";"+message.getKeys()+";"+message.getTags()+new String(message.getBody()));
-                    for(RocketMqMessageListener listener:listener) {
-                        Topic topic = AnnotationUtil.getAnnotation(AopTargetUtils.getTarget(listener).getClass(), Topic.class);
-                        if (topic == null) continue;
-                        if(!checkInTopic(topic, message.getTopic())) continue;
-                        MqRequest req = listener.changeRequest(message);
-                        if(!checkTag(topic, req.getTag())) continue;
-                        listener.handle(req); 
-                    }
-                }catch(Throwable ex) {
-                    log.error("MQ处理信息异常:",ex);
-                }
-            }
-            return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
-        }
-        
-        private boolean checkInTopic(Topic topic,String msgTopic) {
-            for(String t:topic.value()) {
-                if(t.equalsIgnoreCase(rocketMqConfig.localTopic(msgTopic))) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        
 
-        private boolean checkTag(Topic topic,String tag) {
-            if(ExpressionUtil.checkExpression(topic.tag(), tag)) {
+    private static final Logger log = LoggerFactory.getLogger(RocketMqConsumer.class);
+    @Autowired
+    private RocketMqConfig rocketMqConfig;
+    @Autowired(required = false)
+    private List<RocketMqMessageListener> listener;
+    // TAG
+    private final ConcurrentHashMap<String, List<String>> subscribeTag = new ConcurrentHashMap<>();
+
+    @PostConstruct
+    private void init() {
+        if (TypeUtil.isNull(listener)) return;
+        for (RocketMqMessageListener msl : listener) {
+            Topic topic = AnnotationUtil.getAnnotation(AopTargetUtils.getTarget(msl).getClass(), Topic.class);
+            if (topic == null) continue;
+            for (String t : topic.value()) {
+                if (!subscribeTag.containsKey(t)) {
+                    subscribeTag.put(t, new ArrayList<>());
+                }
+
+                for (String tag : topic.tag()) {
+                    if (msl.requestAll()) tag = "*";
+                    if (!subscribeTag.get(t).contains(tag)) {
+                        subscribeTag.get(t).add(tag);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @see org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently#consumeMessage(java.util.List,
+     *      org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext)
+     */
+    @Override
+    public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
+        if (TypeUtil.isNull(msgs)) return ConsumeConcurrentlyStatus.RECONSUME_LATER;
+        for (MessageExt message : msgs) {
+            log.info("收到MQ消息:" + message.getTopic() + ";" + message.getMsgId() + ";" + message.getKeys() + ";"
+                + message.getTags() + new String(message.getBody()));
+            for (RocketMqMessageListener listener : listener) {
+                try {
+                    Topic topic = AnnotationUtil.getAnnotation(AopTargetUtils.getTarget(listener).getClass(), Topic.class);
+                    if (topic == null) continue;
+                    if (!checkInTopic(topic, message.getTopic())) continue;
+                    MqRequest req = listener.changeRequest(message);
+                    if (!checkTag(topic, req.getTag())) continue;
+                    listener.handle(req);
+                } catch (Throwable ex) {
+                    log.error("MQ处理信息异常:", ex);
+                }
+            }
+        }
+        return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+    }
+
+    private boolean checkInTopic(Topic topic, String msgTopic) {
+        for (String t : topic.value()) {
+            if (t.equalsIgnoreCase(rocketMqConfig.localTopic(msgTopic))) {
                 return true;
             }
-            return false;
         }
-        
-        /**
-         * @return the subscribeTag
-         */
-        public ConcurrentHashMap<String, List<String>> getSubscribeTag() {
-            return subscribeTag;
+        return false;
+    }
+
+    private boolean checkTag(Topic topic, String tag) {
+        if (ExpressionUtil.checkExpression(topic.tag(), tag)) {
+            return true;
         }
-        /**
-         * @return the listener
-         */
-        public List<RocketMqMessageListener> getListener() {
-            return listener;
-        }
-        
-        
+        return false;
+    }
+
+    /**
+     * @return the subscribeTag
+     */
+    public ConcurrentHashMap<String, List<String>> getSubscribeTag() {
+        return subscribeTag;
+    }
+
+    /**
+     * @return the listener
+     */
+    public List<RocketMqMessageListener> getListener() {
+        return listener;
+    }
+
 }
