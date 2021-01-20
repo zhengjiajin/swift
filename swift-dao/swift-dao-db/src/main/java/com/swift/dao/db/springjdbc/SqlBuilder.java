@@ -16,9 +16,13 @@ import com.swift.util.type.TypeUtil;
  */
 public class SqlBuilder {
     
-    public static String removeSelect(String sql) {
+    public static String removeSelectAndOrder(String sql) {
         if (StringUtils.isBlank(sql)) {
             return sql;
+        }
+        int order = sql.toLowerCase().indexOf(" order ");
+        if (order != -1) {
+            sql=sql.substring(0, order);
         }
         int from = sql.toLowerCase().indexOf(" from ");
         if (from == -1) {
@@ -31,11 +35,10 @@ public class SqlBuilder {
         boolean selectAll = false;
         if (sql.toLowerCase().indexOf(" union ") != -1) selectAll=true;
         if (sql.toLowerCase().indexOf(" group ") != -1) selectAll=true;
-        if (sql.toLowerCase().indexOf(" order ") != -1) selectAll=true;
+        //if (sql.toLowerCase().indexOf(" order ") != -1) selectAll=true;
         if(selectAll) return "select count(*) from ("+sql+") tableTagwsz" ;
-        return "select count(*) " + removeSelect(sql);
+        return "select count(*) " + removeSelectAndOrder(sql);
     }
-    
 
     public static String appendLimitSql(String sql, long start, int size) {
         if(sql.toLowerCase().indexOf(" limit ")!=-1) return sql;
