@@ -220,7 +220,7 @@ public class TypeUtil {
     }
 
     public static BigDecimal toBigDecimal(Object obj) {
-        if (obj == null) return null;
+        if (TypeUtil.isNull(obj)) return null;
         BigDecimal ret = null;
         if (obj instanceof BigDecimal) {
             ret = (BigDecimal) obj;
