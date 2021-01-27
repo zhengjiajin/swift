@@ -49,7 +49,7 @@ public class ApacheHttpClient implements ClientEngine<HttpUriRequest, HttpRespon
     @PostConstruct
     private void init() throws Exception {
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(5000).setSocketTimeout(30000)
-            .setConnectionRequestTimeout(50).build();
+            .setConnectionRequestTimeout(5000).build();
 
         // 配置线程
         IOReactorConfig ioReactorConfig = IOReactorConfig.custom()
