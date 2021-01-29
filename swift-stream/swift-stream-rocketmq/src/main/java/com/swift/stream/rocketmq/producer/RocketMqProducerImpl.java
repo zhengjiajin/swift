@@ -91,7 +91,7 @@ public class RocketMqProducerImpl implements RocketMqProducer{
                 if(sendResult!=null && sendResult.getSendStatus()==SendStatus.SEND_OK)
                 return sendResult;
             } catch (Exception e) {
-                log.debug("发送MQ消息异常:",e);
+                log.warn("发送MQ消息异常:",e);
             }
         }
         return sendResult;
@@ -127,7 +127,7 @@ public class RocketMqProducerImpl implements RocketMqProducer{
                 producer.sendOneway(msg);
                 return;
             } catch (Exception e) {
-                log.debug("发送MQ消息异常:",e);
+                log.warn("发送MQ消息异常:",e);
             }
         }
     }
@@ -153,7 +153,7 @@ public class RocketMqProducerImpl implements RocketMqProducer{
                 producer.send(msg, callback);
                 return;
             } catch (Exception e) {
-                log.debug("发送MQ消息异常:",e);
+                log.warn("发送MQ消息异常:",e);
             }
         }
     }
