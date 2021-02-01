@@ -93,6 +93,11 @@ public class ServiceIndexNameFactory {
         return this.highClient;
     }
     
+    public boolean isConnect() {
+        if (this.highClient == null)  return false;
+        return true;
+    }
+    
     public void restart() {
         destroy();
         init();
