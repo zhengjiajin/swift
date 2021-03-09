@@ -205,6 +205,7 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
         }
         try {
             servletResponse.getOutputStream().write(resModel.getBody());
+            servletResponse.flushBuffer();
         } catch (IOException e) {
             log.warn("网络异常", e);
         }
@@ -295,14 +296,17 @@ public abstract class AbstractWebHandler extends AbstractHandler implements WebH
                 rawHttpResponse.setContentType(res.getContentType());
                 rawHttpResponse.setStatus(res.getStatus());
                 rawHttpResponse.getOutputStream().write(res.getBody());
+                rawHttpResponse.flushBuffer();
             } else {
                 rawHttpResponse.setContentType("text/html;charset=UTF-8");
                 rawHttpResponse.setStatus(status);
                 rawHttpResponse.getOutputStream().write(msg.getBytes());
+                rawHttpResponse.flushBuffer();
             }
         } catch (Exception ex) {
             log.error("系统异常", ex);
         }finally {
+            
             rawHttpRequest.getAsyncContext().complete();
         }
     }
