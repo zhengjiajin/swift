@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.github.zhengjiajin</groupId>
     <artifactId>swift-dao</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
   </parent>
   <artifactId>swift-dao-redis</artifactId>
   <name>swift-dao-redis</name>
