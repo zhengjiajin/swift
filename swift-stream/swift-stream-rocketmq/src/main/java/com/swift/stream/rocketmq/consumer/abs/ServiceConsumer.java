@@ -29,7 +29,6 @@ public abstract class ServiceConsumer implements RocketMqMessageListener {
         MqRequest req = JsonUtil.toObj(message.getBody(), MqRequest.class);
         if(TypeUtil.isNull(req.getMsgId())) req.setMsgId(message.getKeys());
         if(TypeUtil.isNull(req.getTag())) req.setTag(message.getTags());
-        if(TypeUtil.isNull(req.getMethod())) req.setMethod(message.getTags());
         if(TypeUtil.isNull(req.getData())) req.setData(DataJsonParser.jsonToObject(new String(message.getBody())));
         
         return req;

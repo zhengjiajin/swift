@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true" scanPeriod="5 seconds">
+<configuration scan="true" scanPeriod="60 seconds">
 
 	<jmxConfigurator />
-	
+	<property resource="app.properties" />
+	<!-- log.path 根目录 -->
+	<!-- log.maxHistory 最大保留天数 -->
+	<!-- sysId 系统ID -->
+	<!-- APP_ENV_KEY 运行环境   DEV(""),TEST("test"),DEMO("demo"),PROD("prod") -->
 	<property name="pattern" value="%date→%level→%thread→%class{0}→%line→%message%n" />
 	<property name="fileNamePattern" value="%d{yyyyMMdd}.%i" />
-	<property name="maxHistory" value="30" />
+	<property name="maxHistory" value="${log.maxHistory:-30}" />
 	<property name="maxFileSize" value="200MB" />
+	<property name="logEnv" value="${APP_ENV_KEY:-dev}"/>
+	<property name="logPath" value="${log.path:- }" />
+	<property name="logSysId" value="${sysId:- }" />
 
 	<appender name="stdout" class="ch.qos.logback.classic.AsyncAppender">
 		<appender name="stdout0" class="ch.qos.logback.core.ConsoleAppender">
@@ -20,11 +27,12 @@
 
 	<appender name="file" class="ch.qos.logback.classic.AsyncAppender">
 		<appender name="file0" class="ch.qos.logback.core.rolling.RollingFileAppender">
-			<File>log/log_archive_.log</File>
+			<File>${logPath}log/log_${logSysId}.log</File>
 			<encoder><pattern>${pattern}</pattern></encoder>
 			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-				<FileNamePattern>log/log_archive_.log.${fileNamePattern}</FileNamePattern>
+				<FileNamePattern>${logPath}log/log_${logSysId}.log.${fileNamePattern}</FileNamePattern>
 				<MaxHistory>${maxHistory}</MaxHistory>
+				<cleanHistoryOnStart>true</cleanHistoryOnStart>
 				<TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 					<MaxFileSize>${maxFileSize}</MaxFileSize>
 				</TimeBasedFileNamingAndTriggeringPolicy>
@@ -36,10 +44,10 @@
 	
 	<appender name="error" class="ch.qos.logback.classic.AsyncAppender">
 		<appender name="file0" class="ch.qos.logback.core.rolling.RollingFileAppender">
-			<File>log/log_error_.log</File>
+			<File>${logPath}log/error_${logSysId}_.log</File>
 			<encoder><pattern>${pattern}</pattern></encoder>
 			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-				<FileNamePattern>log/log_error_.log.${fileNamePattern}</FileNamePattern>
+				<FileNamePattern>${logPath}log/error_${logSysId}_.log.${fileNamePattern}</FileNamePattern>
 				<MaxHistory>${maxHistory}</MaxHistory>
 				<TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 					<MaxFileSize>${maxFileSize}</MaxFileSize>
@@ -56,9 +64,18 @@
 	</appender>
 
 	<root level="INFO">
-		<appender-ref ref="stdout" />
-		<appender-ref ref="file" />
-		<appender-ref ref="error" />
+	     <!-- <appender-ref ref="stdout" />
+		 <appender-ref ref="file" />
+		 <appender-ref ref="error" /> -->
+		<if condition='p("logEnv").contains("dev")'>
+		    <then>
+		    	<appender-ref ref="stdout" />
+		    </then>
+		    <else>
+		    	<appender-ref ref="file" />
+				<appender-ref ref="error" />
+		    </else>
+		  </if>
 	</root>
 	
 </configuration>

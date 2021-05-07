@@ -81,9 +81,6 @@ public class RocketMqProducerImpl implements RocketMqProducer{
         for(int i=0;i<RE_NUM;i++) {
             try {
                 //Message msg = new Message(rocketMqConfig.remoteTopic(topic), request.getTag(), JsonUtil.toJson(request.getData()).getBytes(RemotingHelper.DEFAULT_CHARSET));
-                //新旧兼容
-                if(TypeUtil.isNull(request.getMethod()))request.setMethod(request.getTag());
-                if(TypeUtil.isNull(request.getTag()))request.setTag(request.getMethod());
                 
                 Message msg = new Message(rocketMqConfig.remoteTopic(topic), request.getTag(), JsonUtil.toJson(request).getBytes(RemotingHelper.DEFAULT_CHARSET));
                 msg.setKeys(request.getMsgId());
@@ -117,10 +114,7 @@ public class RocketMqProducerImpl implements RocketMqProducer{
         for(int i=0;i<RE_NUM;i++) {
             try {
               //Message msg = new Message(rocketMqConfig.remoteTopic(topic), request.getTag(), JsonUtil.toJson(request.getData()).getBytes(RemotingHelper.DEFAULT_CHARSET));
-                //新旧兼容
-                if(TypeUtil.isNull(request.getMethod()))request.setMethod(request.getTag());
-                if(TypeUtil.isNull(request.getTag()))request.setTag(request.getMethod());
-                
+               
                 Message msg = new Message(rocketMqConfig.remoteTopic(topic), request.getTag(), JsonUtil.toJson(request).getBytes(RemotingHelper.DEFAULT_CHARSET));
                 
                 msg.setKeys(request.getMsgId());
@@ -143,10 +137,7 @@ public class RocketMqProducerImpl implements RocketMqProducer{
         for(int i=0;i<RE_NUM;i++) {
             try {
               //Message msg = new Message(rocketMqConfig.remoteTopic(topic), request.getTag(), JsonUtil.toJson(request.getData()).getBytes(RemotingHelper.DEFAULT_CHARSET));
-                //新旧兼容
-                if(TypeUtil.isNull(request.getMethod()))request.setMethod(request.getTag());
-                if(TypeUtil.isNull(request.getTag()))request.setTag(request.getMethod());
-                
+              
                 Message msg = new Message(rocketMqConfig.remoteTopic(topic), request.getTag(), JsonUtil.toJson(request).getBytes(RemotingHelper.DEFAULT_CHARSET));
                 
                 msg.setKeys(request.getMsgId());
