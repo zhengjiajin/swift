@@ -9,10 +9,10 @@
 	<!-- APP_ENV_KEY 运行环境   DEV(""),TEST("test"),DEMO("demo"),PROD("prod") -->
 	<property name="pattern" value="%date→%level→%thread→%class{0}→%line→%message%n" />
 	<property name="fileNamePattern" value="%d{yyyyMMdd}.%i" />
-	<property name="maxHistory" value="${log.maxHistory:-30}" />
+	<property name="maxHistory" value="${log_maxHistory:-30}" />
 	<property name="maxFileSize" value="200MB" />
 	<property name="logEnv" value="${APP_ENV_KEY:-dev}"/>
-	<property name="logPath" value="${log.path:- }" />
+	<property name="logPath" value="${log_path:- }" />
 	<property name="logSysId" value="${sysId:- }" />
 
 	<appender name="stdout" class="ch.qos.logback.classic.AsyncAppender">
