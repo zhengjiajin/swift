@@ -45,6 +45,7 @@ public class RocketMqConsumer {
         consumer = new DefaultMQPushConsumer(rocketMqConfig.getGroupId(), rocketMqConfig.createRpcHook(), new AllocateMessageQueueAveragely());
         consumer.setNamesrvAddr(rocketMqConfig.getONSAddr());
         consumer.setAccessChannel(AccessChannel.CLOUD);
+        consumer.setConsumeMessageBatchMaxSize(1);
         for(String topic:rocketMqMessageHandler.getSubscribeTag().keySet()) {
             consumer.subscribe(rocketMqConfig.remoteTopic(topic), ExpressionUtil.subExpression(rocketMqMessageHandler.getSubscribeTag().get(topic)));
         }
