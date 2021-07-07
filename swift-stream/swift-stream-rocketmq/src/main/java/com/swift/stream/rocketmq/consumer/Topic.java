@@ -20,7 +20,11 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Topic {
+    public String rocketKey() default "default";
+    //topic //TODO 暂时不支持不同rocketKey相同topic
     public String[] value();
-
+    //tag
     public String[] tag() default "*";
+    //MessageModel  CLUSTERING 集群，BROADCASTING 广播
+    public String messageModel() default "CLUSTERING";
 }

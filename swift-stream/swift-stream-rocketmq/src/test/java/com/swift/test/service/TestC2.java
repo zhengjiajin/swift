@@ -18,7 +18,7 @@ import com.swift.util.type.JsonUtil;
  * @version 1.0 2020年11月26日
  */
 @Service
-@Topic(value="service",tag="testServiceJiajin*")
+@Topic(value="service",tag="testServiceJiajin")
 public class TestC2 extends ServiceConsumer {
 
     /** 

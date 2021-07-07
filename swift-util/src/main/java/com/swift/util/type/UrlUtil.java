@@ -11,6 +11,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +25,11 @@ import com.swift.exception.extend.SystemException;
  * @version 1.0 2018年1月31日
  */
 public class UrlUtil {
-    
+
     public static boolean isUrl(String str) {
-        if(TypeUtil.isNull(str)) return false;
-        if(str.toLowerCase().startsWith("http://")) return true;
-        if(str.toLowerCase().startsWith("https://")) return true;
+        if (TypeUtil.isNull(str)) return false;
+        if (str.toLowerCase().startsWith("http://")) return true;
+        if (str.toLowerCase().startsWith("https://")) return true;
         return false;
     }
 
@@ -47,12 +48,12 @@ public class UrlUtil {
             throw new SystemException("URLDecoder错误:" + str);
         }
     }
-	
+
     public static final String QUESTION_MARK = "?";
     public static final String EQUALS = "=";
     public static final String AMPERSAND = "&";
     public static final String EMPTY_STRING = "";
-    
+
     /**
      * 将Map中的数据转换成URL的查询字符串
      * 
@@ -107,10 +108,10 @@ public class UrlUtil {
      * @return
      */
     public static String toQueryString(Map<String, String> params, String[] excludes, boolean excludeEmptyValue,
-            boolean sortByKey) {
+        boolean sortByKey) {
         return toQueryString(params, excludes, true, excludeEmptyValue, true);
     }
-    
+
     /**
      * 将Map中的数据转换成URL的查询字符串
      * 
@@ -126,8 +127,8 @@ public class UrlUtil {
      *            是否按key排序
      * @return
      */
-    public static String toQueryString(Map<String, String> params, String[] excludes, boolean excludeNull, boolean excludeEmptyValue,
-            boolean sortByKey) {
+    public static String toQueryString(Map<String, String> params, String[] excludes, boolean excludeNull,
+        boolean excludeEmptyValue, boolean sortByKey) {
         List<String> keys = new ArrayList<String>(params.keySet());
         Set<String> excludeKeys = new HashSet<String>();
         if (excludes != null) {
@@ -161,4 +162,82 @@ public class UrlUtil {
         }
         return builder.toString();
     }
+
+    /**
+     * 解析出url请求的路径，包括页面
+     * 
+     * @param strURL
+     *            url地址
+     * @return url路径
+     */
+    public static String urlPage(String strURL) {
+        if(TypeUtil.isNull(strURL)) return strURL;
+        if(strURL.indexOf("?")<=0)  return strURL;
+        String strPage = null;
+        String[] arrSplit = null;
+        strURL = strURL.trim();
+        arrSplit = strURL.split("[?]");
+        if (arrSplit.length >= 1) {
+            if (arrSplit[0] != null) {
+                strPage = arrSplit[0];
+            }
+        }
+        return strPage;
+    }
+
+    /**
+     * 去掉url中的路径，留下请求参数部分
+     * 
+     * @param strURL
+     *            url地址
+     * @return url请求参数部分
+     */
+    public static String truncateUrlPage(String strURL) {
+        if(TypeUtil.isNull(strURL)) return strURL;
+        if(strURL.indexOf("?")<=0)  return null;
+        String strAllParam = null;
+        String[] arrSplit = null;
+        strURL = strURL.trim();
+        arrSplit = strURL.split("[?]");
+        if (arrSplit.length > 1) {
+            if (arrSplit[1] != null) {
+                strAllParam = arrSplit[1];
+            }
+        }
+        return strAllParam;
+    }
+
+    /**
+     * 解析出url参数中的键值对 如 "index.jsp?Action=del&id=123"，解析出Action:del,id:123存入map中
+     * 
+     * @param URL
+     *            url地址
+     * @return url请求参数部分
+     */
+    public static Map<String, String> URLRequest(String URL) {
+        Map<String, String> mapRequest = new HashMap<String, String>();
+        String[] arrSplit = null;
+        String strUrlParam = truncateUrlPage(URL);
+        if (strUrlParam == null) {
+            return mapRequest;
+        }
+        // 每个键值为一组
+        arrSplit = strUrlParam.split("[&]");
+        for (String strSplit : arrSplit) {
+            String[] arrSplitEqual = null;
+            arrSplitEqual = strSplit.split("[=]");
+            // 解析出键值
+            if (arrSplitEqual.length > 1) {
+                // 正确解析
+                mapRequest.put(arrSplitEqual[0], arrSplitEqual[1]);
+            } else {
+                if (arrSplitEqual[0] != "") {
+                    // 只有参数没有值，不加入
+                    mapRequest.put(arrSplitEqual[0], "");
+                }
+            }
+        }
+        return mapRequest;
+    }
+    
 }

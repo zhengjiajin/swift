@@ -1,17 +1,22 @@
 /*
- * @(#)RocketMqConfig.java   1.0  2020年11月20日
+ * @(#)RocketMqConfigkey.java   1.0  2020年11月20日
  * 
  * Copyright (c)	2014-2020. All Rights Reserved.	GuangZhou hhmk Technology Company LTD.
  */
 package com.swift.stream.rocketmq;
 
-import org.apache.rocketmq.acl.common.AclClientRPCHook;
-import org.apache.rocketmq.acl.common.SessionCredentials;
-import org.apache.rocketmq.remoting.RPCHook;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.swift.core.spring.Spring;
 import com.swift.util.type.TypeUtil;
+import com.swift.util.type.UrlUtil;
 
 /**
  * 启动配置,暂不支持事务消息
@@ -21,65 +26,64 @@ import com.swift.util.type.TypeUtil;
  */
 @Component
 public class RocketMqConfig {
-    @Value("${rocket.accessKey:}")
-    private String accessKey;
     
-    @Value("${rocket.secretKey:}")
-    private String secretKey;
+    public static final String default_rocket_key="default";
     
-    @Value("${rocket.ONSAddr:}")
-    private String ONSAddr;
-    
-    @Value("${rocket.topicTop:}")
-    private String topicTop;
-    
-    @Value("${rocket.groupId:}")
-    private String groupId;
-    
-    public RPCHook createRpcHook() {
-        return new AclClientRPCHook(new SessionCredentials(accessKey, secretKey));
+    public RocketMqConfig() {
+        //开源版使用slf4j
+        //System.setProperty("rocketmq.client.logUseSlf4j",logUseSlf4j);
+        System.setProperty("rocketmq.client.logRoot","log/");
+        System.setProperty("rocketmq.client.logLevel","warn");
+        //ClientLogger
+        /*ons.client.logRoot：日志保存路径。
+        ons.client.logFileMaxIndex：保存历史日志文件的最大个数。
+        ons.client.logLevel：日志级别。*/
+        System.setProperty("ons.client.logRoot","log/");
+        System.setProperty("ons.client.logFileMaxIndex","10");
+        System.setProperty("ons.client.logLevel","warn");
     }
     
-    public boolean isStart() {
-        if(TypeUtil.isNull(accessKey)) return false;
-        if(TypeUtil.isNull(secretKey==null)) return false;
-        if(TypeUtil.isNull(ONSAddr==null)) return false;
-        return true;
-    }
-
-    public String remoteTopic(String topic) {
-        if(TypeUtil.isNotNull(topicTop)) {
-            if(topic.indexOf(topicTop)==-1) topic=topicTop+topic;
+    private Map<String,MqConfig> ROCKET_CONFIG = new HashMap<>();
+    
+    private static final String rocket_key_flag="rocket.";
+    
+    @Value("${rocket.groupId:"+MqConfig.producerGroup+"}")
+    private String def_groupId;
+    
+    @PostConstruct
+    private void init() {
+        //rocket.aliMq
+        Set<String> keySet = Spring.getProperties().stringPropertyNames();
+        for(String key:keySet) {
+            //判断KEY
+            if(!key.startsWith(rocket_key_flag)) continue;
+            String rocketKey = key.substring(rocket_key_flag.length());
+            String rocketValue = Spring.getProperties().getProperty(key);
+            Map<String, String> rocketParm = UrlUtil.URLRequest(rocketValue);
+            MqConfig config = new MqConfig();
+            config.setONSAddr(UrlUtil.urlPage(rocketValue));
+            config.setAccessKey(rocketParm.get("accessKey"));
+            config.setSecretKey(rocketParm.get("secretKey"));
+            config.setTopicTop(rocketParm.get("topicTop"));
+            String groupId = TypeUtil.toString(rocketParm.get("groupId"), def_groupId);
+            config.setGroupId(groupId);
+            if(config.isStart()) {
+                ROCKET_CONFIG.put(rocketKey, config);
+            }
         }
-        return topic;
+        
     }
     
-    public String localTopic(String topic) {
-        if(TypeUtil.isNotNull(topicTop)) {
-            topic=topic.replace(topicTop, "");
-        }
-        return topic;
+    public Map<String,MqConfig> getConfig(){
+        return ROCKET_CONFIG;
     }
     
-    /**
-     * @return the oNSAddr
-     */
-    public String getONSAddr() {
-        return ONSAddr;
+    public MqConfig getConfig(String rocketKey){
+        return ROCKET_CONFIG.get(rocketKey);
     }
-
-    /**
-     * @return the topicTop
-     */
-    public String getTopicTop() {
-        return topicTop;
-    }
-
-    /**
-     * @return the groupId
-     */
-    public String getGroupId() {
-        return groupId;
+    
+    public MqConfig getDefaultConfig() {
+        return ROCKET_CONFIG.get(default_rocket_key);
     }
     
 }

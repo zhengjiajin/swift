@@ -5,8 +5,7 @@
  */
 package com.swift.stream.rocketmq.consumer;
 
-import org.apache.rocketmq.common.message.MessageExt;
-
+import com.swift.stream.rocketmq.pojo.MqMessage;
 import com.swift.stream.rocketmq.pojo.MqRequest;
 
 /**
@@ -22,7 +21,7 @@ public interface RocketMqMessageListener {
     /*
      * 收到MESSAGE后它转换成框架对象
      */
-    public MqRequest changeRequest(MessageExt message);
+    public MqRequest changeRequest(MqMessage message);
     /*
      * 接收消息处理
      */

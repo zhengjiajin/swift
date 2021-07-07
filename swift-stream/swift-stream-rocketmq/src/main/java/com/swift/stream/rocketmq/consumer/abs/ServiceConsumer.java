@@ -5,10 +5,9 @@
  */
 package com.swift.stream.rocketmq.consumer.abs;
 
-import org.apache.rocketmq.common.message.MessageExt;
-
 import com.swift.core.model.parser.DataJsonParser;
 import com.swift.stream.rocketmq.consumer.RocketMqMessageListener;
+import com.swift.stream.rocketmq.pojo.MqMessage;
 import com.swift.stream.rocketmq.pojo.MqRequest;
 import com.swift.util.type.JsonUtil;
 import com.swift.util.type.TypeUtil;
@@ -24,13 +23,11 @@ public abstract class ServiceConsumer implements RocketMqMessageListener {
         return false;
     }
     
-    
-    public MqRequest changeRequest(MessageExt message) {
+    public MqRequest changeRequest(MqMessage message) {
         MqRequest req = JsonUtil.toObj(message.getBody(), MqRequest.class);
-        if(TypeUtil.isNull(req.getMsgId())) req.setMsgId(message.getKeys());
-        if(TypeUtil.isNull(req.getTag())) req.setTag(message.getTags());
+        if(TypeUtil.isNull(req.getMsgId())) req.setMsgId(message.getKey());
+        if(TypeUtil.isNull(req.getTag())) req.setTag(message.getTag());
         if(TypeUtil.isNull(req.getData())) req.setData(DataJsonParser.jsonToObject(new String(message.getBody())));
-        
         return req;
     }
     

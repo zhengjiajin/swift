@@ -5,11 +5,10 @@
  */
 package com.swift.stream.rocketmq.consumer.abs;
 
-import org.apache.rocketmq.common.message.MessageExt;
-
 import com.swift.core.model.data.DataModel;
 import com.swift.core.model.parser.DataJsonParser;
 import com.swift.stream.rocketmq.consumer.RocketMqMessageListener;
+import com.swift.stream.rocketmq.pojo.MqMessage;
 import com.swift.stream.rocketmq.pojo.MqRequest;
 
 /**
@@ -23,11 +22,12 @@ public abstract class BinlogConsumer implements RocketMqMessageListener {
         return true;
     }
     
-    public MqRequest changeRequest(MessageExt message) {
+    public MqRequest changeRequest(MqMessage message) {
         MqRequest req = new MqRequest();
         DataModel data = DataJsonParser.jsonToObject(new String(message.getBody()));
         req.setTag(data.getString("database")+"."+data.getString("table"));
         req.setData(data);
+        req.setMsgId(message.getMsgId());
         return req;
     }
     

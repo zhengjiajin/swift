@@ -5,7 +5,6 @@
  */
 package com.swift.test;
 
-import org.apache.rocketmq.client.producer.SendResult;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,8 +30,8 @@ public class TestRocket extends BaseJunit4Test {
         request.setTag("testServiceJiajin");
         request.getData().addObject("name", "jiajin");
         request.getData().addObject("id", 1);
-        SendResult result = rocketMqProducer.send("service", request);
-        System.out.println(result.getSendStatus());
+        String msgId = rocketMqProducer.send("service", request);
+        System.out.println("aaaaaaaaaaaa:"+msgId);
         ThreadUtil.sleep(100000);
     }
     
