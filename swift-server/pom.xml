@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.github.zhengjiajin</groupId>
 		<artifactId>swift</artifactId>
-		<version>1.2-SNAPSHOT</version>
+		<version>${revision}</version>
 	</parent>
 	<artifactId>swift-server</artifactId>
 	<packaging>pom</packaging>
@@ -14,6 +14,7 @@
 	<modules>
 		<module>swift-server-jetty</module>
 		<module>swift-server-netty</module>
+		<module>swift-server-dubbo</module>
 	</modules>
 	<dependencies>
 		<dependency>

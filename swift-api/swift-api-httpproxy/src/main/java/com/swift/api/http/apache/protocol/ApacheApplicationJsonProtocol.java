@@ -24,12 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.swift.api.http.util.ContentTypeUtil;
-import com.swift.api.http.util.HttpDomainUtil;
 import com.swift.core.api.protocol.ClientProtocol;
 import com.swift.core.model.ServiceRequest;
 import com.swift.core.model.ServiceResponse;
 import com.swift.core.model.data.DataModel;
 import com.swift.core.model.data.FileDefinition;
+import com.swift.core.model.parser.HttpDomainUtil;
 import com.swift.core.session.AbstractSession;
 import com.swift.core.session.SessionCrypt;
 import com.swift.exception.ResultCode;

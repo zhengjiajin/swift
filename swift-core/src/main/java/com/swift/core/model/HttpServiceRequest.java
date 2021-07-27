@@ -17,6 +17,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public class HttpServiceRequest extends FileServiceRequest{
 
+    private static final long serialVersionUID = -8796387885340662947L;
+
     @JsonIgnore
     private HttpServletRequest request;
     

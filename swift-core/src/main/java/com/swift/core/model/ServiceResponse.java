@@ -5,6 +5,9 @@
  */
 package com.swift.core.model;
 
+import java.io.Serializable;
+
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.swift.core.model.data.DataModel;
@@ -17,7 +20,9 @@ import com.swift.util.type.JsonUtil;
  * @author zhengjiajin
  * @version 1.0 2015年8月5日
  */
-public class ServiceResponse {
+public class ServiceResponse implements Serializable {
+   
+    private static final long serialVersionUID = -4387570136090783356L;
     /**
      *返回码
      */
@@ -35,6 +40,7 @@ public class ServiceResponse {
      * 本响应所对应的请求。
      */
     @JsonIgnore
+    @JSONField(serialize=false)
     private ServiceRequest request;
     /**
      * 返回的业务字段
@@ -85,6 +91,7 @@ public class ServiceResponse {
      * @return
      */
     @JsonIgnore
+    @JSONField(serialize=false)
     public DataModel getSimpleData() {
         return data;
     }

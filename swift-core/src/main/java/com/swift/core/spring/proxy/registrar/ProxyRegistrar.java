@@ -51,7 +51,7 @@ public class ProxyRegistrar implements ImportBeanDefinitionRegistrar, BeanFactor
         if (basePackages == null || basePackages.length <= 0) return;
         TypeFilter swiftMapperFilter = new SwiftAnnotationTypeFilter(ProxyMapper.class);
         // TypeFilter helloServiceFilter2 = new AssignableTypeFilter(IMybatisMapper.class);
-        MyClassPathBeanDefinitionScanner scanner = new MyClassPathBeanDefinitionScanner(registry);
+        MyClassPathInterfaceDefinitionScanner scanner = new MyClassPathInterfaceDefinitionScanner(registry);
         scanner.setBeanNameGenerator(new ProxyAnnotationBeanNameGenerator());
         scanner.setResourceLoader(this.applicationContext);
         scanner.addIncludeFilter(swiftMapperFilter);

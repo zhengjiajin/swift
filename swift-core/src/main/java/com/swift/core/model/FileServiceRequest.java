@@ -15,6 +15,8 @@ import com.swift.core.model.data.FileDefinition;
  * @version 1.0 2018年6月12日
  */
 public class FileServiceRequest extends ServiceRequest{
+    
+    private static final long serialVersionUID = 8347894162603577324L;
     /**
      * 文件列表
      */

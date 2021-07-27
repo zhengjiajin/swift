@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.github.zhengjiajin</groupId>
+    <artifactId>swift-api</artifactId>
+    <version>${revision}</version>
+  </parent>
+  <artifactId>swift-api-dubbo</artifactId>
+  <name>swift-api-dubbo</name>
+  <description>swift-api-dubbo</description>
+  
+  <dependencies>
+  		<dependency>
+			<groupId>com.github.zhengjiajin</groupId>
+			<artifactId>swift-api-protocol</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.yaml</groupId>
+		    <artifactId>snakeyaml</artifactId>
+		    <version>1.29</version>
+		</dependency>
+  </dependencies>
+</project>

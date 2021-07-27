@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.github.zhengjiajin</groupId>
 		<artifactId>swift</artifactId>
-		<version>1.2-SNAPSHOT</version>
+		<version>${revision}</version>
 	</parent>
 	<artifactId>swift-util</artifactId>
 	<name>swift-util</name>
@@ -50,6 +50,11 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>fastjson</artifactId>
+		    <version>1.2.70</version>
 		</dependency>
 		<dependency>
 			<groupId>org.reflections</groupId>

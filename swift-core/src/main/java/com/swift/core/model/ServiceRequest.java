@@ -5,6 +5,9 @@
  */
 package com.swift.core.model;
 
+import java.io.Serializable;
+
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.swift.core.model.data.AbstractBeanDataModel;
@@ -21,7 +24,9 @@ import com.swift.util.type.JsonUtil;
  * @author zhengjiajin
  * @version 1.0 2015年8月5日
  */
-public class ServiceRequest {
+public class ServiceRequest implements Serializable {
+    
+    private static final long serialVersionUID = 3940059511664685509L;
     @JsonIgnore
     public static String DEFAULT_VERSION = "0";
     /**
@@ -29,18 +34,23 @@ public class ServiceRequest {
      */
     private String reqId = RandomUtil.createReqId();
     /**
-     * 客户端IP地址/请求对方的地址域名
+     * 客户端IP地址/请求对方的地址域名/服务端系统ID
+     * 如：
+     * 127.0.0.1
+     * udb.mydomain.com
+     * udb
      */
-    @JsonIgnore
     private String domain;
     /**
      * 要请求的业务能力给你请求接口
+     * 如:testMethod
+     * com.swift.test.TestMethod
      */
     private String method;
     /**
      * 接口版本号
      */
-    @JsonIgnore
+    //@JsonIgnore
     private String interfaceVersion = DEFAULT_VERSION;
     /**
      * 请求时间
@@ -114,6 +124,7 @@ public class ServiceRequest {
      * @return
      */
     @JsonIgnore
+    @JSONField(serialize=false)
     public DataModel getSimpleData() {
         return data;
     }
