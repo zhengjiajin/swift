@@ -10,6 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.swift.core.env.Env;
 import com.swift.core.env.EnvLoader;
 import com.swift.core.server.LifeCycle;
 import com.swift.core.spring.Spring;
@@ -29,26 +30,15 @@ public class StartMain {
      */
     public static void main(String[] args) {
         try {
-            int port = 80;
-            String env="";
-            if(args!=null && args.length>0) {
-                for(String arg:args) {
-                    if(TypeUtil.isNumber(arg)) {
-                        port=TypeUtil.toInt(arg);
-                    }else {
-                        env=arg;
-                    }
-                }
-            }
-            EnvLoader.loadEnv(env);
-            log.info("starting...ENV:"+EnvLoader.getEnv());
+            int port = defServerPort(args);
+            setEnv(args);
             for (String str : Spring.getAllBeanName()) {
                 log.info("spring存在BEAN..." + str);
             }
             List<LifeCycle> servers = Spring.getBeans(LifeCycle.class);
             if (TypeUtil.isNotNull(servers)) {
                 for (LifeCycle s : servers) {
-                    log.info("准备启动服务:" + s+";port:"+port);
+                    log.info("准备启动服务:" + s+";def_port:"+port);
                     s.start(port); 
                     log.info("结束启动服务:" + s);
                 }
@@ -71,5 +61,31 @@ public class StartMain {
             ThreadUtil.sleep(1000);
             System.exit(1);
         }
+    }
+    
+    private static int defServerPort(String[] args) {
+        if(args==null || args.length<=0) return 80;
+        for(String arg:args) {
+            if(TypeUtil.isNumber(arg)) {
+                return TypeUtil.toInt(arg);
+            }
+        }
+        return 80;
+    }
+    
+    private static void setEnv(String[] args) {
+        String env="";
+        if(args!=null && args.length>0) {
+            for(String arg:args) {
+                if(TypeUtil.isNull(arg)) continue;
+                Env envPath = Env.getEnvByPath(arg);
+                if(envPath!=null) {
+                    env=arg;
+                    continue;
+                }
+            }
+        }
+        EnvLoader.loadEnv(env);
+        log.info("starting...ENV:"+EnvLoader.getEnv());
     }
 }
