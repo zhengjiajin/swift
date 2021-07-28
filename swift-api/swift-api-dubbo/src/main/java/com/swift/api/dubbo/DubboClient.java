@@ -60,6 +60,7 @@ public class DubboClient implements ClientEngine<ServiceRequest, ServiceResponse
     
     public boolean checkDubboClient(ServiceRequest req) {
         try {
+            if(registryConfig==null) return false;
             getGenericService(req);
             return true;
         }catch(Throwable e) {
@@ -90,6 +91,7 @@ public class DubboClient implements ClientEngine<ServiceRequest, ServiceResponse
     }
     
     private GenericService getGenericService(ServiceRequest req) {
+        if(registryConfig==null)  throw new SystemException("没有配置DUBBO注册中心");
         String interfaceName = getInterfaceName(req);
         if(TypeUtil.isNull(interfaceName)) throw new SystemException("请输入需要调用的接口");
         if(genericServiceMap.containsKey(interfaceName)) return genericServiceMap.get(interfaceName);
