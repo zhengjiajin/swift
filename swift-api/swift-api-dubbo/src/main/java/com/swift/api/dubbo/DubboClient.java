@@ -16,6 +16,8 @@ import org.apache.dubbo.common.constants.CommonConstants;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.rpc.service.GenericService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,8 @@ import com.swift.util.type.TypeUtil;
 @Service
 public class DubboClient implements ClientEngine<ServiceRequest, ServiceResponse> {
     
+    private static Logger log = LoggerFactory.getLogger(DubboClient.class);
+
     @Value("${sysId:}")
     private String sysId;
 
@@ -126,6 +130,7 @@ public class DubboClient implements ClientEngine<ServiceRequest, ServiceResponse
     private void autoReq(ServiceRequest req) {
         if(TypeUtil.isNull(req.getMethod())) req.setMethod(HttpDomainUtil.toMethod(req.getDomain()));
         if(TypeUtil.isNull(req.getRequestTime())) req.setRequestTime(System.currentTimeMillis());
+        log.info("发送DUBBO请求:"+JsonUtil.toJson(req));
     }
     
     /** 

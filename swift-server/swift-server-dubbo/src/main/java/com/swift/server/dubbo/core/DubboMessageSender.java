@@ -71,6 +71,7 @@ public class DubboMessageSender implements MessageSender, GenericService {
     public Object $invoke(String method, String[] parameterTypes, Object[] args) throws GenericException {
         if (TypeUtil.isNull(parameterTypes)) return null;
         if (TypeUtil.isNull(args)) return null;
+        log.info("收到DUBBO服务请求:"+args[0].toString());
         ServiceRequest req = formatServiceRequest(args[0]);
         if (TypeUtil.isNull(req.getReqId())) req.setReqId(RandomUtil.createReqId());
         try {
