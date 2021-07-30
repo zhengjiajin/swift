@@ -44,7 +44,7 @@ public class DubboMessageSender implements MessageSender, GenericService {
     @Autowired
     private DubboMessageDeliver dubboMessageDeliver;
 
-    private static final int time_out = 30 * 1000;
+    private static final int time_out = 15 * 1000;
 
     private Map<String, TimeFuture> requestMap = new ConcurrentHashMap<>();
 
@@ -59,6 +59,7 @@ public class DubboMessageSender implements MessageSender, GenericService {
     @Override
     public void sendResponse(ServiceResponse response) {
         TimeFuture timeFuture = requestMap.remove(response.getRequest().getReqId());
+        log.info("返回DUBBO响应:"+timeFuture+";"+JsonUtil.toJson(response));
         if (timeFuture == null) return;
         timeFuture.complete(response);
     }
@@ -76,8 +77,8 @@ public class DubboMessageSender implements MessageSender, GenericService {
         if (TypeUtil.isNull(req.getReqId())) req.setReqId(RandomUtil.createReqId());
         try {
             TimeFuture future = new TimeFuture(System.currentTimeMillis(), req);
-            dubboMessageDeliver.requestReceived(req);
             requestMap.put(req.getReqId(), future);
+            dubboMessageDeliver.requestReceived(req);
             return future;
         } catch (NoWarnException ex) {
             log.warn("Neglectable Exception", ex);
@@ -141,7 +142,7 @@ public class DubboMessageSender implements MessageSender, GenericService {
         }
     }
 
-    private class TimeFuture extends CompletableFuture<ServiceResponse> {
+    public class TimeFuture extends CompletableFuture<ServiceResponse> {
 
         private long requestTime;
 
@@ -152,6 +153,34 @@ public class DubboMessageSender implements MessageSender, GenericService {
             this.request = request;
         }
 
+        /**
+         * @return the requestTime
+         */
+        public long getRequestTime() {
+            return requestTime;
+        }
+
+        /**
+         * @param requestTime the requestTime to set
+         */
+        public void setRequestTime(long requestTime) {
+            this.requestTime = requestTime;
+        }
+
+        /**
+         * @return the request
+         */
+        public ServiceRequest getRequest() {
+            return request;
+        }
+
+        /**
+         * @param request the request to set
+         */
+        public void setRequest(ServiceRequest request) {
+            this.request = request;
+        }
+        
     }
 
 }

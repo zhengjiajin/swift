@@ -141,7 +141,14 @@ public class DubboClient implements ClientEngine<ServiceRequest, ServiceResponse
     @Override
     public void sendRequestNoReturn(ServiceRequest req) {
         autoReq(req);
-        getGenericService(req).$invokeAsync(req.getMethod(), createParameterTypes(), createArgs(req));
+        CompletableFuture<Object> future = getGenericService(req).$invokeAsync(req.getMethod(), createParameterTypes(), createArgs(req));
+        future.whenComplete(new BiConsumer<Object, Throwable>() {
+
+            @Override
+            public void accept(Object t, Throwable u) {
+                log.info("收到DUBBO不处理响应:"+t+"异常:"+u);
+            }
+        });
     }
 
     /** 
@@ -155,6 +162,7 @@ public class DubboClient implements ClientEngine<ServiceRequest, ServiceResponse
 
             @Override
             public void accept(Object t, Throwable u) {
+                log.info("收到DUBBO响应:"+t+"异常:"+u);
                 if(t!=null) {
                     callBack.receiveResponse(formatServiceResponse(t));
                     return;
@@ -178,6 +186,7 @@ public class DubboClient implements ClientEngine<ServiceRequest, ServiceResponse
 
             @Override
             public ServiceResponse toChange(Object t) {
+                log.info("收到DUBBO响应:"+t);
                 return formatServiceResponse(t);
             }
             
@@ -193,7 +202,9 @@ public class DubboClient implements ClientEngine<ServiceRequest, ServiceResponse
         autoReq(req);
         CompletableFuture<Object> future = getGenericService(req).$invokeAsync(req.getMethod(), createParameterTypes(), createArgs(req));
         try {
-            return formatServiceResponse(future.get());
+            Object obj = future.get();
+            log.info("收到DUBBO响应:"+obj);
+            return formatServiceResponse(obj);
         } catch (Exception e) {
             throw new SystemException(JsonUtil.toJson(req)+";异常",e);
         }

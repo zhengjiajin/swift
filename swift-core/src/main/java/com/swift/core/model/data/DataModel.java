@@ -8,9 +8,10 @@ package com.swift.core.model.data;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
+import com.swift.core.model.parser.DataJsonParser;
+import com.swift.util.type.JsonUtil;
 import com.swift.util.type.TypeUtil;
 
 /**
@@ -234,14 +235,23 @@ public interface DataModel {
      */
     public static DataModel collection(DataModel data) {
         if (data == null) return null;
+        data = DataJsonParser.jsonToObject(JsonUtil.toJson(data));
         DataModel res = new MapDataModel();
         Set<String> keyset = data.keySet();
         List<String> list = new ArrayList<String>(keyset);
         Collections.sort(list);
         for(String key:list) {
             Object value = data.getObject(key);
-            if(value instanceof Map || value instanceof AbstractBeanDataModel) {
-                res.addObject(key, collection(data.getDataModel(key)));
+            if(value instanceof DataModel) {
+                res.addObject(key, collection((DataModel)value));
+            } else if(value instanceof List) {
+                for(Object listObj : (List<?>)value) {
+                    if(listObj instanceof DataModel) {
+                        res.addObject(key, collection((DataModel)listObj));
+                    } else {
+                        res.addObject(key, listObj);
+                    }
+                }
             } else {
                 res.addObject(key, value);
             }
@@ -257,4 +267,5 @@ public interface DataModel {
             }
         }
     }
+    
 }
