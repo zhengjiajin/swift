@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
 
 import com.swift.exception.extend.SystemException;
 
@@ -21,9 +22,9 @@ public class ChangeFuture<T,V> implements Future<V> {
 
     private Future<T> oldFuture;
     
-    private FutureValueChange<T,V> changeFucntion;
+    private Function<T,V> changeFucntion;
     
-    public ChangeFuture(Future<T> oldFuture,FutureValueChange<T,V> changeFucntion) {
+    public ChangeFuture(Future<T> oldFuture,Function<T,V> changeFucntion) {
         if(oldFuture==null || changeFucntion==null) throw new SystemException("ChangeFuture pram is null");
         this.oldFuture=oldFuture;
         this.changeFucntion=changeFucntion;
@@ -57,7 +58,7 @@ public class ChangeFuture<T,V> implements Future<V> {
      */
     @Override
     public V get() throws InterruptedException, ExecutionException {
-        return changeFucntion.toChange(oldFuture.get());
+        return changeFucntion.apply(oldFuture.get());
     }
 
     /** 
@@ -65,7 +66,7 @@ public class ChangeFuture<T,V> implements Future<V> {
      */
     @Override
     public V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-        return changeFucntion.toChange(oldFuture.get(timeout, unit));
+        return changeFucntion.apply(oldFuture.get(timeout, unit));
     }
 
 }

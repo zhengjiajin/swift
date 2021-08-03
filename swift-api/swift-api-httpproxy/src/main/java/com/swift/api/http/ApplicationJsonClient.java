@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import com.swift.api.http.apache.ApacheHttpClient;
 import com.swift.api.http.apache.protocol.ApacheApplicationJsonProtocol;
 import com.swift.core.api.asyn.ChangeFuture;
-import com.swift.core.api.asyn.FutureValueChange;
 import com.swift.core.api.rpc.ClientEngine;
 import com.swift.core.model.ServiceRequest;
 import com.swift.core.model.ServiceResponse;
@@ -82,15 +81,7 @@ public class ApplicationJsonClient implements ClientEngine<ServiceRequest, Servi
     public Future<ServiceResponse> sendAsynRequest(ServiceRequest req) {
         autoReq(req);
         Future<HttpResponse> future = apacheHttpClient.sendAsynRequest(apacheApplicationJsonProtocol.toRequest(req));
-        FutureValueChange<HttpResponse,ServiceResponse> apacheFutureChange = new FutureValueChange<HttpResponse,ServiceResponse>(){
-
-            @Override
-            public ServiceResponse toChange(HttpResponse t) {
-                return apacheApplicationJsonProtocol.toResponse(req,t);
-            }
-            
-        };
-        return new ChangeFuture<HttpResponse,ServiceResponse>(future, apacheFutureChange);
+        return new ChangeFuture<HttpResponse,ServiceResponse>(future, (t)->apacheApplicationJsonProtocol.toResponse(req,t));
     }
 
     /** 

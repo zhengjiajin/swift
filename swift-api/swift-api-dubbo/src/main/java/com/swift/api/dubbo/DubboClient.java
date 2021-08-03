@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.swift.core.api.OpenApi;
 import com.swift.core.api.asyn.ChangeFuture;
-import com.swift.core.api.asyn.FutureValueChange;
 import com.swift.core.api.rpc.ClientEngine;
 import com.swift.core.model.ServiceRequest;
 import com.swift.core.model.ServiceResponse;
@@ -182,16 +181,7 @@ public class DubboClient implements ClientEngine<ServiceRequest, ServiceResponse
     public Future<ServiceResponse> sendAsynRequest(ServiceRequest req) {
         autoReq(req);
         CompletableFuture<Object> future = getGenericService(req).$invokeAsync(req.getMethod(), createParameterTypes(), createArgs(req));
-        return new ChangeFuture<Object, ServiceResponse>(future, new FutureValueChange<Object, ServiceResponse>() {
-
-            @Override
-            public ServiceResponse toChange(Object t) {
-                log.info("收到DUBBO响应:"+t);
-                return formatServiceResponse(t);
-            }
-            
-        });
-        
+        return new ChangeFuture<Object, ServiceResponse>(future, (t)->formatServiceResponse(t));
     }
 
     /** 
