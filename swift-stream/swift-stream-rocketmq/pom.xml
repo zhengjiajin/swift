@@ -12,15 +12,16 @@
 	<description>swift-stream-rocketmq</description>
 
 	<dependencies>
+		<!-- 4.9.0以上等不支持http访问 -->
 		<dependency>
 			<groupId>org.apache.rocketmq</groupId>
 			<artifactId>rocketmq-client</artifactId>
-			<version>4.9.0</version>
+			<version>4.7.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.rocketmq</groupId>
 			<artifactId>rocketmq-acl</artifactId>
-			<version>4.9.0</version>
+			<version>4.7.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aliyun.openservices</groupId>
