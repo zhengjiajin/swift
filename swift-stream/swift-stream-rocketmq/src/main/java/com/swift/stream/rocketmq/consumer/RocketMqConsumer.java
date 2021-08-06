@@ -53,6 +53,7 @@ public class RocketMqConsumer extends RocketMqMessageHandler{
         consumerApache.setNamesrvAddr(super.getMqconfig().getONSAddr());
         consumerApache.setAccessChannel(AccessChannel.CLOUD);
         consumerApache.setConsumeMessageBatchMaxSize(1);
+        consumerApache.setVipChannelEnabled(false);
         // 是否广播模式
         if (super.getMessageModel().equalsIgnoreCase("BROADCASTING")) {
             consumerApache.setMessageModel(MessageModel.BROADCASTING);
@@ -72,6 +73,8 @@ public class RocketMqConsumer extends RocketMqMessageHandler{
         properties.put(PropertyKeyConst.AccessKey, super.getMqconfig().getAccessKey());
         properties.put(PropertyKeyConst.SecretKey, super.getMqconfig().getSecretKey());
         properties.put(PropertyKeyConst.NAMESRV_ADDR, super.getMqconfig().getONSAddr());
+        // 关闭VIP通道
+        properties.put(PropertyKeyConst.isVipChannelEnabled,false);
         // 是否广播模式
         if (super.getMessageModel().equalsIgnoreCase("BROADCASTING")) {
             properties.put(PropertyKeyConst.MessageModel, PropertyValueConst.BROADCASTING);

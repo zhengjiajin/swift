@@ -53,6 +53,8 @@ public class MqProducerFactory {
         properties.put(PropertyKeyConst.NAMESRV_ADDR, config.getONSAddr());
         // 您在消息队列RocketMQ版控制台创建的Group ID。
         properties.put(PropertyKeyConst.GROUP_ID,config.getGroupId());
+        // 关闭VIP通道
+        properties.put(PropertyKeyConst.isVipChannelEnabled,false);
         return properties;
     }
     
@@ -85,6 +87,7 @@ public class MqProducerFactory {
         org.apache.rocketmq.client.producer.DefaultMQProducer producer = new org.apache.rocketmq.client.producer.DefaultMQProducer(config.getGroupId(), config.createRpcHook(), true, null);
         producer.setAccessChannel(AccessChannel.CLOUD);
         producer.setNamesrvAddr(config.getONSAddr());
+        producer.setVipChannelEnabled(false);
         try {
             producer.start();
         } catch (MQClientException e) {
@@ -100,6 +103,7 @@ public class MqProducerFactory {
     private org.apache.rocketmq.client.producer.TransactionMQProducer createApacheTransaction(MqConfig config) {
         org.apache.rocketmq.client.producer.TransactionMQProducer transactionMQProducer = new org.apache.rocketmq.client.producer.TransactionMQProducer(config.getGroupId(), config.createRpcHook());
         transactionMQProducer.setNamesrvAddr(config.getONSAddr());
+        transactionMQProducer.setVipChannelEnabled(false);
         transactionMQProducer.setTransactionListener(new org.apache.rocketmq.client.producer.TransactionListener() {
 
             @Override
