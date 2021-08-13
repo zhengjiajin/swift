@@ -8,6 +8,7 @@ package com.swift.api.simple;
 import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import com.swift.api.simple.core.ClientEngineFactory;
@@ -21,6 +22,7 @@ import com.swift.core.model.ServiceResponse;
  * @version 1.0 2021年7月20日
  */
 @Component("autoClientEngine")
+@Primary
 public class AutoClientEngine implements ClientEngine<ServiceRequest, ServiceResponse> {
 
     @Autowired
