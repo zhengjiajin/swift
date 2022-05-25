@@ -56,7 +56,7 @@
 		<plugin.jar.version>2.5</plugin.jar.version>
 		
 		<spring.version>5.2.9.RELEASE</spring.version>
-		<spring.security.version>5.3.5.RELEASE</spring.security.version>
+		<spring.security.version>5.5.7</spring.security.version>
 		<spring-data.version>2.3.4.RELEASE</spring-data.version>
 		
 		<hibernate.version>5.2.1.Final</hibernate.version>
